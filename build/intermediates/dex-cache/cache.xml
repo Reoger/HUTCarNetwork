@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Just\.gradle\caches\modules-2\files-2.1\io.reactivex\rxjava\1.1.0\748f0546d5c3c27f1aef07270ffea0c45f0c42a4\rxjava-1.1.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="748f0546d5c3c27f1aef07270ffea0c45f0c42a4">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\rxjava-1.1.0_6e4db94fe39acb9f1d48833d0d0a138ca378d07b\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-23.3.0_987864431826b6cce743f237825bab775f18d29b\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.3.0_b82cee039de729f9030d09846b2916ed2be753d0\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\io.reactivex\rxandroid\1.1.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d4c4b83de2f6412072d2a29b1b7a5b03edaad5ff">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\io.reactivex-rxandroid-1.1.0_836ee8f7424ec1ea960dc70fb86067b1841d5e82\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.3.0_d88e8c37ddae763fbb4ab67257c03e60ec6fe3e1\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="7cecd3c9001016f8bcd9936d22708132f668407d">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_f32807efff0f87331ad86a0eea372c270ad523bb\classes.dex" />
+    </item>
+    <item
+        jar="E:\Android\Android_SDK\extras\android\m2repository\com\android\support\support-annotations\23.3.0\support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.3.0_b62eb58099a6a485d452156d02b4bf67ac67accd\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="119146ad1e59c492aea7215023c040c9527ffc4a">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_e5cfba619ddf5fdb63ae0173efe7062843f20c61\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_1ba3e2feb1494dc400f14059b423df6522bbf952\classes.dex" />
+    </item>
+    <item
+        jar="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="F:\Android\Project\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_b1791d6477271821853a141c01e5e0f386fc099a\classes.dex" />
+    </item>
+
+</items>
