@@ -63,9 +63,11 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import java.util.Locale;
 
+import just.activities.MyInfoActivity;
+
 
 public class MainActivity extends Activity implements BaiduMap.OnMapClickListener,
-        OnGetRoutePlanResultListener,View.OnClickListener {
+        OnGetRoutePlanResultListener {
 
     //地图相关，使用继承MapView的MyRouteMapView目的是重写touch事件实现泡泡处理
     //如果不处理touch事件，则无需继承，直接使用MapView即可
@@ -136,6 +138,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_layout);
 
         init();
 
@@ -170,12 +173,10 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
         mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);
         mTabNav= (LinearLayout) findViewById(R.id.id_tab_nav);
         mTabMy= (LinearLayout) findViewById(R.id.id_tab_my);
-        mTabMusic.setOnClickListener(this);
-        mTabNav.setOnClickListener(this);
-        mTabMy.setOnClickListener(this);
-
-        SDKInitializer.initialize(getApplicationContext());
-        setContentView(R.layout.main_layout);
+        mTabMy.setOnClickListener(v->{
+            Intent intent=new Intent(MainActivity.this, MyInfoActivity.class);
+            startActivity(intent);
+        });
 
         mView = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.myview,null);
 
@@ -383,21 +384,6 @@ Log.i("sdsdsdsdsd",result.getDetailUrl());
         nearbySearchOption.pageNum(page);
 
         mPoiSearch.searchNearby(nearbySearchOption);// 发起附近检索请求
-    }
-
-    @Override
-    public void onClick(View v) {
-        Class<?> cls=null;
-        switch (v.getId()) {
-            case R.id.id_tab_music:break;
-            case R.id.id_tab_nav:break;
-            case R.id.id_tab_my:break;
-            default:break;
-        }
-        if(cls!=null) {
-            Intent intent=new Intent(this,cls);
-            startActivity(intent);
-        }
     }
 
 
