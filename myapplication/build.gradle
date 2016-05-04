@@ -33,6 +33,13 @@ dependencies {
     //配置Lambda需要
     compile 'io.reactivex:rxjava:1.1.0'
     //配置Lambda需要
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/baidumapapi_base_v3_7_3.jar')
+    compile files('libs/baidumapapi_cloud_v3_7_3.jar')
+    compile files('libs/baidumapapi_map_v3_7_3.jar')
+    compile files('libs/baidumapapi_radar_v3_7_3.jar')
+    compile files('libs/baidumapapi_search_v3_7_3.jar')
+    compile files('libs/baidumapapi_util_v3_7_3.jar')
 }
 
 apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要

@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.cwp.android.baidutest.MainActivity">
+
+    <item
+        android:id="@+id/map_mylocation"
+        android:title="我的位置"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/map_common"
+        android:title="基础地图"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/map_site"
+        android:title="卫星地图"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/map_traffic"
+        android:title="实时地图"
+        app:showAsAction="never" />
+
+</menu>
