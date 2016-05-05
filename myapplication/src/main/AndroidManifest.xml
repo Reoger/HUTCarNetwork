@@ -42,6 +42,11 @@
         </service>
 
         <activity android:name="just.activities.MyInfoActivity"></activity>
+
+        <activity android:name="com.com.reoger.music.View.MainActivity"/>
+        <service android:name="com.com.reoger.music.service.ServiceForMusic"/>
+        <activity android:name="com.com.reoger.music.View.NextActivity"/>
+
     </application>
 
 </manifest>

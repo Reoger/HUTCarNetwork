@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:paddingLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/colorWhite"
+            android:singleLine="true"
+            android:textSize="20sp"
+            android:id="@+id/id_song_name"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="当前播放的歌曲名字是我哎怎么没有超过十个子"/>
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="8"
+            android:id="@+id/id_singer_name"
+            android:text="该歌曲的歌手"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/id_item_time"
+        android:paddingLeft="6dp"
+        android:textColor="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:text="3:32"/>
+
+    <ImageView
+        android:paddingLeft="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@mipmap/playing"
+        android:id="@+id/id_playing"
+        android:visibility="invisible"
+        android:clickable="false"/>
+
+    <ImageButton
+        android:paddingRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/id_menu_item"
+        android:background="@drawable/menu_item"
+        android:clickable="false"
+        android:focusable="false"
+        />
+
+</LinearLayout>

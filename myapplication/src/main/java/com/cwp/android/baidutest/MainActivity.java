@@ -170,11 +170,15 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
     }
 
     void init() {
-        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);
+        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//
         mTabNav= (LinearLayout) findViewById(R.id.id_tab_nav);
         mTabMy= (LinearLayout) findViewById(R.id.id_tab_my);
         mTabMy.setOnClickListener(v->{
             Intent intent=new Intent(MainActivity.this, MyInfoActivity.class);
+            startActivity(intent);
+        });
+        mTabMusic.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
             startActivity(intent);
         });
 
