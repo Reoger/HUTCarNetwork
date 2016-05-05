@@ -138,6 +138,8 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.main_layout);
 
         init();
@@ -146,8 +148,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
 
         editCityEt = "株洲";
         editSearchKeyEt = "加油站";
-
-
+        
     }
 
 
@@ -181,6 +182,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
             Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
             startActivity(intent);
         });
+
 
         mView = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.myview,null);
 
