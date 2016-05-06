@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="just.activities.AutoInfoActivity">
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        
+        <ImageButton
+            android:id="@+id/id_ib_back"
+            android:background="#000000"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:text="个人车辆信息"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_height="match_parent"
+            android:layout_weight="4"/>
+        
+        <ImageButton
+            android:id="@+id/id_ib_add"
+            android:layout_width="0dp"
+            android:background="#fa7979"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    
+    <TextView
+        android:background="#a7a5a5"
+        android:textColor="#403737"
+        android:gravity="center_horizontal"
+        android:textSize="13sp"
+        android:layout_marginTop="10dp"
+        android:text="温馨提示:如果车辆信息未手动添加,将会在添加维护信息时自动添加"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:background="#c6c4c4"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/id_lv_auto_info"
+            android:divider="#544f4f"
+            android:dividerHeight="1px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
+        <TextView
+            android:id="@+id/id_tv_hint"
+            android:visibility="gone"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="暂无任何记录信息"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+</LinearLayout>
