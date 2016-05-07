@@ -5,4 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="品牌："
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/id_item_tv_brand"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="XXX"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <ImageView
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="2px" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="型号："
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/id_item_tv_model"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="XXX"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <ImageView
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="2px" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="车牌号码："
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/id_item_tv_plate_no"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="XXX"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </LinearLayout>
