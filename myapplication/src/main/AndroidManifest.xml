@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -37,18 +37,19 @@
             android:enabled="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2"></action>
+                <action android:name="com.baidu.location.service_v2.2" />
             </intent-filter>
         </service>
 
-        <activity android:name="just.activities.MyInfoActivity"></activity>
-        <activity android:name="just.activities.AutoInfoActivity"></activity>
-        <activity android:name="just.activities.MaInfoActivity"></activity>
+        <activity android:name="just.activities.MyInfoActivity" />
+        <activity android:name="just.activities.AutoInfoActivity" />
+        <activity android:name="just.activities.MaInfoActivity" />
+        <activity android:name="com.com.reoger.music.View.MainActivity" />
 
-        <activity android:name="com.com.reoger.music.View.MainActivity"/>
-        <service android:name="com.com.reoger.music.service.ServiceForMusic"/>
-        <activity android:name="com.com.reoger.music.View.NextActivity"/>
+        <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 
+        <activity android:name="com.com.reoger.music.View.NextActivity" />
+        <activity android:name="just.activities.ManualAddAutoInfoActivity"></activity>
     </application>
 
 </manifest>
