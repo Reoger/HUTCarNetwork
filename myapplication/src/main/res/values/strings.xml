@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">BaiduTest</string>
+    <string name="app_name">车联网</string>
+
     <string name="action_settings">Settings</string>
 </resources>

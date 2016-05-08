@@ -90,7 +90,7 @@ public class  MyAdapter extends BaseAdapter {
 //                MainActivity mainA = new MainActivity();
 //            //    mainA.playMusicOnAcivity(postition);//播放选中的音乐
 //                LogUtils.i("AD", "穿过来的index所对应的值" + postition);
-    //            mainA.test();
+    //            mainA.ic_loction();
 
 
   //          }
@@ -112,7 +112,7 @@ public class  MyAdapter extends BaseAdapter {
     }
 
     /**
-     * 播放音乐的逻辑代码 test
+     * 播放音乐的逻辑代码 ic_loction
      */
     public void playMusic()  {
                MediaPlayer mediaPlayer = new MediaPlayer();

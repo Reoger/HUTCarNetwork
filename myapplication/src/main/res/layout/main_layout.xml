@@ -1,102 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="起点：" />
-
-            <EditText
-                android:id="@+id/start"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="株洲">
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="终点：" />
-
-            <EditText
-                android:id="@+id/end"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="长沙">
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:layout_marginTop="5dip"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/drive"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:layout_weight="1.0"
-
-                android:onClick="SearchButtonProcess"
-                android:text="驾车" />
-
-            <Button
-                android:id="@+id/transit"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:layout_weight="1.0"
-
-                android:onClick="SearchButtonProcess"
-                android:text="公交" />
-
-            <Button
-                android:id="@+id/walk"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:layout_weight="1.0"
-
-                android:onClick="SearchButtonProcess"
-                android:text="步行" />
-        </LinearLayout>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <com.baidu.mapapi.map.MapView
                 android:id="@+id/map"
@@ -104,27 +10,152 @@
                 android:layout_height="fill_parent"
                 android:clickable="true" />
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignWithParentIfMissing="false"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dip"
-                android:orientation="vertical"
-                android:id="@+id/linearLayout">
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/shadow"
 
-                <Button
-                    android:id="@+id/customicon"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginTop="10dip"
-                    android:layout_weight="1.0"
+                android:orientation="vertical" >
 
-                    android:onClick="changeRouteIcon"
-                    android:text="自定义起终点图标" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="起点：" />
+
+                <EditText
+                    android:id="@+id/start"
+                    android:layout_width="0dip"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text="株洲">
+
+                    <requestFocus />
+                </EditText>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="终点：" />
+
+                <EditText
+                    android:id="@+id/end"
+                    android:layout_width="0dip"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text="长沙">
+
+                    <requestFocus />
+                </EditText>
+
             </LinearLayout>
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#cacaca"
+                 />
+
+                <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="服务栏"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/customicon"
+                            android:layout_width="30dip"
+                            android:layout_height="30dip"
+                            android:layout_margin="5dp"
+                            android:onClick="changeRouteIcon"
+                            android:background="@drawable/icon_tag"
+                            />
+
+                        <Button
+                            android:id="@+id/drive"
+                            android:layout_width="30dip"
+                            android:layout_height="30dip"
+                            android:layout_margin="5dp"
+
+                            android:background="@drawable/icon_car"
+                            android:onClick="SearchButtonProcess"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:layout_width="30dip"
+                            android:layout_height="30dip"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/ic_loction"
+                            android:id="@+id/button"
+                            />
+
+                        <Button
+                            android:layout_width="30dip"
+                            android:layout_height="30dip"
+                            android:layout_margin="5dp"
+                            android:id="@+id/search"
+                            android:background="@drawable/icon_gas"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:text="天气"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:src="@drawable/icon_day_mode"/>
+
+                     </LinearLayout>
+
+          </LinearLayout>
+
+
+       </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
@@ -133,7 +164,8 @@
                 android:layout_alignWithParentIfMissing="false"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="false"
-                android:layout_marginBottom="10dip">
+                android:layout_marginBottom="40dip"
+                android:id="@+id/linearLayout">
 
                 <Button
                     android:id="@+id/pre"
@@ -156,26 +188,28 @@
                     android:onClick="nodeClick" />
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="定位"
-                android:id="@+id/button"
-                android:layout_below="@+id/linearLayout"
-                android:layout_alignRight="@+id/linearLayout"
-                android:layout_alignEnd="@+id/linearLayout" />
+                android:layout_alignParentBottom="true">
+                <include layout="@layout/bottom" />
+            </LinearLayout>
 
             <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加油站"
-                android:id="@+id/search"
-                android:layout_below="@+id/linearLayout"
-                android:layout_toLeftOf="@+id/button"
-                android:layout_toStartOf="@+id/button" />
+                android:text="New Button"
+                android:id="@+id/button2"
+                android:layout_above="@+id/linearLayout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="206dp"
+                android:layout_marginStart="206dp"
+                android:layout_marginBottom="57dp" />
+
         </RelativeLayout>
-    </LinearLayout>
 
-    <include layout="@layout/bottom" />
 
-</LinearLayout>  
+
+
