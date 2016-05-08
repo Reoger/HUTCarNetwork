@@ -2,15 +2,12 @@ package just.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import com.cwp.android.baidutest.R;
 
 import just.adapters.AutoInfoAdapter;
-import just.beans.AutomobileInfo;
 import just.interfaces.AboutHint;
 
 public class AutoInfoActivity extends AppCompatActivity {
@@ -33,6 +29,7 @@ public class AutoInfoActivity extends AppCompatActivity {
     public static final int FINISHED_DEL = 2;
 
     public static final int MANUAL_ADD_AUTO_INFO=3;
+    public static final int SCAN_ADD_AUTO_INFO=4;
 
     private Button mAdd;
 
@@ -88,11 +85,11 @@ public class AutoInfoActivity extends AppCompatActivity {
             window.setContentView(R.layout.dialog_for_auto_info_add_mode);
             window.findViewById(R.id.id_bt_manual).setOnClickListener(v1-> {
                 dialog.dismiss();
-                manualAdd();
+                turnAdd(1);
             });
             dialog.getWindow().findViewById(R.id.id_bt_scan).setOnClickListener(v2-> {
                 dialog.dismiss();
-                scanAdd();
+                turnAdd(2);
             });
             dialog.getWindow().findViewById(R.id.id_bt_cancel_auto_info_add_mode).setOnClickListener(v3-> {
                 dialog.dismiss();
@@ -104,13 +101,29 @@ public class AutoInfoActivity extends AppCompatActivity {
         mLvAutoInfo.setAdapter(mAdapter);
     }
 
-    private void scanAdd() {
-
-    }
-
-    private void manualAdd() {
-        Intent intent=new Intent(this,ManualAddAutoInfoActivity.class);
-        startActivityForResult(intent,MANUAL_ADD_AUTO_INFO);
+    /**
+     * 跳转到添加页面
+     * which=1，代表手动添加
+     * which=2，代表扫码添加
+     */
+    private void turnAdd(int which) {
+        Class<?> cls=null;
+        int requestCode=-1;
+        switch (which) {
+            case 1:
+                cls=ManualAddAutoInfoActivity.class;
+                requestCode=MANUAL_ADD_AUTO_INFO;
+                break;
+//            case 2:
+//                cls=CaptureActivity.class;
+//                requestCode=SCAN_ADD_AUTO_INFO;
+//                break;
+            default:break;
+        }
+        if(cls!=null&&requestCode!=-1) {
+            Intent intent=new Intent(this,cls);
+            startActivityForResult(intent,requestCode);
+        }
     }
 
     @Override
@@ -127,15 +140,16 @@ public class AutoInfoActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==MANUAL_ADD_AUTO_INFO) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode==MANUAL_ADD_AUTO_INFO||requestCode==SCAN_ADD_AUTO_INFO) {
                 if (resultCode == RESULT_OK) {
-                    AutomobileInfo automobileInfo= (AutomobileInfo) data.getSerializableExtra(ManualAddAutoInfoActivity.RESULT);
-                    addAutomobileInfo(automobileInfo);
+                    String result=data.getExtras().getString("result");
+                    dealAddResult(result);
                 }
         }
     }
 
-    private void addAutomobileInfo(AutomobileInfo automobileInfo) {
+    private void dealAddResult(String result) {
 
     }
 }
