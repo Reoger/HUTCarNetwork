@@ -66,8 +66,9 @@ public class ServiceForMusic extends Service{
             public void run() {
                 //更新进度条
                 mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-                mTimeStare.setText(mMediaPlayer.getCurrentPosition()+"");
-                mTimeTop.setText(mMediaPlayer.getDuration()+"");
+                mTimeStare.setText(toTime(mMediaPlayer.getCurrentPosition())+"");
+                mTimeTop.setText(toTime(mMediaPlayer.getDuration()));
+
                 handler.postDelayed(runnable,500);
             }
         };
@@ -123,12 +124,12 @@ public class ServiceForMusic extends Service{
                  mMediaPlayer.setDataSource(mSongPath);
                 mMediaPlayer.prepare();
                 seekBar.setMax(mMediaPlayer.getDuration());
+
                 mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (fromUser) {//是否是用户操作
                             mMediaPlayer.seekTo(progress);
-
                             LogUtils.e(TAG, "我是seekBar方法，我执行了,在线程中被开启");
                         }
                     }
@@ -146,13 +147,10 @@ public class ServiceForMusic extends Service{
                 mMediaPlayer.start();
                 mIsPlaying = true;
                 handler.post(runnable);
-                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        LogUtils.e(TAG,"歌曲播放完毕");
-                        //在此添加歌曲播放完毕的逻辑代码
-                        over.onMusicOver();
-                    }
+                mMediaPlayer.setOnCompletionListener(mp -> {
+                    LogUtils.e(TAG,"歌曲播放完毕");
+                    //在此添加歌曲播放完毕的逻辑代码
+                    over.onMusicOver();
                 });
             }catch (Exception e){
                 e.printStackTrace();
@@ -187,6 +185,25 @@ public class ServiceForMusic extends Service{
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public  String toTime(int musicTime){
+        String readableTime = ":";
+        int m = musicTime % 60000 / 1000;
+        int o = musicTime / 60000;
+        if (o == 0) {
+            readableTime = "00" + readableTime;
+        } else if (0 < o && o < 10) {
+            readableTime = "0" + o + readableTime;
+        } else {
+            readableTime = o + readableTime;
+        }
+        if (m < 10) {
+            readableTime = readableTime + "0" + m;
+        } else {
+            readableTime = readableTime + m;
+        }
+        return readableTime;
     }
 }
 

@@ -171,7 +171,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
     }
 
     void init() {
-        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//
+        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//音乐
         mTabNav= (LinearLayout) findViewById(R.id.id_tab_nav);
         mTabMy= (LinearLayout) findViewById(R.id.id_tab_my);
         mTabMy.setOnClickListener(v->{
@@ -216,28 +216,21 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
 
         btn_search = (Button) findViewById(R.id.search);
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        btn_search.setOnClickListener(v -> {
 //                nearbySearch(0);
 //                citySearch(4);
 //                显示页为第0页的结果
 
 
-                boundSearch(0);
-            }
+            boundSearch(0);
         });
 
 
-        btn_myPosition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_myPosition.setOnClickListener(v -> {
 
-                //定位功能,以自己为中点定位
-                centerToMyLocation(mLatitue, mLongLatitue);
+            //定位功能,以自己为中点定位
+            centerToMyLocation(mLatitue, mLongLatitue);
 
-            }
         });
 
 
@@ -301,7 +294,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMapClickListene
                     t2.setText(result.getAddress());
                     t3.setText("5.0");
                     t4.setText("未知");
-Log.i("sdsdsdsdsd",result.getDetailUrl());
+                    Log.i("sdsdsdsdsd",result.getDetailUrl());
                     mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
 
 
