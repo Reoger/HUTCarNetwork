@@ -12,6 +12,6 @@ public class ManualAddAutoInfoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_add_auto_info);
-        Log.d("测试","+++++++++++");
+        Log.d("测试","--------");
     }
 }
