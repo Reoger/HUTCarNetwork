@@ -1,11 +1,9 @@
 package com.cwp.android.baidutest;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +19,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -42,8 +41,10 @@ import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiBoundSearchOption;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.route.BikingRouteResult;
@@ -54,8 +55,10 @@ import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteLine;
+import com.baidu.mapapi.search.route.TransitRoutePlanOption;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
+import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import java.util.Locale;
@@ -63,7 +66,7 @@ import java.util.Locale;
 import just.activities.MyInfoActivity;
 
 
-public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener,
+public class MainActivity extends Activity implements BaiduMap.OnMapClickListener,
         OnGetRoutePlanResultListener {
 
     //地图相关，使用继承MapView的MyRouteMapView目的是重写touch事件实现泡泡处理
@@ -81,12 +84,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     //定位用的按钮
     Button btn_myPosition;
+
     //加油站搜索按钮
     Button btn_search;
-    //上一个节点
-    Button mBtnPre = null;
-    //下一个节点
-    Button mBtnNext = null;
 
     //经度
     private double mLatitue;
@@ -97,7 +97,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     boolean isFirstIn = true;
 
     //***************
+    //上一个节点
+    Button mBtnPre = null;
+    //下一个节点
+    Button mBtnNext = null;
     //节点索引,供浏览节点时使用
+
     int nodeIndex = -1;
 
     //路线的父类，包括多种路线，具体用时动态生成
@@ -116,12 +121,8 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     // 搜索模块，也可去掉地图模块独立使用
     RoutePlanSearch mSearch = null;
-    //显示popou窗口位置
-    LatLng nodeLocation;
 
-    static Handler myhandler;
-    //用于更新加油站数据
-    Bundle bundle = null;
+
     //语音TTS
     TextToSpeech tts;
 
@@ -147,9 +148,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         editCityEt = "株洲";
         editSearchKeyEt = "加油站";
-
-
-
+        
     }
 
 
@@ -172,15 +171,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     }
 
     void init() {
-        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//
+        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//音乐
         mTabNav= (LinearLayout) findViewById(R.id.id_tab_nav);
         mTabMy= (LinearLayout) findViewById(R.id.id_tab_my);
-
         mTabMy.setOnClickListener(v->{
             Intent intent=new Intent(MainActivity.this, MyInfoActivity.class);
             startActivity(intent);
         });
-
         mTabMusic.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
             startActivity(intent);
@@ -211,23 +208,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         //***************
 
-        myhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-
-                switch (msg.what) {
-                    case 0x12:
-                        bundle = msg.getData();
-                        updata(bundle);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-
-        //****************
-
 
         //初始化检索
         mPoiSearch = PoiSearch.newInstance();
@@ -236,25 +216,21 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         btn_search = (Button) findViewById(R.id.search);
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_search.setOnClickListener(v -> {
+//                nearbySearch(0);
+//                citySearch(4);
+//                显示页为第0页的结果
 
-//              显示页为第0页的结果
-                boundSearch(0);
 
-            }
+            boundSearch(0);
         });
 
 
-        btn_myPosition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_myPosition.setOnClickListener(v -> {
 
-                //定位功能,以自己为中点定位
-                centerToMyLocation(mLatitue, mLongLatitue);
+            //定位功能,以自己为中点定位
+            centerToMyLocation(mLatitue, mLongLatitue);
 
-            }
         });
 
 
@@ -262,8 +238,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         //
 
         poiListener = new OnGetPoiSearchResultListener() {
-
-
             public void onGetPoiResult(PoiResult result) {
 
                 if (result == null
@@ -284,16 +258,16 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     poiOverlay.addToMap();// 将所有的overlay添加到地图上
                     poiOverlay.zoomToSpan();
 
-//                    int totalPage = result.getTotalPageNum();// 获取总分页数
+                    int totalPage = result.getTotalPageNum();// 获取总分页数
 
                     Toast.makeText(
                             MainActivity.this,
-                            "总共搜索到" + result.getTotalPoiNum() + "加油站", Toast.LENGTH_SHORT).show();
+                            "总共查到" + result.getTotalPoiNum() + "个兴趣点, 分为"
+                                    + totalPage + "页", Toast.LENGTH_SHORT).show();
 
                 }
 
             }
-
 
             public void onGetPoiDetailResult(PoiDetailResult result) {
 
@@ -304,18 +278,35 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
                 } else {// 正常返回结果的时候，此处可以获得很多相关信息
 
-                    //获取pupouWindow的显示位置
-                    nodeLocation = result.getLocation();
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JSON_DATA.getRequest2(nodeLocation.latitude,nodeLocation.longitude);
-                        }
-                    }).start();
+//        popupText.setBackgroundResource(R.drawable.popup);
 
+                    LatLng nodeLocation = result.getLocation();
+
+                    TextView t1 ,t2,t3,t4;
+
+                    t1 = (TextView) mView.findViewById(R.id.textView1);
+                    t2 = (TextView) mView.findViewById(R.id.textView2);
+                    t3 = (TextView) mView.findViewById(R.id.textView3);
+                    t4 = (TextView) mView.findViewById(R.id.textView4);
+
+                    t1.setText(result.getName());
+                    t2.setText(result.getAddress());
+                    t3.setText("5.0");
+                    t4.setText("未知");
+                    Log.i("sdsdsdsdsd",result.getDetailUrl());
+                    mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
+
+
+//                    Toast.makeText(
+//                            MainActivity.this,
+//                            result.getName() + ": "
+//                                    + result.getAddress(),
+//                            Toast.LENGTH_LONG).show();
                 }
+
             }
+
 
         };
 
@@ -343,7 +334,22 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         //在公交线路规划回调方法中添加TransitRouteOverlay用于展示换乘信息
     }
 
+    /**
+     * 城市内搜索
+     */
+    private void citySearch(int page) {
+        // 设置检索参数
+        PoiCitySearchOption citySearchOption = new PoiCitySearchOption();
 
+        citySearchOption.city(editCityEt);// 城市
+        citySearchOption.keyword(editSearchKeyEt);// 关键字
+
+        citySearchOption.pageCapacity(15);// 默认每页10条
+        citySearchOption.pageNum(page);// 分页编号
+
+        // 发起检索请求
+        mPoiSearch.searchInCity(citySearchOption);
+    }
 
     /**
      * 范围检索
@@ -365,47 +371,31 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mPoiSearch.searchInBound(boundSearchOption);// 发起poi范围检索请求
     }
 
+    /**
+     * 附近检索
+     */
+    private void nearbySearch(int page) {
+        PoiNearbySearchOption nearbySearchOption = new PoiNearbySearchOption();
 
-    //当后台数据完成后显示加油站的信息
+        nearbySearchOption.location(new LatLng(mLatitue, mLongLatitue));
+        nearbySearchOption.keyword(editSearchKeyEt);
+        nearbySearchOption.radius(1000);// 检索半径，单位是米
+        nearbySearchOption.pageNum(page);
 
-    public void updata(Bundle bundle){
-
-        TextView t1 ,t2, t3,t4;
-
-        /*
-        ** t1是加油站名称  t2是加油站地址  t3是油价 t4也是 价格
-         */
-        t1 = (TextView) mView.findViewById(R.id.textView1);
-        t2 = (TextView) mView.findViewById(R.id.textView2);
-
-        t3 = (TextView) mView.findViewById(R.id.textView3);
-        t4 = (TextView) mView.findViewById(R.id.textView4);
-
-        String name = (String) bundle.get("NAME");
-        String address = (String) bundle.get("ADDRESS");
-        String price = (String) bundle.get("price1");
-        String gasprice = (String) bundle.get("gasprice1");
-
-        t1.setText(name);
-        t2.setText(address);
-        t3.setText(price);
-        t4.setText(gasprice);
-
-        mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
-
+        mPoiSearch.searchNearby(nearbySearchOption);// 发起附近检索请求
     }
+
 
     class MyPoiOverlay extends PoiOverlay {
         public MyPoiOverlay(BaiduMap arg0) {
             super(arg0);
         }
 
-        //加油站的点击事件
         @Override
         public boolean onPoiClick(int arg0) {
             super.onPoiClick(arg0);
             PoiInfo poiInfo = getPoiResult().getAllPoi().get(arg0);
-         // 检索poi详细信息
+            // 检索poi详细信息
             mPoiSearch.searchPoiDetail(new PoiDetailSearchOption()
                     .poiUid(poiInfo.uid));
             return true;
@@ -429,11 +419,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     .build();
             mBaiduMap.setMyLocationData(data);
 
+//           MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.COMPASS,arg1,arg2);
 
 //           时时获取经纬度
             mLatitue = location.getLatitude();
             mLongLatitue = location.getLongitude();
-//            Log.v("$$$$$$$$$$$$$", "**********************");
+            Log.v("$$$$$$$$$$$$$", "**********************");
             Log.v("mLatitue", mLatitue + "");
             Log.v("mLongLatitue", mLongLatitue + "");
 
@@ -532,6 +523,65 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     .from(stNode)
                     .to(enNode));
 
+            /**
+             * 公交搜索
+             * */
+
+        } else if (v.getId() == R.id.transit) {
+
+            /**
+             * public boolean transitSearch(TransitRoutePlanOption option)
+             * 发起换乘路线规划
+             * @param option - 请求参数
+             * @return 成功发起检索返回true , 失败返回false
+             *
+             * TransitRoutePlanOption:换乘路线规划参数
+             * public TransitRoutePlanOption from(PlanNode from)
+             * 设置起点
+             * @param from - 起点
+             * @return 该换乘路线规划参数对象
+             *
+             * public TransitRoutePlanOption city(java.lang.String city)
+             * 设置换乘路线规划城市，起终点中的城市将会被忽略
+             * @param city - 城市
+             * @return 该换乘路线规划参数对象
+             *
+             * public TransitRoutePlanOption to(PlanNode to)
+             * 设置终点
+             * @return 该换乘路线规划参数对象
+             * */
+
+            mSearch.transitSearch((new TransitRoutePlanOption())
+                    .from(stNode)
+                    .city("北京")
+                    .to(enNode));
+            /**
+             * 步行搜索
+             * */
+
+        } else if (v.getId() == R.id.walk) {
+
+            /**
+             * public boolean walkingSearch(WalkingRoutePlanOption option)
+             * 发起步行路线规划
+             * @param option - 请求参数
+             * @return 成功发起检索返回true , 失败返回false
+             *
+             * WalkingRoutePlanOption:步行路线规划参数
+             * public WalkingRoutePlanOption from(PlanNode from)
+             * 设置起点
+             * @param from - 起点
+             * @return 该步行路线规划参数对象
+             *
+             * public WalkingRoutePlanOption to(PlanNode to)
+             * 设置终点
+             * @param to - 终点
+             * @return 该步行路线规划参数对象
+             * */
+
+            mSearch.walkingSearch((new WalkingRoutePlanOption())
+                    .from(stNode)
+                    .to(enNode));
         }
     }
 
@@ -658,7 +708,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         mBaiduMap.showInfoWindow(new InfoWindow(popupText, nodeLocation, 0));
 
+
     }
+
 
     /**
      * 自定义起终点图标点击事件

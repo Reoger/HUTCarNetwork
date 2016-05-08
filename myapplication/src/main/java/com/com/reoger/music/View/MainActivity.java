@@ -1,6 +1,7 @@
 package com.com.reoger.music.View;
 
 
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,12 +13,14 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,7 +32,6 @@ import android.widget.Toast;
 
 
 import com.com.reoger.music.Inface.IMusic;
-import com.com.reoger.music.Inface.IsMusicOver;
 import com.com.reoger.music.Utils.LogUtils;
 import com.com.reoger.music.Utils.MyAdapter;
 import com.com.reoger.music.Utils.Utils;
@@ -48,9 +50,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private MyAdapter adaper;
     private boolean mIsMusicPlaying = true;
     private IMusic binder;
-    private ArrayList<HashMap<String, Object>> mMusicData = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<HashMap<String, Object>> mMusicData = new ArrayList<>();
     private Intent in;
-    private static final String ACTION = "com.create.musictest.service";
     private SeekBar mSeekBar;
     private int mCurrSongIndex = 0;//用于记录当前歌曲的索引
     private static final String TAG = "MainActivity";
@@ -61,15 +62,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextView mTimeStare;
     private TextView mTimeTop;
 
+    private Bundle mBundle;
+    private PersistableBundle mPersistableBundle;
+    private String messgae = "";
+
     public ButtonBroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mBundle = savedInstanceState;
+        //也不知道有没有用 暂时试试吧
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_music);
+        getSupportActionBar().hide();
 
         initView();
-     //   initTitle();
+        initTitle();
         initIntent();
         mMusicList.setAdapter(adaper);
         mMusicList.setOnItemClickListener(this);
@@ -83,19 +93,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void initTitle() {
         mCurrSongName = mMusicData.get(mCurrSongIndex).get("musicName") + "";
         toolbar.setTitle(mCurrSongName);
-      //  setSupportActionBar(toolbar);
+
+        //setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ab_android);
         toolbar.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NextActivity.class);
             startActivity(intent);
         });
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "你点击了我", Toast.LENGTH_SHORT).show();
-
-                showButtonNotify();
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+          Intent intentForMain = new Intent(MainActivity.this,com.cwp.android.baidutest.MainActivity.class);
+            startActivity(intentForMain);
+         //   onSaveInstanceState(mBundle,mPersistableBundle);
+            //主动保存数据
         });
     }
 
@@ -113,26 +122,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             bindService(in, conn, Context.BIND_AUTO_CREATE);
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    if (binder != null) {
-                        binder.init(mSeekBar, mTimeStare,mTimeTop,new IsMusicOver() {
-                            @Override
-                            public void onMusicOver() {
-                                nextMusic(null);//自动播放下一曲
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                if (binder != null) {
+                    binder.init(mSeekBar, mTimeStare,mTimeTop, () -> {
+                        nextMusic(null);//自动播放下一曲
 
 
-                                LogUtils.e(TAG, "这是在主函数里面的的自动播放下一曲");
+                        LogUtils.e(TAG, "这是在主函数里面的的自动播放下一曲");
 
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    });
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
 
@@ -172,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -279,8 +281,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
         super.onResume();
+        //主动获取数据
+      //  onRestoreInstanceState(null,null);
         Utils.cancelNotication(MainActivity.this);
-        Toast.makeText(MainActivity.this, "我又满血复活了", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, messgae+"", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //保存长久的数据
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //主动保存数据
+        Toast.makeText(MainActivity.this,"这个可不能退出",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -300,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             unregisterReceiver(mReceiver);
         }
         Utils.saveDate(mCurrSongIndex, this);
+        Utils.cancelNotication(this);
     }
 
     public boolean onlyPlayMusic() {
@@ -348,16 +366,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case OREDR:
                 mImageButtonOrder.setBackgroundResource(R.drawable.order);
                 status = Sequence.CYCLE;
+                Toast.makeText(MainActivity.this,"顺序播放",Toast.LENGTH_SHORT).show();
                 LogUtils.i(TAG, "当前的状态是" + status + "CYCLE");
                 break;
             case CYCLE:
                 mImageButtonOrder.setBackgroundResource(R.drawable.cycle);
                 status = Sequence.RANDER;
+                Toast.makeText(MainActivity.this,"单曲循环",Toast.LENGTH_SHORT).show();
                 LogUtils.i(TAG, "当前的状态是" + status + "RANDER");
                 break;
             case RANDER:
                 status = Sequence.OREDR;
                 mImageButtonOrder.setBackgroundResource(R.drawable.random);
+
+                Toast.makeText(MainActivity.this,"随机播放",Toast.LENGTH_SHORT).show();
                 LogUtils.i(TAG, "当前的状态是" + status + "OREDR");
                 break;
         }
@@ -404,9 +426,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .setSmallIcon(R.drawable.ab_share);
         Notification notify = mBuilder.build();
         notify.flags = Notification.FLAG_ONGOING_EVENT;
-        //会报错，还在找解决思路
-//		notify.contentView = mRemoteViews;
-//		notify.contentIntent = PendingIntent.getActivity(this, 0, new Intent(), 0);
+
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(200, notify);
     }
@@ -424,6 +444,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_BUTTON);
         registerReceiver(mReceiver, intentFilter);
+    }
+
+    /**
+     * 保存数据
+     * @param outState
+     * @param outPersistentState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+       LogUtils.e("SAVE","Save");
+        super.onSaveInstanceState(outState, outPersistentState);
+        this.mBundle = outState;
+        this.mPersistableBundle = outPersistentState;
+      outState.putString("message","reoger");
+    }
+
+    /**
+     * 读取数据
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        LogUtils.e("SAVE","Restore");
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null){
+            messgae = savedInstanceState.getString("message");
+        }
+
     }
 
     /**
@@ -449,7 +498,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     case Constant.BUTTON_NEXT_ID:
                         LogUtils.d(TAG, "下一首");
                         nextMusic(null);
-
                         break;
                     default:
                         break;

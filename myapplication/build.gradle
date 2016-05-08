@@ -40,6 +40,10 @@ dependencies {
     compile files('libs/baidumapapi_radar_v3_7_3.jar')
     compile files('libs/baidumapapi_search_v3_7_3.jar')
     compile files('libs/baidumapapi_util_v3_7_3.jar')
+    compile files('libs/BmobSDK_V3.4.6_0415.jar')
+    compile files('libs/okhttp-2.4.0.jar')
+    compile files('libs/okio-1.4.0.jar')
+    compile files('libs/org.apache.http.legacy.jar')
 }
 
 apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要
