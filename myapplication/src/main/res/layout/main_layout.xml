@@ -195,18 +195,7 @@
                 <include layout="@layout/bottom" />
             </LinearLayout>
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button2"
-                android:layout_above="@+id/linearLayout"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="206dp"
-                android:layout_marginStart="206dp"
-                android:layout_marginBottom="57dp" />
+
 
         </RelativeLayout>
 
