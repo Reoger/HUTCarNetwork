@@ -23,13 +23,13 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ListView
+        <just.swipemenulistview.SwipeMenuListView
+            android:divider="#010101"
+            android:dividerHeight="3px"
             android:id="@+id/id_lv_auto_info"
-            android:divider="#544f4f"
-            android:dividerHeight="1px"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>
+        </just.swipemenulistview.SwipeMenuListView>
 
         <TextView
             android:id="@+id/id_tv_hint"

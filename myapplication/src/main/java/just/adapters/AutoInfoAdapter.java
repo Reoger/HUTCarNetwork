@@ -2,6 +2,7 @@ package just.adapters;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import com.cwp.android.baidutest.R;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
+import cn.bmob.v3.listener.FindListener;
+import just.activities.AutoInfoActivity;
 import just.beans.AutomobileInfo;
 import just.constants.AutoInfoConstants;
 import just.interfaces.AboutHint;
@@ -25,15 +30,15 @@ public class AutoInfoAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
 
-    private Handler mHandler;
-
     private AboutHint mAboutHint;
 
-    public AutoInfoAdapter(Context context, Handler handler, AboutHint aboutHint) {
+    private Handler mHandler;
+
+    public AutoInfoAdapter(Context context, AboutHint aboutHint,Handler handler) {
         mInflater = LayoutInflater.from(context);
         mContext=context;
-        mHandler=handler;
         mAboutHint=aboutHint;
+        mHandler=handler;
         setData();
     }
 
@@ -43,7 +48,7 @@ public class AutoInfoAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public AutomobileInfo getItem(int position) {
         return mData.get(position);
     }
 
@@ -84,5 +89,63 @@ public class AutoInfoAdapter extends BaseAdapter {
         TextView brand;
         TextView model;
         TextView plateNo;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        setData();
+        super.notifyDataSetChanged();
+    }
+
+    public void deletePosition(int position) {
+        AutomobileInfo automobileInfo=mData.get(position);
+        String vin = automobileInfo.getVin();
+        String isSyncToCloud = AutoInfoLocalDBOperation.
+                queryGetSpecifiedAttr(mContext,
+                        new String[]{AutoInfoConstants.COLUMN_IS_SYNC},
+                        " vin = ?", new String[]{vin});
+        if ("0".equals(isSyncToCloud)) {
+            //如果需要删除的数据还没有同步至云端，则只需要直接在本地数据库删除
+            if (AutoInfoLocalDBOperation.deleteBy(mContext, AutoInfoConstants.COLUMN_VIN + " = ?", new String[]{automobileInfo.getVin()})) {
+                Log.d("测试->DeleteAutoInfoTask", vin + "未同步至云端，本地删除成功!");
+                mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+            }
+        } else if ("1".equals(isSyncToCloud)) {
+            //如果同步至了云端，则需要先删除云端的数据
+            BmobQuery<AutomobileInfo> query = new BmobQuery<>();
+            query.addWhereEqualTo("vin", vin);
+            query.setLimit(1);
+            query.addQueryKeys("objectId");
+            query.findObjects(mContext, new FindListener<AutomobileInfo>() {
+                @Override
+                public void onSuccess(List<AutomobileInfo> list) {
+                    Log.d("测试->DeleteAutoInfoTask", "查询成功");
+                    list.get(0).delete(mContext, new DeleteListener() {
+                        @Override
+                        public void onSuccess() {
+                            if (AutoInfoLocalDBOperation.deleteBy(mContext, AutoInfoConstants.COLUMN_VIN + " = ?", new String[]{vin})) {
+                                Log.d("测试->DeleteAutoInfoTask", "vin=" + vin + ",本地与云端删除成功!");
+                                mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            AutoInfoLocalDBOperation.updateForIsDelWithCloud(mContext, vin, 1);
+                            Log.d("测试->DeleteAutoInfoTask", "删除失败！ i=" + i + ",s=" + s);
+                            mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    AutoInfoLocalDBOperation.updateForIsDelWithCloud(mContext, vin, 1);
+                    Log.d("测试->DeleteAutoInfoTask", "查询失败:失败编码->" + i + ",失败原因->" + s);
+                    mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                }
+            });
+        }
     }
 }

@@ -1,52 +1,77 @@
 package just.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
+import java.util.Date;
+
+import cn.bmob.v3.listener.SaveListener;
 import just.adapters.AutoInfoAdapter;
+import just.beans.AutomobileInfo;
 import just.interfaces.AboutHint;
+import just.operations.AutoInfoLocalDBOperation;
+import just.swipemenulistview.SwipeMenuItem;
+import just.swipemenulistview.SwipeMenuListView;
 
 public class AutoInfoActivity extends AppCompatActivity {
-    private ListView mLvAutoInfo;
+    private SwipeMenuListView mLvAutoInfo;
     private AutoInfoAdapter mAdapter;
     private TextView mTvHint;
 
-    public static final int START_DEL = 1;
-    public static final int FINISHED_DEL = 2;
+    public static final int START_ADD = 1;
+    public static final int FINISHED_ADD = 2;
+    public static final int START_DEL = 3;
+    public static final int FINISHED_DEL = 4;
 
-    public static final int MANUAL_ADD_AUTO_INFO=3;
-    public static final int SCAN_ADD_AUTO_INFO=4;
+    public static final int MANUAL_ADD_AUTO_INFO=5;
+    public static final int SCAN_ADD_AUTO_INFO=6;
 
     private Button mAdd;
 
-    private Handler mHandler = new Handler() {
+    private Handler mHandler=new Handler() {
         private ProgressDialog progressDialog;
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == START_DEL) {
+            if(msg.what==START_ADD) {
                 progressDialog = new ProgressDialog(AutoInfoActivity.this);
-                progressDialog.setTitle("正在删除选择项");
+                progressDialog.setTitle("正在添加");
                 progressDialog.setMessage("请等待...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-            } else if (msg.what == FINISHED_DEL) {
+            }
+            else if(msg.what==START_DEL) {
+                progressDialog = new ProgressDialog(AutoInfoActivity.this);
+                progressDialog.setTitle("正在删除");
+                progressDialog.setMessage("请等待...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+            else if(msg.what==FINISHED_ADD||msg.what==FINISHED_DEL) {
                 progressDialog.dismiss();
-                progressDialog = null;
+                progressDialog=null;
+                mAdapter.notifyDataSetChanged();
             }
         }
     };
@@ -71,7 +96,7 @@ public class AutoInfoActivity extends AppCompatActivity {
 
         mTvHint = (TextView) findViewById(R.id.id_tv_hint);
 
-        mLvAutoInfo = (ListView) findViewById(R.id.id_lv_auto_info);
+        mLvAutoInfo = (SwipeMenuListView) findViewById(R.id.id_lv_auto_info);
 
         AboutHint myHint = isShow -> {
             mTvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);
@@ -96,9 +121,65 @@ public class AutoInfoActivity extends AppCompatActivity {
             });
         });
 
-        mAdapter = new AutoInfoAdapter(this, mHandler, myHint);
+        mAdapter = new AutoInfoAdapter(this, myHint, mHandler);
 
         mLvAutoInfo.setAdapter(mAdapter);
+
+        // set creator
+        mLvAutoInfo.setMenuCreator(menu->{
+//                // create "open" item
+//                SwipeMenuItem openItem = new SwipeMenuItem(
+//                        getApplicationContext());
+//                // set item background
+//                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+//                        0xCE)));
+//                // set item width
+//                openItem.setWidth(dp2px(90));
+//                // set item title
+//                openItem.setTitle("Open");
+//                // set item title fontsize
+//                openItem.setTitleSize(18);
+//                // set item title font color
+//                openItem.setTitleColor(Color.WHITE);
+//                // add to menu
+//                menu.addMenuItem(openItem);
+
+            // create "delete" item
+            SwipeMenuItem deleteItem = new SwipeMenuItem(
+                    getApplicationContext());
+            // set item background
+            deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                    0x3F, 0x25)));
+            // set item width
+            deleteItem.setWidth(dp2px(90));
+            // set a icon
+            deleteItem.setIcon(R.drawable.ic_delete);
+            // add to menu
+            menu.addMenuItem(deleteItem);
+        });
+
+        mLvAutoInfo.setOnMenuItemClickListener(((position, menu, index) -> {
+            switch (index) {
+                case 0:
+                    new OperationTask(position).start();
+                    break;
+            }
+        }));
+
+        mLvAutoInfo.setOnItemClickListener(((parent, view, position, id) -> {
+            AutomobileInfo automobileInfo=mAdapter.getItem(position);
+            String s="品牌:"+automobileInfo.getBrand()+"\n型号:"+automobileInfo.getModel()+
+                    "\n车牌级别:"+automobileInfo.getBodyLevel()+
+                    "\n车牌号:"+automobileInfo.getLicensePlateNum()+
+                    "\n发动机号:"+automobileInfo.getEngineNum()+
+                    "\n车架号"+automobileInfo.getVin();
+            new AlertDialog.Builder(this)
+                    .setTitle("详细信息")
+                    .setMessage(s)
+                    .setPositiveButton("确定",((dialog, which) -> {
+                        dialog.dismiss();
+                    })).create().show();
+        }));
     }
 
     /**
@@ -114,10 +195,10 @@ public class AutoInfoActivity extends AppCompatActivity {
                 cls=ManualAddAutoInfoActivity.class;
                 requestCode=MANUAL_ADD_AUTO_INFO;
                 break;
-//            case 2:
-//                cls=CaptureActivity.class;
-//                requestCode=SCAN_ADD_AUTO_INFO;
-//                break;
+            case 2:
+                cls=CaptureActivity.class;
+                requestCode=SCAN_ADD_AUTO_INFO;
+                break;
             default:break;
         }
         if(cls!=null&&requestCode!=-1) {
@@ -143,13 +224,91 @@ public class AutoInfoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode==MANUAL_ADD_AUTO_INFO||requestCode==SCAN_ADD_AUTO_INFO) {
                 if (resultCode == RESULT_OK) {
+                    Date time=new Date();
                     String result=data.getExtras().getString("result");
-                    dealAddResult(result);
+                    Log.d("测试->AutoInfoActivity",result);
+
+                    new OperationTask(result,time).start();
                 }
         }
     }
 
-    private void dealAddResult(String result) {
+    private void dealAddResult(String s,Date date) {
+        String[] result=s.split("[:\n]");
+        AutomobileInfo autoInfo=new AutomobileInfo();
+        autoInfo.setBrand(result[1]);
+        autoInfo.setModel(result[3]);
+        autoInfo.setBodyLevel(result[5]);
+        autoInfo.setEngineNum(result[7]);
+        autoInfo.setLicensePlateNum(result[9]);
+        autoInfo.setVin(result[11]);
+        autoInfo.setUsername(MyApplication.getUsername());
+        autoInfo.setAddTime(date);
 
+        syncToCloud(autoInfo);
+    }
+
+    private void syncToCloud(AutomobileInfo autoInfo) {
+        autoInfo.save(this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                saveToLocal(autoInfo,1);
+                Log.d("测试->AutoInfoActivity","成功同步至云端");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                saveToLocal(autoInfo,0);
+
+                //i=9016 表示The network is not available。
+                Log.d("测试->AutoInfoActivity","同步云端失败:错误编号-"+i+"，错误原因-"+s);
+            }
+        });
+    }
+
+    private void saveToLocal(AutomobileInfo autoInfo, int isSyncToCloud) {
+        AutoInfoLocalDBOperation.insert(this,autoInfo,isSyncToCloud);
+        mHandler.sendEmptyMessage(FINISHED_ADD);
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+
+    private class OperationTask extends Thread {
+        public static final int OPERATION_ADD=1;
+        public static final int OPERATION_DEL=2;
+
+        private int mOperation;
+
+        private String result;
+        private Date date;
+
+        private int position;
+
+        public OperationTask(String result,Date date) {
+            mOperation=OPERATION_ADD;
+            this.result=result;
+            this.date=date;
+        }
+
+        public OperationTask(int position) {
+            mOperation=OPERATION_DEL;
+            this.position=position;
+        }
+
+        @Override
+        public void run() {
+            if(mOperation==OPERATION_ADD) {
+                mHandler.sendEmptyMessage(START_ADD);
+                dealAddResult(result,date);
+
+            }
+            else if(mOperation==OPERATION_DEL) {
+                mHandler.sendEmptyMessage(START_DEL);
+                mAdapter.deletePosition(position);
+            }
+        }
     }
 }

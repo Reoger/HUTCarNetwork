@@ -19,21 +19,17 @@ import just.helpers.AutoInfoOpenHelper;
  */
 public class AutoInfoLocalDBOperation {
 
-    public static boolean insert(Context context, AutomobileInfo automobileInfo, int isSyncToCloud) {
+    public static void insert(Context context, AutomobileInfo automobileInfo, int isSyncToCloud) {
         SQLiteDatabase db= AutoInfoOpenHelper.getInstance(context).getWritableDatabase();
 
         //暂时先用这种方式防止插入重复的数据
         Cursor cursor = db.query(AutoInfoConstants.AUTO_INFO_TABLE_NAME, new String[]{AutoInfoConstants.COLUMN_VIN},AutoInfoConstants.COLUMN_VIN+" = ?", new String[]{automobileInfo.getVin()}, null, null, null);
-        if (cursor.moveToFirst()) return false;
+        if (cursor.moveToFirst()) return;
 
         ContentValues values= getValuesForInsert(automobileInfo,isSyncToCloud);
 
-        long rowId=db.insert(AutoInfoConstants.AUTO_INFO_TABLE_NAME,null,values);
+        db.insert(AutoInfoConstants.AUTO_INFO_TABLE_NAME,null,values);
         db.close();
-        if(rowId>0) {
-            return true;
-        }
-        return false;
     }
 
     public static List<AutomobileInfo> queryAll(Context context) {
@@ -49,7 +45,6 @@ public class AutoInfoLocalDBOperation {
      * @return  返回具有指定查询结果的List
      */
     public static List<AutomobileInfo> queryBy(Context context, @Nullable String[] columns, @Nullable String selection, @Nullable String[] selectionArgs) {
-        Log.d("测试","AutoInfoLocalDBOperation->queryBy");
         List<AutomobileInfo> list=new ArrayList<>();
         SQLiteDatabase db = AutoInfoOpenHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(AutoInfoConstants.AUTO_INFO_TABLE_NAME, columns, selection, selectionArgs, null, null, null);

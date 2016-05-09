@@ -1,2 +1,1 @@
-include ':myapplication'
-include ':swipeMenuListView'
+include ':myapplication', ':libzxing'

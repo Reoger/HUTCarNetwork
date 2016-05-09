@@ -12,7 +12,7 @@ import cn.bmob.v3.Bmob;
  */
 public class MyApplication extends Application {
     public static Semaphore mSyncSemaphore;
-    public static String USERNAME;
+    public static String USERNAME="13874939742";
 
     @Override
     public void onCreate() {
@@ -23,8 +23,6 @@ public class MyApplication extends Application {
     }
 
     public void setUsername(String username) {
-//        USERNAME=username;
-        USERNAME="13874939742";
     }
 
     public static String getUsername() {

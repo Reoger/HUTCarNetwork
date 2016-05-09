@@ -44,7 +44,9 @@
         <activity android:name="just.activities.MyInfoActivity" />
         <activity android:name="just.activities.AutoInfoActivity" />
         <activity android:name="just.activities.MaInfoActivity" />
-        <activity android:name="com.com.reoger.music.View.MainActivity" />
+        <activity
+            android:launchMode="singleTask"
+            android:name="com.com.reoger.music.View.MainActivity" />
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 

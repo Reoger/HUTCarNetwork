@@ -44,6 +44,8 @@ dependencies {
     compile files('libs/okhttp-2.4.0.jar')
     compile files('libs/okio-1.4.0.jar')
     compile files('libs/org.apache.http.legacy.jar')
+    compile project(':libzxing')
+    compile 'com.android.support:support-v4:23.3.0'
 }
 
 apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要
