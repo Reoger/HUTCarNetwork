@@ -15,4 +15,5 @@ public class MaInfoConstants {
     public static final String COLUMN_SCAN_TIME="scanTime";
     public static final String COLUMN_IS_SYNC="isSync";//用于判断是否已经存入了云端
     public static final String COLUMN_IS_DEL_WITH_CLOUD="isDelete";//用于判断是否已经在云端删除
+    public static final String COLUMN_USERNAME="username";//维护信息对应的用户名
 }

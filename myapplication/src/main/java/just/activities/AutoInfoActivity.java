@@ -1,23 +1,19 @@
 package just.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cwp.android.baidutest.MyApplication;
@@ -28,26 +24,22 @@ import java.util.Date;
 
 import cn.bmob.v3.listener.SaveListener;
 import just.adapters.AutoInfoAdapter;
-import just.beans.AutomobileInfo;
-import just.interfaces.AboutHint;
+import just.beans.AutoInfo;
 import just.operations.AutoInfoLocalDBOperation;
 import just.swipemenulistview.SwipeMenuItem;
 import just.swipemenulistview.SwipeMenuListView;
 
-public class AutoInfoActivity extends AppCompatActivity {
+public class AutoInfoActivity extends Activity {
     private SwipeMenuListView mLvAutoInfo;
     private AutoInfoAdapter mAdapter;
-    private TextView mTvHint;
+
+    public static final int MANUAL_ADD_AUTO_INFO=1;
+    public static final int SCAN_ADD_AUTO_INFO=2;
 
     public static final int START_ADD = 1;
     public static final int FINISHED_ADD = 2;
     public static final int START_DEL = 3;
     public static final int FINISHED_DEL = 4;
-
-    public static final int MANUAL_ADD_AUTO_INFO=5;
-    public static final int SCAN_ADD_AUTO_INFO=6;
-
-    private Button mAdd;
 
     private Handler mHandler=new Handler() {
         private ProgressDialog progressDialog;
@@ -85,25 +77,9 @@ public class AutoInfoActivity extends AppCompatActivity {
     }
 
     private void init() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        View customView = getLayoutInflater().inflate(R.layout.actionbar_for_auto_info_activity, null);
-        actionBar.setCustomView(customView, new
-                ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
-                ActionBar.LayoutParams.MATCH_PARENT));
-
-        mTvHint = (TextView) findViewById(R.id.id_tv_hint);
-
         mLvAutoInfo = (SwipeMenuListView) findViewById(R.id.id_lv_auto_info);
 
-        AboutHint myHint = isShow -> {
-            mTvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);
-        };
-
-        mAdd= (Button) findViewById(R.id.id_bt_add_auto_info);
-        mAdd.setOnClickListener(v -> {
+        findViewById(R.id.id_ib_top_bar_add).setOnClickListener(v -> {
             AlertDialog dialog = new AlertDialog.Builder(AutoInfoActivity.this).create();
             dialog.show();
             Window window=dialog.getWindow();
@@ -120,8 +96,15 @@ public class AutoInfoActivity extends AppCompatActivity {
                 dialog.dismiss();
             });
         });
+        findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
+            finish();
+        });
+        ((TextView)findViewById(R.id.id_tv_top_bar_title)).setText("个人汽车信息");
 
-        mAdapter = new AutoInfoAdapter(this, myHint, mHandler);
+        TextView tvHint=(TextView) findViewById(R.id.id_tv_hint);
+        mAdapter = new AutoInfoAdapter(this,
+                isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);},
+                mHandler);
 
         mLvAutoInfo.setAdapter(mAdapter);
 
@@ -167,12 +150,12 @@ public class AutoInfoActivity extends AppCompatActivity {
         }));
 
         mLvAutoInfo.setOnItemClickListener(((parent, view, position, id) -> {
-            AutomobileInfo automobileInfo=mAdapter.getItem(position);
-            String s="品牌:"+automobileInfo.getBrand()+"\n型号:"+automobileInfo.getModel()+
-                    "\n车牌级别:"+automobileInfo.getBodyLevel()+
-                    "\n车牌号:"+automobileInfo.getLicensePlateNum()+
-                    "\n发动机号:"+automobileInfo.getEngineNum()+
-                    "\n车架号"+automobileInfo.getVin();
+            AutoInfo autoInfo =mAdapter.getItem(position);
+            String s="品牌:"+ autoInfo.getBrand()+"\n型号:"+ autoInfo.getModel()+
+                    "\n车牌级别:"+ autoInfo.getBodyLevel()+
+                    "\n车牌号:"+ autoInfo.getLicensePlateNum()+
+                    "\n发动机号:"+ autoInfo.getEngineNum()+
+                    "\n车架号"+ autoInfo.getVin();
             new AlertDialog.Builder(this)
                     .setTitle("详细信息")
                     .setMessage(s)
@@ -235,7 +218,7 @@ public class AutoInfoActivity extends AppCompatActivity {
 
     private void dealAddResult(String s,Date date) {
         String[] result=s.split("[:\n]");
-        AutomobileInfo autoInfo=new AutomobileInfo();
+        AutoInfo autoInfo=new AutoInfo();
         autoInfo.setBrand(result[1]);
         autoInfo.setModel(result[3]);
         autoInfo.setBodyLevel(result[5]);
@@ -248,7 +231,7 @@ public class AutoInfoActivity extends AppCompatActivity {
         syncToCloud(autoInfo);
     }
 
-    private void syncToCloud(AutomobileInfo autoInfo) {
+    private void syncToCloud(AutoInfo autoInfo) {
         autoInfo.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
@@ -266,7 +249,7 @@ public class AutoInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void saveToLocal(AutomobileInfo autoInfo, int isSyncToCloud) {
+    private void saveToLocal(AutoInfo autoInfo, int isSyncToCloud) {
         AutoInfoLocalDBOperation.insert(this,autoInfo,isSyncToCloud);
         mHandler.sendEmptyMessage(FINISHED_ADD);
     }

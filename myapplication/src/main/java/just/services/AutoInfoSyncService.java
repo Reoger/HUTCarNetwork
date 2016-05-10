@@ -16,7 +16,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import just.beans.AutomobileInfo;
+import just.beans.AutoInfo;
 import just.constants.AutoInfoConstants;
 import just.operations.AutoInfoLocalDBOperation;
 import just.receivers.AutoInfoSyncReceiver;
@@ -42,15 +42,15 @@ public class AutoInfoSyncService extends IntentService {
         }
         Log.d("测试->AutoInfoSyncService","已成功开启服务");
         if(NetworkUtil.isNetworkAvailable(mContext)) {
-            List<AutomobileInfo> list1 = AutoInfoLocalDBOperation.queryBy(mContext, null,
+            List<AutoInfo> list1 = AutoInfoLocalDBOperation.queryBy(mContext,
                     AutoInfoConstants.COLUMN_IS_SYNC + " = ?",
                     new String[]{"0"});
             if (list1.size() != 0) {
-                for (AutomobileInfo automobileInfo : list1) {
-                    automobileInfo.save(this, new SaveListener() {
+                for (AutoInfo autoInfo : list1) {
+                    autoInfo.save(this, new SaveListener() {
                         @Override
                         public void onSuccess() {
-                            AutoInfoLocalDBOperation.updateForIsSyncToCloud(mContext, automobileInfo.getVin(), 1);
+                            AutoInfoLocalDBOperation.updateForIsSyncToCloud(mContext, autoInfo.getVin(), 1);
                             Log.d("测试->AutoInfoSyncService", "成功同步至云端");
                         }
 
@@ -71,19 +71,19 @@ public class AutoInfoSyncService extends IntentService {
             isContinueSync=true;
 
             //实现删除云端本该删除的数据
-            List<AutomobileInfo> list2 = AutoInfoLocalDBOperation.queryBy(mContext, null,
+            List<AutoInfo> list2 = AutoInfoLocalDBOperation.queryBy(mContext,
                     AutoInfoConstants.COLUMN_IS_SYNC + " = ? and "+AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",
                     new String[]{"1","1"});
             if(list2.size()!=0) {
-                for (AutomobileInfo automobileInfo : list2) {
-                    String vin=automobileInfo.getVin();
-                    BmobQuery<AutomobileInfo> query = new BmobQuery<>();
+                for (AutoInfo autoInfo : list2) {
+                    String vin= autoInfo.getVin();
+                    BmobQuery<AutoInfo> query = new BmobQuery<>();
                     query.addWhereEqualTo("vin", vin);
                     query.setLimit(1);
                     query.addQueryKeys("objectId");
-                    query.findObjects(mContext, new FindListener<AutomobileInfo>() {
+                    query.findObjects(mContext, new FindListener<AutoInfo>() {
                         @Override
-                        public void onSuccess(List<AutomobileInfo> list) {
+                        public void onSuccess(List<AutoInfo> list) {
                             Log.d("测试->DeleteAutoInfoTask", "查询成功");
                             list.get(0).delete(mContext, new DeleteListener() {
                                 @Override

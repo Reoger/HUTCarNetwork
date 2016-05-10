@@ -45,13 +45,14 @@
         <activity android:name="just.activities.AutoInfoActivity" />
         <activity android:name="just.activities.MaInfoActivity" />
         <activity
-            android:launchMode="singleTask"
-            android:name="com.com.reoger.music.View.MainActivity" />
+            android:name="com.com.reoger.music.View.MainActivity"
+            android:launchMode="singleTask" />
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 
         <activity android:name="com.com.reoger.music.View.NextActivity" />
-        <activity android:name="just.activities.ManualAddAutoInfoActivity"></activity>
+        <activity android:name="just.activities.ManualAddAutoInfoActivity" />
+        <activity android:name="just.activities.IllegalActivity"></activity>
     </application>
 
 </manifest>

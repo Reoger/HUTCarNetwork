@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cwp.android.baidutest.R;
-
-import java.util.Date;
-
-import just.beans.AutomobileInfo;
 
 public class ManualAddAutoInfoActivity extends Activity {
     private EditText etBrand,etModel,etBodyLevel,etPlateNum,etEngineNum,etVin;

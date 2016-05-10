@@ -45,7 +45,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.id_ll_auto_info:cls=AutoInfoActivity.class;break;
             case R.id.id_ll_ma_info:cls=MaInfoActivity.class;break;
-            case R.id.id_ll_illegal_info:break;
+            case R.id.id_ll_illegal_info:cls=IllegalActivity.class;break;
             case R.id.id_ll_bespeak_info:break;
             default:break;
         }

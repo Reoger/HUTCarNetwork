@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="just.activities.AutoInfoActivity">
+
+    <include layout="@layout/top_bar"></include>
     
     <TextView
         android:background="#a7a5a5"
