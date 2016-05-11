@@ -55,8 +55,8 @@ public class IllegalActivity extends Activity {
             AutoInfo autoInfo =mAdapter.getItem(position);
             Log.d("测试->IllegalActivity","已经获取汽车的相关信息----");
             //选择要查询的地点
-            Intent intent = new Intent(IllegalActivity.this,ProvinceList.class);
-            startActivity(intent);
+          //  Intent intent = new Intent(IllegalActivity.this,ProvinceList.class);
+          //  startActivity(intent);
             startResultList();
         }));
     }
