@@ -25,7 +25,7 @@ public class IllegalActivity extends Activity {
     }
 
     private void init() {
-        findViewById(R.id.id_ib_top_bar_add).setVisibility(View.VISIBLE);
+        findViewById(R.id.id_ib_top_bar_add).setVisibility(View.INVISIBLE);
         findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
             finish();
         });
@@ -39,7 +39,7 @@ public class IllegalActivity extends Activity {
 
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {
             AutoInfo autoInfo =mAdapter.getItem(position);
-            Log.d("测试->IllegalActivity","已经获取汽车的相关信息");
+            Log.d("测试->IllegalActivity","已经获取汽车的相关信息----");
         }));
     }
 }

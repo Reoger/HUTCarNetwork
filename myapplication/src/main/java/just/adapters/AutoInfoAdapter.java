@@ -46,6 +46,7 @@ public class AutoInfoAdapter extends BaseAdapter {
         mAboutHint=aboutHint;
         mInflater = LayoutInflater.from(context);
         mData = AutoInfoLocalDBOperation.queryBy(context, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",new String[]{"0"});
+        mAboutHint.setHint(mData.size()<=0?true:false);
     }
 
     @Override
