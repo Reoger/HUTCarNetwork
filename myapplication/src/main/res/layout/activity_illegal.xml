@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="just.activities.IllegalActivity">
 
-    <include layout="@layout/top_bar"></include>
+    <include layout="@layout/top_bar"/>
 
     <RelativeLayout
         android:background="#c6c4c4"

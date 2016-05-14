@@ -102,6 +102,7 @@ public class MaInfoLocalDBOperation {
         values.put(MaInfoConstants.COLUMN_ENGINE_PERFOR, maInfo.getEnginePerfor());
         values.put(MaInfoConstants.COLUMN_TRANSMISSION_PERFOR, maInfo.getTransmissionPerfor());
         values.put(MaInfoConstants.COLUMN_LAMP, maInfo.getLamp());
+        values.put(MaInfoConstants.COLUMN_SCAN_TIME,maInfo.getScanTime());
 
         values.put(AutoInfoConstants.COLUMN_VIN, maInfo.getVin());
         values.put(AutoInfoConstants.COLUMN_IS_SYNC,isSyncToCloud);
@@ -120,6 +121,7 @@ public class MaInfoLocalDBOperation {
         maInfo.setTransmissionPerfor(cursor.getString(cursor.getColumnIndex(MaInfoConstants.COLUMN_TRANSMISSION_PERFOR)));
         maInfo.setLamp(cursor.getString(cursor.getColumnIndex(MaInfoConstants.COLUMN_LAMP)));
         maInfo.setUsername(cursor.getString(cursor.getColumnIndex(MaInfoConstants.COLUMN_USERNAME)));
+        maInfo.setScanTime(cursor.getString(cursor.getColumnIndex(MaInfoConstants.COLUMN_SCAN_TIME)));
 
         return maInfo;
     }

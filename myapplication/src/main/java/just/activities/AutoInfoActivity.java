@@ -235,16 +235,17 @@ public class AutoInfoActivity extends Activity {
         autoInfo.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
-                saveToLocal(autoInfo,1);
                 Log.d("测试->AutoInfoActivity","成功同步至云端");
+
+                saveToLocal(autoInfo,1);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                saveToLocal(autoInfo,0);
-
                 //i=9016 表示The network is not available。
                 Log.d("测试->AutoInfoActivity","同步云端失败:错误编号-"+i+"，错误原因-"+s);
+
+                saveToLocal(autoInfo,0);
             }
         });
     }

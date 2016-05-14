@@ -25,10 +25,10 @@ public class IllegalActivity extends Activity {
     }
 
     private void init() {
-        findViewById(R.id.id_ib_top_bar_add).setVisibility(View.INVISIBLE);
         findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
             finish();
         });
+        findViewById(R.id.id_ib_top_bar_add).setVisibility(View.INVISIBLE);
         ((TextView)findViewById(R.id.id_tv_top_bar_title)).setText("汽车违章信息");
 
         mLvForIllegal= (ListView) findViewById(R.id.id_lv_auto_info_for_illegal);

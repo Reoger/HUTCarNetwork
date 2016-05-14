@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="just.activities.AutoInfoActivity">
 
-    <include layout="@layout/top_bar"></include>
+    <include layout="@layout/top_bar"/>
     
     <TextView
         android:background="#a7a5a5"

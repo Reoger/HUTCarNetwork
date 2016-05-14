@@ -82,7 +82,7 @@ public class MaInfo extends BmobObject {
         this.scanTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(scanTime);
     }
 
-    public void setScanDate(String scanDate) {
+    public void setScanTime(String scanDate) {
         this.scanTime =scanDate;
     }
 }

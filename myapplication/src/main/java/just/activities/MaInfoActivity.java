@@ -8,6 +8,7 @@ import android.os.Message;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -31,8 +32,12 @@ import just.operations.MaInfoLocalDBOperation;
 
 public class MaInfoActivity extends Activity {
     private Spinner mSpinner;
+    private ArrayAdapter<String> mAdapter1;
+    private List<String> mAutoInfoList;
+    private int currentSpinnerSelected;
+
     private ListView mLvMaInfo;
-    private MaInfoAdapter mAdapter;
+    private MaInfoAdapter mAdapter2;
 
     private static final int SCAN_ADD_MA_INFO=1;
 
@@ -63,7 +68,16 @@ public class MaInfoActivity extends Activity {
             else if(msg.what==FINISHED_ADD||msg.what==FINISHED_DEL) {
                 progressDialog.dismiss();
                 progressDialog=null;
-                mAdapter.notifyDataSetChanged();
+
+                mAdapter1.notifyDataSetChanged();
+                if (currentSpinnerSelected!=0) {
+                    String selected=mAutoInfoList.get(currentSpinnerSelected);
+                    String vin=selected.split("[-]")[3].trim();
+                    mAdapter2.notifyDataSetChanged(vin);
+                }
+                else {
+                    mAdapter2.notifyDataSetChanged();
+                }
             }
         }
     };
@@ -77,26 +91,46 @@ public class MaInfoActivity extends Activity {
     }
 
     private void init() {
+        findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
+            finish();
+        });
         findViewById(R.id.id_ib_top_bar_add).setOnClickListener(v -> {
             Intent intent=new Intent(this, CaptureActivity.class);
             startActivityForResult(intent,SCAN_ADD_MA_INFO);
         });
-        findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
-            finish();
-        });
         ((TextView)findViewById(R.id.id_tv_top_bar_title)).setText("汽车维护信息");
+
+        mSpinner= (Spinner) findViewById(R.id.id_spinner);
+        mAutoInfoList=getAutoList();
+        mAdapter1= new ArrayAdapter<>(MaInfoActivity.this, android.R.layout.simple_spinner_item,mAutoInfoList);
+        //设置样式
+        mAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        mSpinner.setAdapter(mAdapter1);
+        mSpinner.setSelection(currentSpinnerSelected);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentSpinnerSelected=position;
+                if (currentSpinnerSelected!=0) {
+                    String selected=mAutoInfoList.get(currentSpinnerSelected);
+                    String vin=selected.split("[-]")[3].trim();
+                    mAdapter2.notifyDataSetChanged(vin);
+                }
+                else {
+                    mAdapter2.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         mLvMaInfo= (ListView) findViewById(R.id.id_lv_ma_info);
         TextView tvHint=(TextView) findViewById(R.id.id_tv_hint);
-        mAdapter = new MaInfoAdapter(this, isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);}, mHandler);
-        mLvMaInfo.setAdapter(mAdapter);
-
-        mSpinner= (Spinner) findViewById(R.id.id_spinner);
-        ArrayAdapter<String> adapter= new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,getAutoList());
-        //设置样式
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //加载适配器
-        mSpinner.setAdapter(adapter);
+        mAdapter2 = new MaInfoAdapter(this, isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);}, mHandler,mAutoInfoList);
+        mLvMaInfo.setAdapter(mAdapter2);
     }
 
     @Override
@@ -108,7 +142,7 @@ public class MaInfoActivity extends Activity {
                 String result=data.getExtras().getString("result");
                 Log.d("测试->MaInfoActivity",result);
 
-//                new OperationTask(result,time).start();
+                new OperationTask(result,time).start();
             }
         }
     }
@@ -120,7 +154,7 @@ public class MaInfoActivity extends Activity {
                 AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",
                 new String[]{"0"});
         for(AutoInfo autoInfo :list2) {
-            String temp= autoInfo.getBrand()+"-"+ autoInfo.getModel()+"-"+ autoInfo.getLicensePlateNum();
+            String temp= autoInfo.getBrand()+"-"+ autoInfo.getModel()+"-"+ autoInfo.getLicensePlateNum()+"-"+autoInfo.getVin();
             list1.add(temp);
         }
         return list1;
@@ -156,19 +190,18 @@ public class MaInfoActivity extends Activity {
     private void dealAddResult(String s,Date date) {
         String[] result=s.split("[:\n]");
 
-        Log.d("测试->MaInfoActivity",""+result.length);
-
-        String vin=result[11];
+        String vin=result[11].trim();
         String username=MyApplication.getUsername();
         List<AutoInfo> list=AutoInfoLocalDBOperation.queryBy(this,AutoInfoConstants.COLUMN_VIN+" = ?",new String[]{vin});
 
         MaInfo maInfo=new MaInfo();
         maInfo.setVin(vin);
-        maInfo.setMileage(Float.parseFloat(result[13].replace("km","")));
-        maInfo.setGasolineVolume(Integer.parseInt(result[15]));
-        maInfo.setEnginePerfor(result[17]);
-        maInfo.setTransmissionPerfor(result[19]);
-        maInfo.setLamp(result[21]);
+        maInfo.setMileage(Float.parseFloat(result[13].replace("km","").trim()));
+        maInfo.setGasolineVolume(Integer.parseInt(result[15].trim()));
+        maInfo.setEnginePerfor(result[17].trim());
+        maInfo.setTransmissionPerfor(result[19].trim());
+        maInfo.setLamp(result[21].trim());
+        maInfo.setScanTime(date);
         maInfo.setUsername(username);
 
         //维护信息中的汽车信息不存在，需要自动添加汽车信息
@@ -188,6 +221,9 @@ public class MaInfoActivity extends Activity {
                     AutoInfoLocalDBOperation.insert(MaInfoActivity.this,autoInfo,1);
                     Log.d("测试->MaInfoActivity","汽车信息成功同步至云端");
 
+                    String temp= autoInfo.getBrand()+"-"+ autoInfo.getModel()+"-"+ autoInfo.getLicensePlateNum()+"-"+autoInfo.getVin();
+                    mAutoInfoList.add(temp);
+
                     syncToCloud(maInfo);
                 }
 
@@ -198,7 +234,10 @@ public class MaInfoActivity extends Activity {
                     //i=9016 表示The network is not available。
                     Log.d("测试->MaInfoActivity","汽车信息同步云端失败:错误编号-"+i+"，错误原因-"+s);
 
-                    syncToCloud(maInfo);
+                    String temp= autoInfo.getBrand()+"-"+ autoInfo.getModel()+"-"+ autoInfo.getLicensePlateNum()+"-"+autoInfo.getVin();
+                    mAutoInfoList.add(temp);
+
+                    saveToLocal(maInfo,0);
                 }
             });
         }
@@ -211,16 +250,16 @@ public class MaInfoActivity extends Activity {
         maInfo.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
-                saveToLocal(maInfo,1);
                 Log.d("测试->MaInfoActivity","维护信息成功同步至云端");
+                saveToLocal(maInfo,1);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                saveToLocal(maInfo,0);
-
                 //i=9016 表示The network is not available。
                 Log.d("测试->MaInfoActivity","维护信息同步云端失败:错误编号-"+i+"，错误原因-"+s);
+
+                saveToLocal(maInfo,0);
             }
         });
     }

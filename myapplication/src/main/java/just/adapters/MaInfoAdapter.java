@@ -2,13 +2,18 @@ package just.adapters;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.cwp.android.baidutest.R;
 
 import java.util.List;
 
+import just.beans.AutoInfo;
 import just.beans.MaInfo;
 import just.constants.MaInfoConstants;
 import just.interfaces.AboutHint;
@@ -19,14 +24,18 @@ public class MaInfoAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
 
+    private List<String> mAutoInfoList;
+
     private AboutHint mAboutHint;
 
     private Handler mHandler;
-    public MaInfoAdapter(Context context, AboutHint aboutHint,Handler handler) {
+
+    public MaInfoAdapter(Context context, AboutHint aboutHint,Handler handler,List<String> list) {
         mInflater = LayoutInflater.from(context);
         mContext=context;
         mAboutHint=aboutHint;
         mHandler=handler;
+        mAutoInfoList=list;
         setData();
     }
 
@@ -47,11 +56,48 @@ public class MaInfoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        ViewHolder viewHolder = null;
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            convertView = mInflater.inflate(R.layout.item_ma_info, null);
+            viewHolder.brand$model = (TextView) convertView.findViewById(R.id.id_item_brand$model);
+            viewHolder.plateNo = (TextView) convertView.findViewById(R.id.id_item_plate_no);
+            viewHolder.mileage = (TextView) convertView.findViewById(R.id.id_item_mileage);
+            viewHolder.gasolineVolume = (TextView) convertView.findViewById(R.id.id_item_gasoline_volume);
+            viewHolder.enginePerfor = (TextView) convertView.findViewById(R.id.id_item_engine_perfor);
+            viewHolder.tranPerfor = (TextView) convertView.findViewById(R.id.id_item_tran_perfor);
+            viewHolder.lamp = (TextView) convertView.findViewById(R.id.id_item_lamp);
+            viewHolder.scanTime = (TextView) convertView.findViewById(R.id.id_item_scan_time);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        MaInfo maInfo = mData.get(position);
+
+        for(String s:mAutoInfoList) {
+            String[] info=s.split("[-]");
+            if(info.length==4&&info[3].equals(maInfo.getVin())) {
+                String str1=info[0].trim()+"("+info[1].trim()+")";
+                String str2=info[2].trim();
+                viewHolder.brand$model .setText(str1);
+                viewHolder.plateNo.setText(str2);
+                break;
+            }
+        }
+        viewHolder.mileage.setText(""+maInfo.getMileage());
+        viewHolder.gasolineVolume.setText(""+maInfo.getGasolineVolume());
+        viewHolder.enginePerfor.setText(maInfo.getEnginePerfor());
+        viewHolder.tranPerfor .setText(maInfo.getTransmissionPerfor());
+        viewHolder.lamp.setText(maInfo.getLamp());
+        viewHolder.scanTime.setText(maInfo.getScanTime());
+
+        return convertView;
     }
 
     class ViewHolder {
-
+        TextView brand$model,plateNo,mileage,gasolineVolume,enginePerfor,tranPerfor,lamp,scanTime;
     }
 
     @Override

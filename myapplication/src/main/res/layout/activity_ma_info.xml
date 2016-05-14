@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="just.activities.MaInfoActivity">
 
-    <include layout="@layout/top_bar"></include>
+    <include layout="@layout/top_bar"/>
     
     <Spinner
         android:layout_marginTop="5dp"
@@ -23,13 +23,80 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ListView
-            android:divider="#010101"
-            android:dividerHeight="3px"
-            android:id="@+id/id_lv_ma_info"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="品牌\n(型号)"/>
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:text="车牌号码"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="里程数(km)"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="汽油量(%)"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="发动机性能"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="变速器性能"/>
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="车灯"/>
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:text="扫描时间"/>
+            </LinearLayout>
+
+            <ListView
+                android:layout_marginTop="3dp"
+                android:divider="#010101"
+                android:dividerHeight="3px"
+                android:id="@+id/id_lv_ma_info"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/id_tv_hint"
