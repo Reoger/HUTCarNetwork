@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:name=".MyApplication"
@@ -53,6 +55,11 @@
         <activity android:name="com.com.reoger.music.View.NextActivity" />
         <activity android:name="just.activities.ManualAddAutoInfoActivity" />
         <activity android:name="just.activities.IllegalActivity"></activity>
+
+        <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
+        <activity android:name="just.activities.WeizhangResul"/>
+        <activity android:name="just.activities.ProvinceList"/>
+        <activity android:name="just.activities.CityList"/>
     </application>
 
 </manifest>
