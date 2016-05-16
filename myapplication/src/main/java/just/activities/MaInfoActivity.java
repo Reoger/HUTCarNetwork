@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,6 +40,11 @@ public class MaInfoActivity extends Activity {
 
     private ListView mLvMaInfo;
     private MaInfoAdapter mAdapter2;
+
+    private LinearLayout mLlBatchOperation;
+    private Button mBtDel;
+    private Button mBtAll;
+    private Button mBtRevoke;
 
     private static final int SCAN_ADD_MA_INFO=1;
 
@@ -131,6 +138,41 @@ public class MaInfoActivity extends Activity {
         TextView tvHint=(TextView) findViewById(R.id.id_tv_hint);
         mAdapter2 = new MaInfoAdapter(this, isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);}, mHandler,mAutoInfoList);
         mLvMaInfo.setAdapter(mAdapter2);
+
+        mLlBatchOperation = (LinearLayout) findViewById(R.id.id_ll_batch_operation);
+        mBtDel= (Button) findViewById(R.id.id_bt_del);
+        mBtAll= (Button) findViewById(R.id.id_bt_all);
+        mBtRevoke= (Button) findViewById(R.id.id_bt_revoke);
+        mBtDel.setOnClickListener(v -> {
+            mAdapter2.deleteCheckBox();
+        });
+        mBtAll.setOnClickListener(v -> {
+            if("全选".equals(mBtAll.getText())) {
+                mAdapter2.selectAllCheckBox(true);
+                mBtAll.setText("取消全选");
+            }
+            else if("取消全选".equals(mBtAll.getText())) {
+                mAdapter2.selectAllCheckBox(false);
+                mBtAll.setText("全选");
+            }
+        });
+        mBtRevoke.setOnClickListener(v -> {
+            mAdapter2.setIsDelPattern(false);
+            mLlBatchOperation.setVisibility(View.GONE);
+        });
+
+        mLvMaInfo.setOnItemLongClickListener((parent, view, position, id) -> {
+            Log.d("测试->MaInfoActivity","长按生效");
+            mAdapter2.setIsDelPattern(true);
+            mLlBatchOperation.setVisibility(View.VISIBLE);
+            return true;
+        });
+
+        mLvMaInfo.setOnItemClickListener(((parent, view, position, id) -> {
+            if (mAdapter2.getIsDelPattern()) {
+                mAdapter2.setSelectedCheckBox(position);
+            }
+        }));
     }
 
     @Override
@@ -142,7 +184,7 @@ public class MaInfoActivity extends Activity {
                 String result=data.getExtras().getString("result");
                 Log.d("测试->MaInfoActivity",result);
 
-                new OperationTask(result,time).start();
+                new AddOperationTask(result,time).start();
             }
         }
     }
@@ -160,30 +202,19 @@ public class MaInfoActivity extends Activity {
         return list1;
     }
 
-    private class OperationTask extends Thread {
-        public static final int OPERATION_ADD=1;
-        public static final int OPERATION_DEL=2;
-
-        private int mOperation;
-
+    private class AddOperationTask extends Thread {
         private String result;
         private Date date;
 
-        public OperationTask(String result,Date date) {
-            mOperation=OPERATION_ADD;
+        public AddOperationTask(String result, Date date) {
             this.result=result;
             this.date=date;
         }
 
         @Override
         public void run() {
-            if(mOperation==OPERATION_ADD) {
-                mHandler.sendEmptyMessage(START_ADD);
-                dealAddResult(result,date);
-            }
-            else if(mOperation==OPERATION_DEL) {
-                mHandler.sendEmptyMessage(START_DEL);
-            }
+            mHandler.sendEmptyMessage(START_ADD);
+            dealAddResult(result,date);
         }
     }
 

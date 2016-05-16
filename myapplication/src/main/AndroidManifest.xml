@@ -57,9 +57,13 @@
         <activity android:name="just.activities.IllegalActivity"></activity>
 
         <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
+
         <activity android:name="just.activities.WeizhangResul"/>
         <activity android:name="just.activities.ProvinceList"/>
         <activity android:name="just.activities.CityList"/>
+
+        <service android:name="just.services.AutoAndMaInfoSyncService" />
+        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver"/>
     </application>
 
 </manifest>

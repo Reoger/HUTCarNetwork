@@ -69,27 +69,44 @@ public class MaInfoLocalDBOperation {
     }
 
     /**
-     * 同步至云端后，需更改本地数据库的AutoInfoConstants.COLUMN_IS_SYNC属性列
+     * 同步至云端后，需更改本地数据库的MaInfoConstants.COLUMN_IS_SYNC属性列
      */
-    public static void updateForIsSyncToCloud(Context context, String scanTime, int isSyncToCloud) {
+    public static void updateForIsSyncToCloud(Context context, String scanTime,String vin, int isSyncToCloud) {
         SQLiteDatabase db = LocalInfoOpenHelper.getInstance(context).getWritableDatabase();
         String str1="update "+MaInfoConstants.MA_INFO_TABLE_NAME+" set "+MaInfoConstants.COLUMN_IS_SYNC+" = ? " +
-                "where "+MaInfoConstants.COLUMN_SCAN_TIME+" = ?";
-        String[] str2={""+isSyncToCloud,scanTime};
+                "where "+MaInfoConstants.COLUMN_SCAN_TIME+" = ? and "+MaInfoConstants.COLUMN_VIN+" = ?";
+        String[] str2={""+isSyncToCloud,scanTime,vin};
+        db.execSQL(str1,str2);
+        db.close();
+    }
+
+    public static void updateForIsDelWithCloud(Context context, String scanTime, String vin,int isDelWithCloud) {
+        SQLiteDatabase db = LocalInfoOpenHelper.getInstance(context).getWritableDatabase();
+        String str1="update "+MaInfoConstants.MA_INFO_TABLE_NAME+" set "+MaInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? " +
+                "where "+MaInfoConstants.COLUMN_SCAN_TIME+" = ? and "+MaInfoConstants.COLUMN_VIN+" = ?";
+        String[] str2={""+isDelWithCloud,scanTime,vin};
         db.execSQL(str1,str2);
         db.close();
     }
 
     /**
-     * 更改本地数据的AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD值
+     * 已知需查询的数据数目唯一，返回该数据的特定列的数据(只能得到一列的)
+     * @param context
+     * @param columns
+     * @param selection
+     * @param selectionArgs
+     * @return
      */
-    public static void updateForIsDelWithCloud(Context context, String scanTime, int isDelWithCloud) {
-        SQLiteDatabase db = LocalInfoOpenHelper.getInstance(context).getWritableDatabase();
-        String str1="update "+MaInfoConstants.MA_INFO_TABLE_NAME+" set "+MaInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? " +
-                "where "+MaInfoConstants.COLUMN_SCAN_TIME+" = ?";
-        String[] str2={""+isDelWithCloud,scanTime};
-        db.execSQL(str1,str2);
+    public static String queryGetSpecifiedAttr(Context context, @Nullable String[] columns, @Nullable String selection, @Nullable String[] selectionArgs) {
+        SQLiteDatabase db = LocalInfoOpenHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(MaInfoConstants.MA_INFO_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+        String result="";
+        if (cursor.moveToFirst()) {
+            result=result+cursor.getInt(0);//考虑到有可能得到的数据为Integer型的
+        }
+        cursor.close();
         db.close();
+        return result;
     }
 
     private static ContentValues getValuesForInsert(MaInfo maInfo, int isSyncToCloud) {

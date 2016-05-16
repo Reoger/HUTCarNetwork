@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
 import java.util.List;
@@ -18,13 +19,13 @@ import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import just.activities.AutoInfoActivity;
 import just.beans.AutoInfo;
+import just.beans.MaInfo;
 import just.constants.AutoInfoConstants;
+import just.constants.MaInfoConstants;
 import just.interfaces.AboutHint;
 import just.operations.AutoInfoLocalDBOperation;
+import just.operations.MaInfoLocalDBOperation;
 
-/**
- * Created by Just on 2016/5/5.
- */
 public class AutoInfoAdapter extends BaseAdapter {
     private List<AutoInfo> mData;
     private Context mContext;
@@ -108,6 +109,7 @@ public class AutoInfoAdapter extends BaseAdapter {
     }
 
     public void deletePosition(int position) {
+        Log.d("测试->AutoInfoAdapter","deletePosition->"+position);
         AutoInfo autoInfo =mData.get(position);
         String vin = autoInfo.getVin();
         String isSyncToCloud = AutoInfoLocalDBOperation.
@@ -118,7 +120,7 @@ public class AutoInfoAdapter extends BaseAdapter {
             //如果需要删除的数据还没有同步至云端，则只需要直接在本地数据库删除
             if (AutoInfoLocalDBOperation.deleteBy(mContext, AutoInfoConstants.COLUMN_VIN + " = ?", new String[]{autoInfo.getVin()})) {
                 Log.d("测试->DeleteAutoInfoTask", vin + "未同步至云端，本地删除成功!");
-                mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                delRelatedMaInfo(vin);
             }
         } else if ("1".equals(isSyncToCloud)) {
             //如果同步至了云端，则需要先删除云端的数据
@@ -135,7 +137,7 @@ public class AutoInfoAdapter extends BaseAdapter {
                         public void onSuccess() {
                             if (AutoInfoLocalDBOperation.deleteBy(mContext, AutoInfoConstants.COLUMN_VIN + " = ?", new String[]{vin})) {
                                 Log.d("测试->DeleteAutoInfoTask", "vin=" + vin + ",本地与云端删除成功!");
-                                mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                                delRelatedMaInfo(vin);
                             }
                         }
 
@@ -143,7 +145,7 @@ public class AutoInfoAdapter extends BaseAdapter {
                         public void onFailure(int i, String s) {
                             AutoInfoLocalDBOperation.updateForIsDelWithCloud(mContext, vin, 1);
                             Log.d("测试->DeleteAutoInfoTask", "删除失败！ i=" + i + ",s=" + s);
-                            mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                            delRelatedMaInfo(vin);
                         }
                     });
 
@@ -153,9 +155,24 @@ public class AutoInfoAdapter extends BaseAdapter {
                 public void onError(int i, String s) {
                     AutoInfoLocalDBOperation.updateForIsDelWithCloud(mContext, vin, 1);
                     Log.d("测试->DeleteAutoInfoTask", "查询失败:失败编码->" + i + ",失败原因->" + s);
-                    mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
+                    delRelatedMaInfo(vin);
                 }
             });
         }
+    }
+
+    /**
+     * 删除与需要删除的汽车信息相关的维护信息
+     * 实际上只是将维护信息的isDelWithCloud改为1即可
+     * 暂时不在云端删除，留给后台的Service去做，避免耗时的操作
+     * @param vin
+     */
+    private void delRelatedMaInfo(String vin) {
+        List<MaInfo> needsDelList= MaInfoLocalDBOperation.queryBy(mContext, MaInfoConstants.COLUMN_VIN+" = ?",new String[]{vin});
+        for (MaInfo maInfo:needsDelList) {
+            MaInfoLocalDBOperation.updateForIsDelWithCloud(mContext,maInfo.getScanTime(),vin,1);
+        }
+        MyApplication.mSyncSemaphore.release();
+        mHandler.sendEmptyMessage(AutoInfoActivity.FINISHED_DEL);
     }
 }

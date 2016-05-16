@@ -109,4 +109,30 @@
             android:layout_height="match_parent" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/id_ll_batch_operation"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/id_bt_del"
+            android:text="删除"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/id_bt_all"
+            android:text="全选"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/id_bt_revoke"
+            android:text="取消"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -54,6 +54,7 @@ public class AutoInfoActivity extends Activity {
                 progressDialog.show();
             }
             else if(msg.what==START_DEL) {
+                Log.d("测试","-------------------");
                 progressDialog = new ProgressDialog(AutoInfoActivity.this);
                 progressDialog.setTitle("正在删除");
                 progressDialog.setMessage("请等待...");
@@ -287,9 +288,12 @@ public class AutoInfoActivity extends Activity {
             if(mOperation==OPERATION_ADD) {
                 mHandler.sendEmptyMessage(START_ADD);
                 dealAddResult(result,date);
-
             }
             else if(mOperation==OPERATION_DEL) {
+                try {
+                    MyApplication.mSyncSemaphore.acquire();
+                } catch (InterruptedException e) {
+                }
                 mHandler.sendEmptyMessage(START_DEL);
                 mAdapter.deletePosition(position);
             }
