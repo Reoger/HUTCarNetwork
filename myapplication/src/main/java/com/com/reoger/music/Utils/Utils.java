@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 
 
 import com.com.reoger.music.View.MainActivity;
+import com.com.reoger.music.mode.Music;
 import com.cwp.android.baidutest.R;
 
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class Utils {
      *
      * @return
      */
-    public static ArrayList<HashMap<String, Object>> getDataFromSD(Context context) {
-        ArrayList<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+    public static ArrayList<Music> getDataFromSD(Context context) {
+        ArrayList<Music> data = new ArrayList<>();
 
         ContentResolver musicResolcer = context.getContentResolver();
         Cursor musicCursor = musicResolcer.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -43,25 +44,25 @@ public class Utils {
         if (musicCursor != null && musicCursor.getCount() > 0) {
             for (musicCursor.moveToFirst(); !musicCursor.isAfterLast();
                  musicCursor.moveToNext()) {
-                HashMap<String, Object> item = new HashMap<String, Object>();
+                Music item = new Music();
                 musicColumnIndex = musicCursor.getColumnIndex(
                         MediaStore.Audio.AudioColumns._ID);
                 int musicRating = musicCursor.getInt(musicColumnIndex);
-                item.put("musicRating", musicRating + "");
-                //item.put("id",size+"");
+                item.setmMusicRating(musicRating);
+
                 //取得音乐播放路径
                 musicColumnIndex = musicCursor.getColumnIndex(
                         MediaStore.Audio.AudioColumns.DATA);
-                item.put("musicPath", musicCursor.getString(musicColumnIndex));
+
+                item.setmMusicPath(musicCursor.getString(musicColumnIndex));
                 //获取音乐的名字
                 musicColumnIndex = musicCursor.getColumnIndex(
                         MediaStore.Audio.AudioColumns.TITLE);
-                item.put("musicName", musicCursor.getString(musicColumnIndex));
+                item.setmMusicName(musicCursor.getString(musicColumnIndex));
                 //获取音乐的演唱者
                 musicColumnIndex = musicCursor
                         .getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
-                item.put("musicArtist", musicCursor.getString(musicColumnIndex));
-
+                item.setmMusicArtist(musicCursor.getString(musicColumnIndex));
                 //获取歌曲的时间
                 musicColumnIndex = musicCursor.getColumnIndex(
                         MediaStore.Audio.AudioColumns.DURATION);
@@ -89,12 +90,7 @@ public class Utils {
                     readableTime = readableTime + m;
                 }
 
-                item.put("musicTime", readableTime);
-                //获取歌曲的路径
-                musicColumnIndex = musicCursor
-                        .getColumnIndex(MediaStore.Audio.AudioColumns.DATA);
-                String path = musicCursor.getString(musicColumnIndex);
-                item.put("path", path);
+                item.setmMusicTime(readableTime);
 
                 data.add(item);
             }
@@ -122,7 +118,7 @@ public class Utils {
                 .build();
 
         manager.notify(1,noti);
-     //   service.startForeground(1,noti);
+        //   service.startForeground(1,noti);
         return true;
     }
     /**
@@ -149,7 +145,7 @@ public class Utils {
      * @return
      */
     public static int getDate(Context context){
-       SharedPreferences pre  = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        SharedPreferences pre  = context.getSharedPreferences("data", Context.MODE_PRIVATE);
         int a = pre.getInt("index",0);
         return a;
     }
