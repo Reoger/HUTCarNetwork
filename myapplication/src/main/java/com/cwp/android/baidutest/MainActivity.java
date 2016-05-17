@@ -1,5 +1,8 @@
 package com.cwp.android.baidutest;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +34,10 @@ import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
@@ -93,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     //纬度
     private double mLongLatitue;
 
+    private double mEnLatitue;
+    //纬度
+    private double mEnLongLatitue;
+
+    Marker mMarker;
+
     //是否第一次进入，是就先定位到当前位置
     boolean isFirstIn = true;
 
@@ -134,6 +148,18 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private LinearLayout mTabNav;//导航Tab
     private LinearLayout mTabMy;//我的Tab
 
+    //自定义路线
+    private ImageView poi;
+    private ImageView route_to;
+    private boolean POI_true_folse;
+    private boolean Search_true_folse;
+
+    private int[] ivIds = {R.id.iv_b, R.id.iv_c, R.id.iv_d, R.id.iv_e, R.id.iv_a};
+    private ImageView[] imageViews = new ImageView[ivIds.length];
+    private boolean isOpen;
+    private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +173,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         editCityEt = "株洲";
         editSearchKeyEt = "加油站";
-
-
 
     }
 
@@ -168,17 +192,88 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         mLocationClient.setLocOption(option);
 
-
     }
 
     void init() {
-        mTabMusic= (LinearLayout) findViewById(R.id.id_tab_music);//
-        mTabNav= (LinearLayout) findViewById(R.id.id_tab_nav);
-        mTabMy= (LinearLayout) findViewById(R.id.id_tab_my);
+        mTabMusic = (LinearLayout) findViewById(R.id.id_tab_music);
+        mTabNav = (LinearLayout) findViewById(R.id.id_tab_nav);
+        mTabMy = (LinearLayout) findViewById(R.id.id_tab_my);
 
-        mTabMy.setOnClickListener(v->{
-            Intent intent=new Intent(MainActivity.this, MyInfoActivity.class);
-            startActivity(intent);
+        poi = (ImageView) findViewById(R.id.Img_poi);
+        route_to = (ImageView) findViewById(R.id.Img_route_to);
+
+        for (int i = 0; i < ivIds.length; i++) {
+            imageViews[i] = (ImageView) findViewById(ivIds[i]);
+        }
+        imageViews[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.iv_a:
+                        executeAnim(isOpen);
+                        isOpen = !isOpen;
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+        isOpen = true;
+
+        route_to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (POI_true_folse) {
+
+                    mBaiduMap.clear();
+
+                    LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
+
+                    LatLng enPosition = mMarker.getPosition();
+
+
+                    PlanNode stNode = PlanNode.withLocation(stPosition);
+                    PlanNode enNode = PlanNode.withLocation(enPosition);
+
+                    mSearch.drivingSearch((new DrivingRoutePlanOption())
+                            .from(stNode)
+                            .to(enNode));
+                } else {
+                    mBaiduMap.clear();
+                    Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        poi.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+                if (!POI_true_folse) {
+
+                    POI_true_folse = true;
+
+                    LatLng point = new LatLng(mLatitue, mLongLatitue+0.004);
+                    BitmapDescriptor bitmap = BitmapDescriptorFactory
+                            .fromResource(R.drawable.icon_en);
+                    OverlayOptions options = new MarkerOptions()
+                            .position(point)  //设置marker的位置
+                            .icon(bitmap)  //设置marker图标
+                            .zIndex(9)  //设置marker所在层级
+                            .draggable(true);  //设置手势拖拽
+
+                    mMarker = (Marker) (mBaiduMap.addOverlay(options));
+
+                } else {
+                    mMarker.remove();
+                    POI_true_folse = false;
+                }
+            }
         });
 
         mTabMusic.setOnClickListener(v -> {
@@ -186,8 +281,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             startActivity(intent);
         });
 
+        mTabMy.setOnClickListener(v -> {
 
-        mView = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.myview,null);
+            Intent intent = new Intent(MainActivity.this, MyInfoActivity.class);
+            startActivity(intent);
+        });
+
+        mView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.myview, null);
 
         mMapView = (MapView) findViewById(R.id.map);
         mBaiduMap = mMapView.getMap();
@@ -310,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            JSON_DATA.getRequest2(nodeLocation.latitude,nodeLocation.longitude);
+                            JSON_DATA.getRequest2(nodeLocation.latitude, nodeLocation.longitude);
                         }
                     }).start();
 
@@ -326,13 +426,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             @Override
             public void onInit(int status) {
 
-                if(status == TextToSpeech.SUCCESS){
+                if (status == TextToSpeech.SUCCESS) {
                     int result = tts.setLanguage(Locale.CHINA);
 
-                    if(result != TextToSpeech.LANG_MISSING_DATA &&
-                            result!= TextToSpeech.LANG_NOT_SUPPORTED){
+                    if (result != TextToSpeech.LANG_MISSING_DATA &&
+                            result != TextToSpeech.LANG_NOT_SUPPORTED) {
 
-                        Toast.makeText(MainActivity.this, "error",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -342,7 +442,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         //在公交线路规划回调方法中添加TransitRouteOverlay用于展示换乘信息
     }
-
 
 
     /**
@@ -368,9 +467,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     //当后台数据完成后显示加油站的信息
 
-    public void updata(Bundle bundle){
+    public void updata(Bundle bundle) {
 
-        TextView t1 ,t2, t3,t4;
+        TextView t1, t2, t3, t4;
 
         /*
         ** t1是加油站名称  t2是加油站地址  t3是油价 t4也是 价格
@@ -413,9 +512,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     }
 
 
-
 //****************************检索功能***********************
-
 
     private class MyLocationListener implements BDLocationListener {
 
@@ -528,9 +625,17 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
              * @return 该 DrivingRoutePlanOption 选项对象
              * */
 
-            mSearch.drivingSearch((new DrivingRoutePlanOption())
-                    .from(stNode)
-                    .to(enNode));
+            if (!Search_true_folse) {
+
+                Search_true_folse = true;
+                mSearch.drivingSearch((new DrivingRoutePlanOption())
+                        .from(stNode)
+                        .to(enNode));
+
+            } else {
+                mBaiduMap.clear();
+                Search_true_folse = false;
+            }
 
         }
     }
@@ -672,11 +777,11 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             return;
         }
         if (useDefaultIcon) {
-            ((Button) v).setText("自定义起终点图标");
+//            ((Button) v).setText();
             Toast.makeText(this, "将使用系统起终点图标", Toast.LENGTH_SHORT).show();
 
         } else {
-            ((Button) v).setText("系统起终点图标");
+//            ((Button) v).setText("系统起终点图标");
             Toast.makeText(this, "将使用自定义起终点图标", Toast.LENGTH_SHORT).show();
         }
         useDefaultIcon = !useDefaultIcon;
@@ -1014,4 +1119,42 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mLocationClient.stop();
 
     }
+
+    private void executeAnim(boolean isOpen) {
+
+        float X = imageViews[3].getX();
+        float Y = imageViews[3].getY();
+
+        if (isOpen) {
+
+            for (int i = 0; i <= 2; i++) {
+
+                float x = (float) Math.sin(angel[i]) * 120;
+                float y = -(float) Math.cos(angel[i]) * 120;
+
+                //Log.i("坐标", angle + " " + x + " " + y);
+
+
+                ObjectAnimator animator1 = ObjectAnimator.ofFloat(imageViews[i], "X", X, x + X);
+                ObjectAnimator animator2 = ObjectAnimator.ofFloat(imageViews[i], "Y", Y, y + Y);
+
+                AnimatorSet set = new AnimatorSet();
+
+                set.playTogether(animator1, animator2);
+                set.setInterpolator(new BounceInterpolator());//设置差值器，BounceInterpolator使得动画具有像小球落在地上回弹一样的效果
+                set.setDuration(5000);
+                set.start();
+            }
+        } else {
+            for (int i = 0; i <= 2; i++) {
+                PropertyValuesHolder p1 = PropertyValuesHolder.ofFloat("X", imageViews[i].getX(),
+                        X);
+                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("Y", imageViews[i].getY(),
+                        Y);
+                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2)
+                        .setDuration(300 * i).start();
+            }
+        }
+    }
+
 }

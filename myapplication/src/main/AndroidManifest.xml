@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -54,16 +53,19 @@
 
         <activity android:name="com.com.reoger.music.View.NextActivity" />
         <activity android:name="just.activities.ManualAddAutoInfoActivity" />
-        <activity android:name="just.activities.IllegalActivity"></activity>
+        <activity android:name="just.activities.IllegalActivity" />
 
         <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
 
-        <activity android:name="just.activities.WeizhangResul"/>
-        <activity android:name="just.activities.ProvinceList"/>
-        <activity android:name="just.activities.CityList"/>
+        <activity android:name="just.activities.WeizhangResul" />
+        <activity android:name="just.activities.ProvinceList" />
+        <activity android:name="just.activities.CityList" />
 
         <service android:name="just.services.AutoAndMaInfoSyncService" />
-        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver"/>
+
+        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
+
+        <activity android:name="just.activities.BespeakGasActivity"></activity>
     </application>
 
 </manifest>

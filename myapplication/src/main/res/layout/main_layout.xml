@@ -1,3 +1,8 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -142,13 +147,23 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/Img_poi"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:src="@drawable/icon_day_mode"/>
+                            android:layout_marginLeft="10dp"
+                            android:src="@drawable/icon_poi"/>
+
+                        <ImageView
+                            android:id="@+id/Img_route_to"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:src="@drawable/icon_route_to"/>
 
                      </LinearLayout>
 
@@ -188,17 +203,18 @@
                     android:onClick="nodeClick" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-                <include layout="@layout/bottom" />
-            </LinearLayout>
-
-
 
         </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
 
+        android:layout_gravity="bottom"
+        >
+        <include layout="@layout/bottom" />
+    </LinearLayout>
+
+    </FrameLayout >
 
 
