@@ -86,8 +86,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:padding="10dp">
+                android:paddingBottom="10dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,20 +100,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+
                     <Button
-                        android:id="@+id/customicon"
+                        android:id="@+id/drive_end"
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:layout_margin="5dp"
                         android:background="@drawable/icon_tag"
-                        android:onClick="changeRouteIcon" />
+                        android:onClick="ChangeSearchButtonProcess" />
 
                     <Button
-                        android:id="@+id/drive"
+                        android:id="@+id/drive_st"
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:layout_margin="5dp"
-
                         android:background="@drawable/icon_car"
                         android:onClick="SearchButtonProcess" />
 
@@ -143,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50dp"
-                    android:text="天气" />
+                    android:text="选址" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -181,7 +182,7 @@
             android:layout_alignWithParentIfMissing="false"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="false"
-            android:layout_marginBottom="40dip">
+            android:layout_marginBottom="120dip">
 
             <Button
                 android:id="@+id/pre"
@@ -210,7 +211,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-
+        android:layout_marginBottom="10dip"
         android:layout_gravity="bottom">
 
         <include layout="@layout/bottom" />

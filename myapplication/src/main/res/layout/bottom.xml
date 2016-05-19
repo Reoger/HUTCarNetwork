@@ -12,12 +12,7 @@
         android:gravity="center|bottom"
         android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/id_tab_music_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/c"
-            />
+
 
     </LinearLayout>
 
@@ -41,12 +36,7 @@
         android:gravity="center|bottom|left"
         android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/id_tab_my_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:src="@drawable/e"/>
 
         <TextView
             android:layout_width="wrap_content"
