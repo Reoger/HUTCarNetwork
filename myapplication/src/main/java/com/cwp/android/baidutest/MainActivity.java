@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -147,10 +148,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private LinearLayout mTabMusic;//音乐Tab
     private LinearLayout mTabNav;//导航Tab
     private LinearLayout mTabMy;//我的Tab
-
+    private LinearLayout layout_server_page;
     //自定义路线
     private ImageView poi;
     private ImageView route_to;
+    private ImageView arrow;
+
+    private boolean sLayoutServerPageVisiable =true;
     private boolean POI_true_folse;
     private boolean Search_true_folse;
 
@@ -198,7 +202,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mTabMusic = (LinearLayout) findViewById(R.id.id_tab_music);
         mTabNav = (LinearLayout) findViewById(R.id.id_tab_nav);
         mTabMy = (LinearLayout) findViewById(R.id.id_tab_my);
+        layout_server_page = (LinearLayout) findViewById(R.id.layout_server_page);
 
+        arrow = (ImageView) findViewById(R.id.arrow);
         poi = (ImageView) findViewById(R.id.Img_poi);
         route_to = (ImageView) findViewById(R.id.Img_route_to);
 
@@ -250,7 +256,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         poi.setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View v) {
 
@@ -274,6 +279,28 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     POI_true_folse = false;
                 }
             }
+        });
+
+        arrow.setOnClickListener(v-> {
+
+            if(sLayoutServerPageVisiable){
+                ObjectAnimator//
+                        .ofFloat(arrow, "rotationX", 0.0F, 180.0F)//
+                        .setDuration(500)//
+                        .start();
+                layout_server_page.setVisibility(View.GONE);
+                sLayoutServerPageVisiable =false;
+
+            }else {
+                ObjectAnimator//
+                        .ofFloat(arrow, "rotationX", 0.0F, 0.0F)//
+                        .setDuration(500)//
+                        .start();
+                layout_server_page.setVisibility(View.VISIBLE);
+                sLayoutServerPageVisiable= true;
+            }
+
+
         });
 
         mTabMusic.setOnClickListener(v -> {
