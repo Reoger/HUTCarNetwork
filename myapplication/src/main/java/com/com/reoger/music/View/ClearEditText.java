@@ -44,7 +44,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         mClearDrawable = getCompoundDrawables()[2];
         if (mClearDrawable == null) {
             mClearDrawable = getResources()
-                    .getDrawable(R.mipmap.emotionstore_progresscancelbtn);
+                    .getDrawable(R.mipmap.ic_launcher);
         }
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight());
         setClearIconVisible(false);
