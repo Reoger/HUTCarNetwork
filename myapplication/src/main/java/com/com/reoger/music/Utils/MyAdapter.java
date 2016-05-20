@@ -69,7 +69,7 @@ public class MyAdapter extends BaseAdapter implements SectionIndexer {
             converView = layoutInflater.inflate(R.layout.layout_list_item, null);
             p.mSongName = (TextView) converView.findViewById(R.id.id_song_name);
             p.mCurrpaly = (ImageView) converView.findViewById(R.id.id_playing);
-            p.mMenuRight = (ImageButton) converView.findViewById(R.id.id_menu_item);
+        //    p.mMenuRight = (ImageButton) converView.findViewById(R.id.id_menu_item);
             p.mSingerName = (TextView) converView.findViewById(R.id.id_singer_name);
             p.mSongTime = (TextView) converView.findViewById(R.id.id_item_time);
             p.tvLetter = (TextView) converView.findViewById(R.id.catalog);//字母
@@ -92,7 +92,7 @@ public class MyAdapter extends BaseAdapter implements SectionIndexer {
         p.mSingerName.setText(data.get(postition).getmMusicArtist());
         p.mSongName.setText(data.get(postition).getmMusicName());
         p.mSongTime.setText(data.get(postition).getmMusicTime());
-        p.mMenuRight.setOnClickListener(v -> Toast.makeText(context, "你点击了子菜单", Toast.LENGTH_SHORT).show());
+     //   p.mMenuRight.setOnClickListener(v -> Toast.makeText(context, "你点击了子菜单", Toast.LENGTH_SHORT).show());
 
 
         return converView;

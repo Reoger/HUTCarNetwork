@@ -2,44 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#F0F0F0"
+    android:orientation="vertical"
+    >
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-   >
-
-        <SeekBar
-            android:indeterminateDrawable="@color/colorWhite"
-            android:id="@+id/seekBar1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/time_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingRight="10dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorMain"
             android:text="00:00" />
+
+        <SeekBar
+            android:indeterminateDrawable="@color/colorWhite"
+            android:thumb="@drawable/seekbar_img"
+            android:id="@+id/seekBar1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:progress="0"
+            android:paddingRight="10dp" />
         <TextView
             android:id="@+id/time_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="end"
             android:paddingRight="15dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorMain"
             android:text="03:00"/>
     </LinearLayout>
 
@@ -47,7 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="horizontal">
 

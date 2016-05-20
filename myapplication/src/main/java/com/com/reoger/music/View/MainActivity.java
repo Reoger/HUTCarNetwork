@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         toolbar.setTitle(mCurrSongName);
 
         //setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ab_android);
+        toolbar.setNavigationIcon(R.mipmap.back1);
         toolbar.setOnClickListener(v -> {
 //            Intent intent = new Intent(MainActivity.this, NextActivity.class);
 //            startActivity(intent);
@@ -383,6 +383,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             stopService(in);
         }
 
+
         initIntent();
         if (onlyPlayMusic()) {
             LogUtils.d(TAG, "下一曲");
@@ -497,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void showButtonNotify() {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.view_custom_button);
-        mRemoteViews.setImageViewResource(R.id.custom_song_icon, R.drawable.ab_android);
+        mRemoteViews.setImageViewResource(R.id.custom_song_icon, R.drawable.ic_logo);
         mRemoteViews.setTextViewText(R.id.tv_custom_song_singer, mMusicData.get(mCurrSongIndex).getmMusicArtist());
         mRemoteViews.setTextViewText(R.id.tv_custom_song_name, mCurrSongName);
         Intent intentMain = new Intent(this, MainActivity.class);
@@ -605,8 +606,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean showPopupMenu(View view,int postion) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         Menu menu = popupMenu.getMenu();
-        menu.add(Menu.NONE, Menu.FIRST + 0, 0, "删除").setIcon(R.mipmap.ic_launcher);
-        menu.add(Menu.NONE, Menu.FIRST + 1, 1, "详细").setIcon(R.mipmap.ic_launcher);
+        menu.add(Menu.NONE, Menu.FIRST + 0, 0, "删除");
+        menu.add(Menu.NONE, Menu.FIRST + 1, 1, "详细");
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case Menu.FIRST + 0:
@@ -637,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         AlertDialog.Builder builder=new AlertDialog.Builder(this);  //先得到构造器
         builder.setTitle("详细信息"); //设置标题
         //builder.setMessage("是否确认退出?"); //设置内容
-        builder.setIcon(R.mipmap.ic_launcher);//设置图标，图片id即可
+       // builder.setIcon(R.mipmap.ic_launcher);//设置图标，图片id即可
         //设置列表显示，注意设置了列表显示就不要设置builder.setMessage()了，否则列表不起作用。
         builder.setItems(items, (dialog1, which) -> {
             dialog1.dismiss();

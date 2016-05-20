@@ -108,7 +108,7 @@
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:layout_margin="5dp"
-                        android:background="@drawable/icon_tag"
+                        android:background="@drawable/change"
                         android:onClick="ChangeSearchButtonProcess" />
 
                     <Button
@@ -116,7 +116,7 @@
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:layout_margin="5dp"
-                        android:background="@drawable/icon_car"
+                        android:background="@drawable/car"
                         android:onClick="SearchButtonProcess" />
 
                 </LinearLayout>
@@ -131,12 +131,12 @@
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:layout_margin="5dp"
-                        android:background="@drawable/ic_loction" />
+                        android:background="@drawable/loation" />
 
                     <Button
                         android:id="@+id/search"
-                        android:layout_width="30dip"
-                        android:layout_height="30dip"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_margin="5dp"
                         android:background="@drawable/icon_gas" />
 
@@ -155,19 +155,19 @@
 
                     <ImageView
                         android:id="@+id/Img_poi"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_weight="2"
-                        android:src="@drawable/icon_poi" />
+
+                        android:src="@drawable/mark" />
 
                     <ImageView
                         android:id="@+id/Img_route_to"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/icon_route_to" />
+
+                        android:src="@drawable/go" />
 
                 </LinearLayout>
 
@@ -218,7 +218,6 @@
 
         <include layout="@layout/bottom" />
     </LinearLayout>
-
 </FrameLayout>
 
 

@@ -47,6 +47,7 @@
         <activity android:name="just.activities.MaInfoActivity" />
         <activity
             android:name="com.com.reoger.music.View.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />

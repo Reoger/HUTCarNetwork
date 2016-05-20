@@ -10,7 +10,7 @@
         android:layout_height="64dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ab_android" />
+        android:src="@drawable/ic_logo" />
 
     <LinearLayout
         android:id="@+id/ll_custom_button"

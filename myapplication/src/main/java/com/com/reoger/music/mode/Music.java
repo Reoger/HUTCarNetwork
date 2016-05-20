@@ -8,7 +8,7 @@ public class Music {
     private String mMusicName;
     private String mMusicTime;
     private String mMusicArtist; //歌手
-    private String sortLetters="A";  //字母
+    private String sortLetters;  //字母
 
     public void setSortLetters(String sortLetters) {
         this.sortLetters = sortLetters;
