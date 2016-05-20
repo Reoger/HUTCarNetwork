@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#d4d4d4"
+    android:padding="10dp"
     android:orientation="vertical">
 
 
@@ -14,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="加油站名称 : " />
+            android:text="名 称 : " />
 
         <TextView
             android:id="@+id/textView1"
@@ -30,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="加油站地址 : " />
+            android:text="地 址 : " />
 
         <TextView
             android:id="@+id/textView2"
@@ -72,6 +73,13 @@
             android:layout_height="wrap_content"
             android:text="暂无数据" />
 
+
     </LinearLayout>
 
+    <Button
+        android:id="@+id/ording"
+        android:layout_gravity="center|right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="预约加油"/>
 </LinearLayout>

@@ -7,19 +7,58 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:background="@color/colorMain"
-         >
-<!-- android:background="?attr/colorPrimary"-->
+        android:background="@color/colorMain">
+        <!-- android:background="?attr/colorPrimary"-->
     </android.support.v7.widget.Toolbar>
-    <ListView
-        android:id="@+id/musicList"
-        android:layout_marginTop="55dp"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="115dp">
-    </ListView>
-    <include layout="@layout/layou_play"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.com.reoger.music.View.ClearEditText
+            android:id="@+id/filter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:hint="请输入关键字"
+            android:singleLine="true"
+            android:textSize="15.0dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ListView
+                android:id="@+id/musicList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="95dp"
+                android:layout_marginTop="5dp"></ListView>
+
+            <TextView
+                android:id="@+id/dialog"
+                android:layout_width="80.0dp"
+                android:layout_height="80.0dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_launcher"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dp"
+                android:visibility="invisible" />
+
+            <com.com.reoger.music.View.SideBar
+                android:id="@+id/sidrbar"
+                android:layout_width="30.0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="55dp"
+                android:layout_gravity="right|center" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layou_play" />
 
 </RelativeLayout>

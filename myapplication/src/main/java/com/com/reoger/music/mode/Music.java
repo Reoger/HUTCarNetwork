@@ -6,11 +6,44 @@ package com.com.reoger.music.mode;
 public class Music {
     private String mMusicPath;
     private String mMusicName;
-    private String mMusicSinger;
-    /**唱片*/
-    private String mMusicAlbuml;
-    private String mMusicAlbunKey;
-    private String mMusicAlbunArtPath;
+    private String mMusicTime;
+    private String mMusicArtist; //歌手
+    private String sortLetters="A";  //字母
+
+    public void setSortLetters(String sortLetters) {
+        this.sortLetters = sortLetters;
+    }
+
+
+    public String getmMusicTime() {
+        return mMusicTime;
+    }
+
+
+    public void setmMusicTime(String mMusicTime) {
+        this.mMusicTime = mMusicTime;
+    }
+
+    public String getmMusicArtist() {
+        return mMusicArtist;
+    }
+
+    public void setmMusicArtist(String mMusicArtist) {
+        this.mMusicArtist = mMusicArtist;
+    }
+
+
+    private int mMusicRating;
+
+
+    public void setmMusicRating(int mMusicRating) {
+        this.mMusicRating = mMusicRating;
+    }
+
+
+    public String getSortLetters() {
+        return sortLetters;
+    }
 
 
     public String getmMusicPath() {
@@ -27,14 +60,6 @@ public class Music {
 
     public void setmMusicName(String mMusicName) {
         this.mMusicName = mMusicName;
-    }
-
-    public String getmMusicSinger() {
-        return mMusicSinger;
-    }
-
-    public void setmMusicSinger(String mMusicSinger) {
-        this.mMusicSinger = mMusicSinger;
     }
 
 

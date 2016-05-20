@@ -121,7 +121,7 @@ public class ServiceForMusic extends Service{
             mMediaPlayer.reset();
             //设置播放资源
             try{
-                 mMediaPlayer.setDataSource(mSongPath);
+                mMediaPlayer.setDataSource(mSongPath);
                 mMediaPlayer.prepare();
                 seekBar.setMax(mMediaPlayer.getDuration());
 
