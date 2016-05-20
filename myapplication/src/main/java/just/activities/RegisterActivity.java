@@ -25,11 +25,11 @@ import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
 import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.VerifySMSCodeListener;
-import just.beans.User;
 
 public class RegisterActivity extends AppCompatActivity {
     private TextView mTvStep,mTvPrompt,mTvStep1,mTvStep2,mTvStep3;
@@ -195,8 +195,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 mHandler.sendEmptyMessage(SUCCEED_SEND);
                             }
                             else {
-                                Log.d("测试->RegisterActivity","请求验证码失败:"+ex.getMessage());
-                                mHandler.sendEmptyMessage(FAILED_SEND);
+                                Log.d("测试->RegisterActivity","请求验证码失败:code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
+                                mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_SEND));
                             }
                         }
                     });
@@ -225,7 +225,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     mHandler.sendEmptyMessage(SUCCEED_VALIDATE);
                                 }else{
                                     Log.i("测试->RegisterActivity", "验证失败：code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
-                                    mHandler.sendEmptyMessage(FAILED_VALIDATE);
+                                    mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_VALIDATE));
                                 }
                             }
                         });
@@ -247,10 +247,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 new Thread(()-> {
-                    User user=new User();
+                    BmobUser user=new BmobUser();
                     user.setUsername(mEtStep1.getText().toString());
+                    Log.d("测试->RegisterActivity",mEtStep1.getText().toString());
                     user.setPassword(password1);
-                    user.save(RegisterActivity.this, new SaveListener() {
+                    user.signUp(RegisterActivity.this, new SaveListener() {
                         @Override
                         public void onSuccess() {
                             Log.i("测试->RegisterActivity", "注册成功");
@@ -260,7 +261,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(int i, String s) {
                             Log.i("测试->RegisterActivity", "注册失败:i="+i+",s="+s);
-                            mHandler.sendEmptyMessage(FAILED_REGISTER);
+                            mHandler.sendMessage(getMessage(i,FAILED_REGISTER));
                         }
                     });
                 }).start();
@@ -269,6 +270,20 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("测试->RegisterActivity","请输入符合格式要求的密码");
             }
         });
+    }
+
+    private Message getMessage(int i,int code) {
+        String s=null;
+        if(i==9016) {
+            s="无网络连接，请检查您的手机网络。";
+        }
+        else if(i==9010) {
+            s="网络超时!";
+        }
+        Message message=Message.obtain();
+        message.what=code;
+        message.obj=s;
+        return message;
     }
 
     @Override

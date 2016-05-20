@@ -18,16 +18,19 @@ public class MyApplication extends Application {
     private static Context mContext;
     public static Semaphore mSyncSemaphore;
     public static String USERNAME;
+    public static String NAME;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext=getApplicationContext();
-//        Bmob.initialize(mContext,"f6344bf02fe34ae0c0dca856e9563a30"); //Just
-        Bmob.initialize(mContext,"ad3064090c6b457cd256c20d62639243"); //杰哥
+
+        init();
     }
 
     public static void init() {
+        //        Bmob.initialize(mContext,"f6344bf02fe34ae0c0dca856e9563a30"); //Just
+        Bmob.initialize(mContext,"ad3064090c6b457cd256c20d62639243"); //杰哥
         SDKInitializer.initialize(mContext);
         mSyncSemaphore=new Semaphore(1);
         Intent intentService=new Intent(mContext,AutoAndMaInfoSyncService.class);
@@ -40,5 +43,13 @@ public class MyApplication extends Application {
 
     public static String getUsername() {
         return USERNAME;
+    }
+
+    public static void setName(String name) {
+        NAME=name;
+    }
+
+    public static String getNAME() {
+        return NAME;
     }
 }

@@ -92,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mEtUsername= (EditText) findViewById(R.id.id_et_username);
         mEtPassword= (EditText) findViewById(R.id.id_et_password);
-        mEtUsername.setText("");
-        mEtPassword.setText("");
         mEtUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -131,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-      mEtPassword.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"));
+//      mEtPassword.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"));
 
         mBtRegister= (Button) findViewById(R.id.id_bt_register);
         mBtLogin= (Button) findViewById(R.id.id_bt_login);

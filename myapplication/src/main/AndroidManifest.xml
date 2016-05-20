@@ -25,7 +25,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
 
-        <activity android:name="just.activities.LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,9 +65,11 @@
 
         <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
 
-        <activity android:name="just.activities.BespeakGasActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="just.activities.LoginActivity" />
         <activity android:name="just.activities.RegisterActivity" />
+
+        <activity android:name=".OrdGasActivity"/>
+
     </application>
 
 </manifest>
