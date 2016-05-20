@@ -211,9 +211,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         });
 
-        imageViews[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imageViews[4].setOnClickListener(v->{
                 switch (v.getId()) {
                     case R.id.iv_a:
                         executeAnim(isOpen);
@@ -223,14 +221,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                         Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
                         break;
                 }
-            }
+
         });
         //卫星菜单是否打开
         isOpen = true;
 
-        route_to.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        route_to.setOnClickListener(v -> {
 
                 if (POI_true_folse) {
 
@@ -249,13 +245,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     mBaiduMap.clear();
                     Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
                 }
-            }
         });
 
-        poi.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
+        poi.setOnClickListener(v -> {
 
                 if (!POI_true_folse) {
 
@@ -277,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     mMarker.remove();
                     POI_true_folse = false;
                 }
-            }
+
         });
 
         arrow.setOnClickListener(v -> {
@@ -360,14 +352,11 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         });
 
 
-        btn_myPosition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_myPosition.setOnClickListener(v -> {
 
                 //定位功能,以自己为中点定位
                 centerToMyLocation(mLatitue, mLongLatitue);
 
-            }
         });
 
 
