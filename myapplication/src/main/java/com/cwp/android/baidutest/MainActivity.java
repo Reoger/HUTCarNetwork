@@ -237,9 +237,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     mBaiduMap.clear();
 
                     LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
-
                     LatLng enPosition = mMarker.getPosition();
-
 
                     PlanNode stNode = PlanNode.withLocation(stPosition);
                     PlanNode enNode = PlanNode.withLocation(enPosition);
@@ -486,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         /*
         ** t1是加油站名称  t2是加油站地址  t3是油价 t4也是 价格
          */
-
+        Button btn_ording = (Button) mView.findViewById(R.id.ording);
 
         t1 = (TextView) mView.findViewById(R.id.textView1);
         t2 = (TextView) mView.findViewById(R.id.textView2);
@@ -503,6 +501,14 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         t2.setText(address);
         t3.setText(price);
         t4.setText(gasprice);
+
+        btn_ording.setOnClickListener(v->{
+
+            Intent intent = new Intent (MainActivity.this, Ordding.class);
+            intent.putExtra("bundle",bundle);
+            startActivity(intent);
+
+        });
 
         mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
 

@@ -37,6 +37,7 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="起点：" />
 
                 <EditText
@@ -45,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:ems="10"
+                    android:singleLine="true"
                     android:text="株洲">
 
                     <requestFocus />

@@ -65,7 +65,8 @@
 
         <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
 
-        <activity android:name="just.activities.BespeakGasActivity"></activity>
+        <activity android:name="just.activities.BespeakGasActivity" />
+        <activity android:name=".Ordding"></activity>
     </application>
 
 </manifest>
