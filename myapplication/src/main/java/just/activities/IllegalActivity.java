@@ -19,6 +19,7 @@ import just.beans.AutoInfo;
 public class IllegalActivity extends Activity {
     private ListView mLvForIllegal;
     private AutoInfoAdapter mAdapter;
+    private  AutoInfo autoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,24 +53,25 @@ public class IllegalActivity extends Activity {
         mLvForIllegal.setAdapter(mAdapter);
 
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {
-            AutoInfo autoInfo =mAdapter.getItem(position);
+             autoInfo =mAdapter.getItem(position);
             Log.d("测试->IllegalActivity","已经获取汽车的相关信息----");
             //选择要查询的地点
-          //  Intent intent = new Intent(IllegalActivity.this,ProvinceList.class);
-          //  startActivity(intent);
-            startResultList();
+            Intent intent = new Intent(IllegalActivity.this,ProvinceList.class);
+            startActivityForResult(intent,0x20);
+          //  startResultList();
         }));
     }
 
-    public void startResultList(){
+    public void startResultList(String cityId){
         CarInfo car = new CarInfo();
-        car.setChepai_no("粤B12345");
-        car.setChejia_no("123456");
-        car.setEngine_no("");
+        car.setChepai_no(autoInfo.getLicensePlateNum());
+        car.setChejia_no(autoInfo.getVin());
+        car.setEngine_no(autoInfo.getEngineNum());
         car.setRegister_no("");
 
+        int a = Integer.valueOf(cityId);
         //这里需要通过用户选择要查询的地区，
-        car.setCity_id(109);
+        car.setCity_id(a);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("carInfo", car);
@@ -79,5 +81,18 @@ public class IllegalActivity extends Activity {
         startActivity(intent);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        Log.d("TAG","resultCode "+resultCode);
+        Bundle bundle = data.getExtras();
+        // 获取城市name
+        String cityName = bundle.getString("city_name");
+        String cityId = bundle.getString("city_id");
+        Log.e("TAG", cityName + cityId);
+        startResultList(cityId);//查询结果
+     }
 
 }

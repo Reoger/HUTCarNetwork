@@ -30,7 +30,7 @@ public class MyApplication extends Application {
 
     public static void init() {
         //        Bmob.initialize(mContext,"f6344bf02fe34ae0c0dca856e9563a30"); //Just
-        Bmob.initialize(mContext,"ad3064090c6b457cd256c20d62639243"); //杰哥
+        Bmob.initialize(mContext,"11c50a59fafd8add5a2c19107b769f9d"); //杰哥
         SDKInitializer.initialize(mContext);
         mSyncSemaphore=new Semaphore(1);
         Intent intentService=new Intent(mContext,AutoAndMaInfoSyncService.class);
