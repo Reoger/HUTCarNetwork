@@ -67,9 +67,8 @@
 
         <activity android:name="just.activities.LoginActivity" />
         <activity android:name="just.activities.RegisterActivity" />
-
-        <activity android:name=".OrdGasActivity"/>
-
+        <activity android:name=".OrdGasActivity" />
+        <activity android:name="just.activities.OrdGasInfoActivity"></activity>
     </application>
 
 </manifest>

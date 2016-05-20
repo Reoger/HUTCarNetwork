@@ -1,8 +1,10 @@
 package com.cwp.android.baidutest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,11 +25,9 @@ public class OrdGasActivity extends AppCompatActivity {
     }
 
     private void init() {
-        findViewById(R.id.id_ib_top_bar_back).setOnClickListener(v -> {
-            finish();
-        });
-        findViewById(R.id.id_ib_top_bar_add).setVisibility(View.INVISIBLE);
-        ((TextView) findViewById(R.id.id_tv_top_bar_title)).setText("汽车违章信息");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("预约加油");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mLvForIllegal = (ListView) findViewById(R.id.id_lv_auto_info_for_illegal);
         TextView tvHint = (TextView) findViewById(R.id.id_tv_hint);
@@ -39,7 +39,19 @@ public class OrdGasActivity extends AppCompatActivity {
 
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {
             AutoInfo autoInfo = mAdapter.getItem(position);
-            Log.d("测试->IllegalActivity", "已经获取汽车的相关信息----");
+            Log.d("测试->OrdGasActivity", "已经获取汽车的相关信息----");
         }));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
