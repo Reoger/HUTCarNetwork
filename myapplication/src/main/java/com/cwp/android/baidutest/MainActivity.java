@@ -4,8 +4,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,7 +41,6 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
-import com.baidu.mapapi.model.inner.GeoPoint;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
 import com.baidu.mapapi.overlayutil.PoiOverlay;
@@ -493,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         btn_ording.setOnClickListener(v->{
 
-            Intent intent = new Intent (MainActivity.this, Ordding.class);
+            Intent intent = new Intent (MainActivity.this, OrdGasActivity.class);
             intent.putExtra("bundle",bundle);
             startActivity(intent);
 

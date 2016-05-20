@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.cwp.android.baidutest.OrdGasActivity;
 import com.cwp.android.baidutest.R;
 
 public class MyInfoActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,7 +47,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.id_ll_auto_info:cls=AutoInfoActivity.class;break;
             case R.id.id_ll_ma_info:cls=MaInfoActivity.class;break;
             case R.id.id_ll_illegal_info:cls=IllegalActivity.class;break;
-            case R.id.id_ll_bespeak_info:cls=BespeakGasActivity.class;break;
+            case R.id.id_ll_bespeak_info:cls=OrdGasActivity.class;break;
             default:break;
         }
         if(cls!=null) {

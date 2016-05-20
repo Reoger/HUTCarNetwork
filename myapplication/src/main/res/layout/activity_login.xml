@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="just.activities.IllegalActivity">
+    <RelativeLayout
+        android:id="@+id/id_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center" >
+        <FrameLayout
+            android:id="@+id/id_username_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:gravity="center" >
+            <EditText
+                android:hint="手机号码"
+                android:id="@+id/id_et_username"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:inputType="phone"
+                android:paddingRight="60dp"
+                android:maxLength="11"
+                android:paddingLeft="55dp">
+            </EditText>
+            <ImageView
+                android:background="@drawable/username"
+                android:layout_width="22dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="left|center_vertical"
+                android:visibility="visible" />
+            <Button
+                android:background="@drawable/clear"
+                android:id="@+id/id_bt_username_clear"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:visibility="invisible"
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/id_usercode_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_username_layout"
+            android:layout_marginTop="6dp"
+            android:gravity="center" >
+            <EditText
+                android:id="@+id/id_et_password"
+                android:digits="@string/password_requirement"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:inputType="textPassword"
+                android:paddingRight="60dp"
+                android:hint="密码"
+                android:maxLength="12"
+                android:paddingLeft="55dp" >
+            </EditText>
+            <ImageView
+                android:background="@drawable/password"
+                android:layout_width="24dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_gravity="left|center_vertical" />
+            <Button
+                android:background="@drawable/password_eye"
+                android:id="@+id/id_bt_pwd_eye"
+                android:visibility="invisible"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                />
+            <Button
+                android:background="@drawable/clear"
+                android:id="@+id/id_bt_password_clear"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:visibility="invisible"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="40dp"/>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/id_bt_login"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/id_usercode_layout"
+            android:layout_marginTop="30dp"
+            android:background="#ff336699"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="登录" />
+        <Button
+            android:id="@+id/id_bt_login_forget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/id_bt_login"
+            android:layout_below="@id/id_bt_login"
+            android:background="#00000000"
+            android:text="忘记密码"
+            android:textColor="#467fd9"
+            android:textSize="16sp" />
+        <Button
+            android:id="@+id/id_bt_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/id_bt_login"
+            android:layout_below="@id/id_bt_login"
+            android:background="#00000000"
+            android:gravity="left|center_vertical"
+            android:text="注册"
+            android:textColor="#467fd9"
+            android:textSize="16sp"
+            android:visibility="visible" />
+    </RelativeLayout>
+</RelativeLayout>
