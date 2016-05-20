@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#4abff1"
+    tools:context="just.activities.RegisterActivity">
+    
+    <TextView
+        android:text="1.设置账号"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:background="#86dbd7"
+        android:id="@+id/id_tv_register_step"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+    
+    <TextView
+        android:id="@+id/id_tv_register_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+        <TextView
+            android:background="#e98b5f"
+            android:id="@+id/id_tv_register_step1"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:id="@+id/id_ll_register_step1"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/phone_no"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+            <EditText
+                android:id="@+id/id_et_register_step1"
+                android:textSize="18sp"
+                android:digits="0123456789"
+                android:hint="请输入您的手机号码"
+                android:background="#94c5ed"
+                android:maxLength="11"
+                android:inputType="phone"
+                android:layout_weight="13"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/id_bt_register_step1"
+                android:text="确定"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+        <TextView
+            android:id="@+id/id_tv_register_step2"
+            android:background="#f1543c"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:id="@+id/id_ll_register_step2"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/verification_code"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+            <EditText
+                android:id="@+id/id_et_register_step2"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:hint="请输入验证码"
+                android:background="#94c5ed"
+                android:maxLength="6"
+                android:inputType="number"
+                android:layout_weight="13"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/id_bt_register_step2"
+                android:text="确定"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+        <TextView
+            android:id="@+id/id_tv_register_step3"
+            android:background="#ed342e"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/id_ll_register_step3"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/set_password"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+
+                    <EditText
+                        android:id="@+id/id_et_register_step3_1"
+                        android:textSize="18sp"
+                        android:digits="@string/password_requirement"
+                        android:hint="请设置密码"
+                        android:background="#94c5ed"
+                        android:maxLength="12"
+                        android:inputType="textPassword"
+                        android:layout_weight="15"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="3dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/repeat_password"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+
+                    <EditText
+                        android:id="@+id/id_et_register_step3_2"
+                        android:textSize="18sp"
+                        android:digits="@string/password_requirement"
+                        android:hint="请重复上述密码"
+                        android:background="#94c5ed"
+                        android:maxLength="12"
+                        android:inputType="textPassword"
+                        android:layout_weight="15"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            <Button
+                android:id="@+id/id_bt_register_step3"
+                android:text="确定"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
