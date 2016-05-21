@@ -29,14 +29,14 @@ import just.utils.NetworkUtil;
 /**
  * 用于将本地汽车信息与云端的同步
  */
-public class AutoAndMaInfoSyncService extends IntentService {
+public class InfoSyncToCloudService extends IntentService {
     private boolean isContinueSync=true;//用于判断某些情况下是否继续同步数据
     private Context mContext;
 
     private Semaphore mIsNextSemaphore;//信号量的使用是为了使每块逻辑中的回调方法执行完毕之后再执行下一块的逻辑
 
-    public AutoAndMaInfoSyncService() {
-            super("AutoAndMaInfoSyncService");
+    public InfoSyncToCloudService() {
+            super("InfoSyncToCloudService");
     }
 
     @Override

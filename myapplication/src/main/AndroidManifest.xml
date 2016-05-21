@@ -26,7 +26,11 @@
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
 
         <activity android:name=".MainActivity">
-          
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
@@ -43,14 +47,8 @@
         <activity android:name="just.activities.MaInfoActivity" />
         <activity
             android:name="com.com.reoger.music.View.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 
@@ -71,7 +69,8 @@
         <activity android:name="just.activities.LoginActivity" />
         <activity android:name="just.activities.RegisterActivity" />
         <activity android:name=".OrdGasActivity" />
-        <activity android:name="just.activities.OrdGasInfoActivity"></activity>
+        <activity android:name="just.activities.OrdGasInfoActivity" />
+        <activity android:name=".PayActivity"></activity>
     </application>
 
 </manifest>

@@ -21,15 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cwp.android.baidutest.MainActivity;
-import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
 import cn.bmob.v3.BmobSMS;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.VerifySMSCodeListener;
+import just.beans.MyUser;
 
 public class RegisterActivity extends AppCompatActivity {
     private TextView mTvStep,mTvPrompt,mTvStep1,mTvStep2,mTvStep3;
@@ -126,7 +124,6 @@ public class RegisterActivity extends AppCompatActivity {
                 mTvStep3.setText("注册成功");
                 mTvStep3.setVisibility(View.VISIBLE);
                 mLlStep3.setVisibility(View.INVISIBLE);
-                MyApplication.init();
                 Intent intent=new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -165,7 +162,6 @@ public class RegisterActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mTvStep= (TextView) findViewById(R.id.id_tv_register_step);
-        mTvPrompt= (TextView) findViewById(R.id.id_tv_register_prompt);
         mTvStep1= (TextView) findViewById(R.id.id_tv_register_step1);
         mTvStep2= (TextView) findViewById(R.id.id_tv_register_step2);
         mTvStep3= (TextView) findViewById(R.id.id_tv_register_step3);
@@ -186,20 +182,25 @@ public class RegisterActivity extends AppCompatActivity {
             if (!TextUtils.isEmpty(number)&&number.length()==11) {
                 new Thread(()-> {
                     mHandler.sendEmptyMessage(REQUEST_SEND);
-                    BmobSMS.requestSMSCode(RegisterActivity.this, number, "test",new RequestSMSCodeListener() {
-
-                        @Override
-                        public void done(Integer smsId,BmobException ex) {
-                            if(ex==null){//验证码发送成功
-                                Log.d("测试->RegisterActivity","请求验证码成功");
-                                mHandler.sendEmptyMessage(SUCCEED_SEND);
-                            }
-                            else {
-                                Log.d("测试->RegisterActivity","请求验证码失败:code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
-                                mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_SEND));
-                            }
-                        }
-                    });
+//                    BmobSMS.requestSMSCode(RegisterActivity.this, number, "test",new RequestSMSCodeListener() {
+//
+//                        @Override
+//                        public void done(Integer smsId,BmobException ex) {
+//                            if(ex==null){//验证码发送成功
+//                                Log.d("测试->RegisterActivity","请求验证码成功");
+//                                mHandler.sendEmptyMessage(SUCCEED_SEND);
+//                            }
+//                            else {
+//                                Log.d("测试->RegisterActivity","请求验证码失败:code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
+//                                mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_SEND));
+//                            }
+//                        }
+//                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                    }
+                    mHandler.sendEmptyMessage(SUCCEED_SEND);
                 }).start();
             }
             else {
@@ -247,7 +248,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 new Thread(()-> {
-                    BmobUser user=new BmobUser();
+                    MyUser user=new MyUser();
                     user.setUsername(mEtStep1.getText().toString());
                     Log.d("测试->RegisterActivity",mEtStep1.getText().toString());
                     user.setPassword(password1);

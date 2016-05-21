@@ -3,13 +3,12 @@ package com.cwp.android.baidutest;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import java.util.concurrent.Semaphore;
 
 import cn.bmob.v3.Bmob;
-import just.services.AutoAndMaInfoSyncService;
+import just.services.InfoSyncToCloudService;
 
 /**
  * Created by Just on 2016/5/4.
@@ -29,11 +28,19 @@ public class MyApplication extends Application {
     }
 
     public static void init() {
-        //        Bmob.initialize(mContext,"f6344bf02fe34ae0c0dca856e9563a30"); //Just
-        Bmob.initialize(mContext,"11c50a59fafd8add5a2c19107b769f9d"); //杰哥
-        SDKInitializer.initialize(mContext);
+        Bmob.initialize(mContext,"11c50a59fafd8add5a2c19107b769f9d"); //Bmob相关初始化
+        SDKInitializer.initialize(mContext);//百度地图初始化
+    }
+
+    //当用账号登陆的时候，需要开启一个服务从云端同步数据至本地
+    public static void startSyncFromCloudService() {
+        
+    }
+
+    //当记住了账号的时候，直接开启将本地数据同步至云端的服务
+    public static void startSyncToCloudService() {
         mSyncSemaphore=new Semaphore(1);
-        Intent intentService=new Intent(mContext,AutoAndMaInfoSyncService.class);
+        Intent intentService=new Intent(mContext,InfoSyncToCloudService.class);
         mContext.startService(intentService);
     }
 
@@ -49,7 +56,7 @@ public class MyApplication extends Application {
         NAME=name;
     }
 
-    public static String getNAME() {
+    public static String getName() {
         return NAME;
     }
 }

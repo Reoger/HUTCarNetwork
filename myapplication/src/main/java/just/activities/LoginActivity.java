@@ -1,8 +1,8 @@
 package just.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -10,10 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +22,12 @@ import com.cwp.android.baidutest.MainActivity;
 import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
-import cn.bmob.v3.BmobUser;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import just.beans.MyUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mEtUsername, mEtPassword;
@@ -48,11 +50,15 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case SUCCEED_VERIFY:
                     MyApplication.setUsername(mEtUsername.getText().toString());
-                    MyApplication.init();
+                    MyApplication.setName((String) msg.obj);
                     progressDialog.dismiss();
                     progressDialog =null;
                     Log.d("测试->LoginActivity","验证成功");
-                    Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+
+                    //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
+                    MyApplication.startSyncFromCloudService();
+
+                    Intent intent=new Intent(LoginActivity.this, MyInfoActivity.class);
                     startActivity(intent);
                     finish();
                     break;
@@ -106,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else if(s.length()==0){
                     mBtPasswordClear.setVisibility(View.INVISIBLE);
-                    mBtEyePassword.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -120,23 +125,20 @@ public class LoginActivity extends AppCompatActivity {
                 if(s.length()>0) {
                     mBtPasswordClear.setVisibility(View.VISIBLE);
                     mBtUsernameClear.setVisibility(View.INVISIBLE);
-                    mBtEyePassword.setVisibility(View.VISIBLE);
 
                 }
                 else if(s.length()==0){
                     mBtPasswordClear.setVisibility(View.INVISIBLE);
-                    mBtEyePassword.setVisibility(View.INVISIBLE);
                 }
             }
         });
-//      mEtPassword.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"));
 
         mBtRegister= (Button) findViewById(R.id.id_bt_register);
         mBtLogin= (Button) findViewById(R.id.id_bt_login);
-        mBtForget= (Button) findViewById(R.id.id_bt_login_forget);
+//        mBtForget= (Button) findViewById(R.id.id_bt_login_forget);
         mBtUsernameClear= (Button) findViewById(R.id.id_bt_username_clear);
         mBtPasswordClear= (Button) findViewById(R.id.id_bt_password_clear);
-        mBtEyePassword= (Button) findViewById(R.id.id_bt_pwd_eye);
+//        mBtEyePassword= (Button) findViewById(R.id.id_bt_pwd_eye);
 
         mBtUsernameClear.setOnClickListener(v -> {
             mEtUsername.setText("");
@@ -145,16 +147,17 @@ public class LoginActivity extends AppCompatActivity {
         mBtPasswordClear.setOnClickListener(v -> {
             mEtPassword.setText("");
         });
-        mBtEyePassword.setOnClickListener(v -> {
-            if(mEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD)){
-                mBtEyePassword.setBackgroundResource(R.drawable.password_unvisiblity);
-                mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_NORMAL);
-            }else{
-                mBtEyePassword.setBackgroundResource(R.drawable.password_eye);
-                mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            }
-            mEtPassword.setSelection(mEtPassword.getText().toString().length());
-        });
+
+//        mBtEyePassword.setOnClickListener(v -> {
+//            if(mEtPassword.getInputType() == (InputType.TYPE_TEXT_VARIATION_PASSWORD)){
+//                mBtEyePassword.setBackgroundResource(R.drawable.ic_login_no_eye);
+//                mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//            }else if(mEtPassword.getInputType() == (InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)) {
+//                mBtEyePassword.setBackgroundResource(R.drawable.ic_login_eye);
+//                mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//            }
+//            mEtPassword.setSelection(mEtPassword.getText().toString().length());
+//        });
         mBtLogin.setOnClickListener(v -> {
             Log.d("测试->LoginActivity","登陆");
             String username=mEtUsername.getText().toString();
@@ -169,13 +172,29 @@ public class LoginActivity extends AppCompatActivity {
             }
             mHandler.sendEmptyMessage(START_VERIFY);
             new Thread(()->{
-                BmobUser user=new BmobUser();
+                MyUser user=new MyUser();
                 user.setUsername(username);
                 user.setPassword(password);
                 user.login(LoginActivity.this, new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        mHandler.sendEmptyMessage(SUCCEED_VERIFY);
+                        BmobQuery<MyUser> query=new BmobQuery<MyUser>();
+                        query.addWhereEqualTo("username",username);
+                        query.setLimit(1);
+                        query.findObjects(LoginActivity.this, new FindListener<MyUser>() {
+                            @Override
+                            public void onSuccess(List<MyUser> list) {
+                                String name=list.get(0).getTableName();
+                                saveLoginInfoToLocal(username,name);
+                                mHandler.sendEmptyMessage(SUCCEED_VERIFY);
+                            }
+
+                            @Override
+                            public void onError(int i, String s) {
+                                saveLoginInfoToLocal(username,"null");
+                                mHandler.sendEmptyMessage(SUCCEED_VERIFY);
+                            }
+                        });
                     }
 
                     @Override
@@ -198,9 +217,17 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
             startActivity(intent);
         });
-        mBtForget.setOnClickListener(v -> {
-            Log.d("测试->LoginActivity","忘记密码");
-        });
+//        mBtForget.setOnClickListener(v -> {
+//            Log.d("测试->LoginActivity","忘记密码");
+//        });
+    }
+
+    private void saveLoginInfoToLocal(String username,String name) {
+        SharedPreferences.Editor editor = getSharedPreferences(MyInfoActivity.FILE_NAME,
+                MODE_PRIVATE).edit();
+        editor.putString(MyInfoActivity.USERNAME, username);
+        editor.putString(MyInfoActivity.NAME, name);
+        editor.commit();
     }
 
     @Override
