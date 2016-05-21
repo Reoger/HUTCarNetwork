@@ -19,15 +19,17 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
-        android:background="#c6c4c4"
+
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <just.swipemenulistview.SwipeMenuListView
-            android:divider="#010101"
-            android:dividerHeight="3px"
+            android:scrollbars="none"
+            android:divider="@null"
+            android:layout_margin="4dip"
+            android:padding="6dip"
             android:id="@+id/id_lv_auto_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
