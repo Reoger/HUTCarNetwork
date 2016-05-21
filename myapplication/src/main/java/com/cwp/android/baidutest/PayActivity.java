@@ -69,27 +69,30 @@ public class PayActivity extends AppCompatActivity {
 
         radioButton2 = (RadioButton) findViewById(R.id.RadioButton2);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == radioButton1.getId()) {
-                    TypeGas = false;
-                    change(allPrice);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == radioButton1.getId()) {
+                TypeGas = false;
+                change(allPrice);
 //                    Toast.makeText(getApplicationContext(), "汽油", 1).show();
 //                    price.setText(bundle.getString("gasprice1"));
-                } else if (checkedId == radioButton2.getId()) {
-                    TypeGas = true;
+            } else if (checkedId == radioButton2.getId()) {
+                TypeGas = true;
 //                    Toast.makeText(getApplicationContext(), "柴油", 1).show();
 //                    price.setText(bundle.getString("price1"));
-                }
-
-                change(allPrice);
             }
+
+            change(allPrice);
         });
 
 
         btn_pay_ok.setOnClickListener(v -> {//支付接口
-            BP.pay(PayActivity.this, "商品名称", "商品描述", 0.02, false, new PListener() {
+            String type = TypeGas?"柴油":"汽油";
+            String name = "加油站名字"+bundle.getString("NAME");
+            String address = "地址"+bundle.getString("ADDRESS");
+            String price = "汽油价格"+bundle.getString("price1");
+            String price2 = "柴油价格"+bundle.getString("gasprice1");
+
+            BP.pay(PayActivity.this, type, name+address+price+price2, 0.02, false, new PListener() {
                 @Override
                 public void orderId(String s) {
 
