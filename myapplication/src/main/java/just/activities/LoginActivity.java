@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
                     MyApplication.startSyncFromCloudService();
 
-                    Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent=new Intent(LoginActivity.this, MyInfoActivity.class);
                     startActivity(intent);
                     finish();
                     break;
