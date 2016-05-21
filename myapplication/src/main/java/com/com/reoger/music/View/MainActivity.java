@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Toolbar toolbar;
     private TextView mTimeStare;
     private TextView mTimeTop;
-    private boolean isFirstRun = true;
+    private boolean isFirstRun = true;//判断是否为第一次运行
+    private boolean processFlag = true;//反之过快点击
 
     private SideBar sideBar;
     private ClearEditText mClearEditText;
@@ -102,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mMusicList.setOnItemClickListener(this);
         mMusicList.setOnItemLongClickListener(this);
         initButtonReceiver();
-        if(isFirstRun){
+        if (isFirstRun) {
             Intent inent = new Intent(MainActivity.this, com.cwp.android.baidutest.MainActivity.class);
             startActivity(inent);
-            isFirstRun= false;
+            isFirstRun = false;
         }
 
     }
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             LogUtils.e("TAG", "歌曲运行了");
             in.setClass(this, ServiceForMusic.class);
             mCurrSOngpath = mMusicData.get(mCurrSongIndex).getmMusicPath();
-            in.putExtra("path",mCurrSOngpath);
+            in.putExtra("path", mCurrSOngpath);
             startService(in);//隐式启动service
             bindService(in, conn, Context.BIND_AUTO_CREATE);
         }
@@ -319,84 +320,95 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void playMusic(View view) {
+        if (processFlag) {
+            setProcessFlag();
+            if (mIsMusicPlaying) {//当前在正在播放歌曲
+                binder.pauseMusic();//暂停播放
+                mImagePause.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.pause));
+                LogUtils.d(TAG, "当前正在播放，点击暂停了");
+                mIsMusicPlaying = false;
 
-        if (mIsMusicPlaying) {//当前在正在播放歌曲
-            binder.pauseMusic();//暂停播放
-            mImagePause.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.pause));
-            LogUtils.d(TAG, "当前正在播放，点击暂停了");
-            mIsMusicPlaying = false;
-
-        } else {
-            binder.resumeMusic();
-            LogUtils.e(TAG, "当前没有播放，点击播放了");
-            // binder.startMusic();
-            mImagePause.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.play));
-            mIsMusicPlaying = true;
+            } else {
+                binder.resumeMusic();
+                LogUtils.e(TAG, "当前没有播放，点击播放了");
+                // binder.startMusic();
+                mImagePause.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.play));
+                mIsMusicPlaying = true;
+            }
+            toolbar.setTitle(mCurrSongName);
+            new TimeThread().start();
         }
-        toolbar.setTitle(mCurrSongName);
+
+
     }
 
     public void upMusic(View view) {
-        mCurrSongIndex--;
-        if (mCurrSongIndex <= 0) {
-            mCurrSongIndex = 0;
-            Toast.makeText(MainActivity.this, "这已经是第一首歌了", Toast.LENGTH_SHORT).show();
-            LogUtils.d(TAG, "这已经是第一首歌了");
-            return;
-        }
-        if (in != null && binder != null) {
-            binder.restMusic();
-            binder.removeMusic();
-            binder.stopMusic();
-            unbindService(conn);
-            stopService(in);
-        }
+        if (processFlag) {
+            setProcessFlag();
+            mCurrSongIndex--;
+            if (mCurrSongIndex <= 0) {
+                mCurrSongIndex = 0;
+                Toast.makeText(MainActivity.this, "这已经是第一首歌了", Toast.LENGTH_SHORT).show();
+                LogUtils.d(TAG, "这已经是第一首歌了");
+                return;
+            }
+            if (in != null && binder != null) {
+                binder.restMusic();
+                binder.removeMusic();
+                binder.stopMusic();
+                unbindService(conn);
+                stopService(in);
+            }
 
-        initIntent();
-        if (onlyPlayMusic()) {
-            LogUtils.d(TAG, "下一曲");
+            initIntent();
+            if (onlyPlayMusic()) {
+                LogUtils.d(TAG, "下一曲");
+            }
+            new TimeThread().start();
         }
     }
 
     public void nextMusic(View view) {
+        if (processFlag) {
+            setProcessFlag();
+            switch (status) {
+                case CYCLE:
+                    mCurrSongIndex++;
+                    break;
+                case RANDER://单曲循环
+                    break;
+                case OREDR://随机播放
+                    int temp = (int) (0 + Math.random() * (mMusicData.size() - 0 + 1));
+                    if (temp == mCurrSongIndex) {
+                        mCurrSongIndex = 1 + temp;
+                    } else {
+                        mCurrSongIndex = temp;
+                    }
+                    LogUtils.d(TAG, mCurrSongIndex + " mMusicData.size()" + mMusicData.size());
+                    break;
+            }
 
-        switch (status) {
-            case CYCLE:
-                mCurrSongIndex++;
-                break;
-            case RANDER://单曲循环
-                break;
-            case OREDR://随机播放
-                int temp = (int) (0 + Math.random() * (mMusicData.size() - 0 + 1));
-                if (temp == mCurrSongIndex) {
-                    mCurrSongIndex = 1 + temp;
-                } else {
-                    mCurrSongIndex = temp;
-                }
-                LogUtils.d(TAG, mCurrSongIndex + " mMusicData.size()" + mMusicData.size());
-                break;
+            if (mCurrSongIndex >= mMusicData.size()) {
+                Toast.makeText(MainActivity.this, "这已经是最后一首歌了" + mCurrSongIndex, Toast.LENGTH_SHORT).show();
+                mCurrSongIndex = 0;
+            }
+            if (in != null && binder != null) {
+                binder.restMusic();
+                binder.stopMusic();
+                binder.removeMusic();
+                unbindService(conn);
+                stopService(in);
+            }
+
+
+            initIntent();
+            if (onlyPlayMusic()) {
+                LogUtils.d(TAG, "下一曲");
+            }
+            new TimeThread().start();
         }
-
-        if (mCurrSongIndex >= mMusicData.size()) {
-            Toast.makeText(MainActivity.this, "这已经是最后一首歌了" + mCurrSongIndex, Toast.LENGTH_SHORT).show();
-            mCurrSongIndex = 0;
-        }
-        if (in != null && binder != null) {
-            binder.restMusic();
-            binder.stopMusic();
-            binder.removeMusic();
-            unbindService(conn);
-            stopService(in);
-        }
-
-
-        initIntent();
-        if (onlyPlayMusic()) {
-            LogUtils.d(TAG, "下一曲");
-        }
-
     }
 
     @Override
@@ -447,7 +459,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-
     /**
      * 点击歌曲时候的处理逻辑
      *
@@ -460,20 +471,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //mCurrSongIndex = position;
         //这样写还是原来的序号，会导致无法索搜后的结果播放
-         int index = ((Music)adaper.getItem(position)).getCurrentIndex();
-        mCurrSongIndex = index;
+        if (processFlag) {
+            setProcessFlag();//
+            int index = ((Music) adaper.getItem(position)).getCurrentIndex();
+            mCurrSongIndex = index;
 
-        if (in != null && binder != null) {
-            binder.restMusic();
-            binder.removeMusic();
-            binder.stopMusic();
-            unbindService(conn);
-            stopService(in);
+            if (in != null && binder != null) {
+                binder.restMusic();
+                binder.removeMusic();
+                binder.stopMusic();
+                unbindService(conn);
+                stopService(in);
+            }
+            initIntent();
+            if (onlyPlayMusic()) {
+                LogUtils.d(TAG, "text");
+            }
+            new TimeThread().start();
         }
-        initIntent();
-        if (onlyPlayMusic()) {
-            LogUtils.d(TAG, "text");
-        }
+
+
     }
 
     Sequence status = Sequence.OREDR;
@@ -526,19 +543,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         //点击的事件处理
         Intent buttonIntent = new Intent(Constant.ACTION_BUTTON);
-        /* 上一首按钮 */
-        buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_PREV_ID);
-        //这里加了广播，所及INTENT的必须用getBroadcast方法
-        PendingIntent intent_prev = PendingIntent.getBroadcast(this, 1, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_prev, intent_prev);
-		/* 播放/暂停  按钮 */
-        buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_PALY_ID);
-        PendingIntent intent_paly = PendingIntent.getBroadcast(this, 2, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_play, intent_paly);
-		/* 下一首 按钮  */
-        buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_NEXT_ID);
-        PendingIntent intent_next = PendingIntent.getBroadcast(this, 3, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_next, intent_next);
+        if (processFlag) {
+            setProcessFlag();//
+            /* 上一首按钮 */
+            buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_PREV_ID);
+            //这里加了广播，所及INTENT的必须用getBroadcast方法
+            PendingIntent intent_prev = PendingIntent.getBroadcast(this, 1, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_prev, intent_prev);
+         /** 播放/暂停  按钮 */
+            buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_PALY_ID);
+            PendingIntent intent_paly = PendingIntent.getBroadcast(this, 2, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_play, intent_paly);
+		    /** 下一首 按钮  */
+            buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_NEXT_ID);
+            PendingIntent intent_next = PendingIntent.getBroadcast(this, 3, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_next, intent_next);
+            new TimeThread().start();
+        }
 
         mBuilder.setContent(mRemoteViews)
                 .setContentIntent(getDefalutIntent(Notification.FLAG_ONGOING_EVENT))
@@ -607,8 +628,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        int index = ((Music)adaper.getItem(position)).getCurrentIndex();
-        showPopupMenu(view,index);
+        int index = ((Music) adaper.getItem(position)).getCurrentIndex();
+        showPopupMenu(view, index);
         return false;
     }
 
@@ -618,7 +639,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param view
      * @return
      */
-    public boolean showPopupMenu(View view,int postion) {
+    public boolean showPopupMenu(View view, int postion) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         Menu menu = popupMenu.getMenu();
         menu.add(Menu.NONE, Menu.FIRST + 0, 0, "删除");
@@ -626,15 +647,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case Menu.FIRST + 0:
-                 showSureInfo(postion);
+                    showSureInfo(postion);
                     break;
                 case Menu.FIRST + 1:
                     Music music = mMusicData.get(postion);
                     String items[] = new String[4];
-                    items[0] = "歌曲名字："+music.getmMusicName();
-                    items[1] = "歌手名字："+music.getmMusicArtist();
-                    items[2] = "歌曲长度："+music.getmMusicTime();
-                    items[3] = "歌曲路径："+music.getmMusicPath();
+                    items[0] = "歌曲名字：" + music.getmMusicName();
+                    items[1] = "歌手名字：" + music.getmMusicArtist();
+                    items[2] = "歌曲长度：" + music.getmMusicTime();
+                    items[3] = "歌曲路径：" + music.getmMusicPath();
                     showDetailed(items);
                     break;
             }
@@ -649,11 +670,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      *
      * @return
      */
-    public boolean showDetailed(String []items) {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);  //先得到构造器
+    public boolean showDetailed(String[] items) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //先得到构造器
         builder.setTitle("详细信息"); //设置标题
         //builder.setMessage("是否确认退出?"); //设置内容
-       // builder.setIcon(R.mipmap.ic_launcher);//设置图标，图片id即可
+        // builder.setIcon(R.mipmap.ic_launcher);//设置图标，图片id即可
         //设置列表显示，注意设置了列表显示就不要设置builder.setMessage()了，否则列表不起作用。
         builder.setItems(items, (dialog1, which) -> {
             dialog1.dismiss();
@@ -676,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     // 通过程序我们知道删除了，但是怎么刷新ListView呢？
                     // 只需要重新设置一下adapter
                     adaper.notifyDataSetChanged();
-                    Toast.makeText(MainActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                 }).show();
         return true;
     }
@@ -718,5 +739,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 com.cwp.android.baidutest.MainActivity.class);
         startActivity(intent);
 
+    }
+
+    /**
+     * 设置按钮在短时间内被重复点击的有效标识（true表示点击有效，false表示点击无效）
+     */
+    private synchronized void setProcessFlag() {
+        processFlag = false;
+    }
+
+    /**
+     * 防止过快点击的时间线程
+     */
+    private class TimeThread extends Thread {
+        public void run() {
+            try {
+                sleep(1000);
+                processFlag = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
