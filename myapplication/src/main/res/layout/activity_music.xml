@@ -14,7 +14,7 @@
         tools:context=".MainActivity">
 
         <android.support.v7.widget.Toolbar
-            android:background="@color/colorMain"
+            android:background="#4dff02"
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent">

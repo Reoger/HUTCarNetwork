@@ -29,22 +29,26 @@ public class ManualAddAutoInfoActivity extends Activity {
         etPlateNum= (EditText) findViewById(R.id.id_et_add_plate_num);
         etEngineNum= (EditText) findViewById(R.id.id_et_add_engine_num);
         etVin= (EditText) findViewById(R.id.id_et_add_vin);
-
         btConfirm= (Button) findViewById(R.id.id_bt_add_confirm);
         btCancel= (Button) findViewById(R.id.id_bt_add_cancel);
 
         btConfirm.setOnClickListener(v -> {
-            String brand="品牌:"+etBrand.getText().toString().trim();
-            String model="型号:"+etModel.getText().toString().trim();
-            String body="车声级别:"+etBodyLevel.getText().toString().trim();
-            String plate="车牌号码:"+etPlateNum.getText().toString().trim();
-            String engine="发动机号:"+etEngineNum.getText().toString().trim();
-            String vin="车架号:"+etVin.getText().toString().trim();
+            String brand=etBrand.getText().toString().trim();
+            String model=etModel.getText().toString().trim();
+            String body=etBodyLevel.getText().toString().trim();
+            String plate=etPlateNum.getText().toString().trim();
+            String engine=etEngineNum.getText().toString().trim();
+            String vin=etVin.getText().toString().trim();
             if(!TextUtils.isEmpty(brand)&&!TextUtils.isEmpty(model)&&
                     !TextUtils.isEmpty(plate)&&!TextUtils.isEmpty(engine)&&
                     !TextUtils.isEmpty(body)&&!TextUtils.isEmpty(vin)) {
                 Intent intent = new Intent();
-                String result=brand+"\n"+model+"\n"+body+"\n"+plate+"\n"+engine+"\n"+vin;
+                String result="品牌:"+brand+"\n"+
+                        "型号:"+model+"\n"+
+                        "车声级别:"+body+"\n"+
+                        "车牌号码:"+plate+"\n"+
+                        "发动机号:"+engine+"\n"+
+                        "车架号:"+vin;
                 intent.putExtra("result", result);
                 setResult(RESULT_OK, intent);
                 finish();

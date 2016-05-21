@@ -9,4 +9,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="just.activities.OrdGasInfoActivity">
 
+    <TextView
+        android:gravity="center"
+        android:text="预约加油订单查看界面"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
