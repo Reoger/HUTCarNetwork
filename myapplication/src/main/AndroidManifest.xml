@@ -47,8 +47,8 @@
         <activity android:name="just.activities.MaInfoActivity" />
         <activity
             android:name="com.com.reoger.music.View.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 
@@ -69,7 +69,8 @@
         <activity android:name="just.activities.LoginActivity" />
         <activity android:name="just.activities.RegisterActivity" />
         <activity android:name=".OrdGasActivity" />
-        <activity android:name="just.activities.OrdGasInfoActivity"></activity>
+        <activity android:name="just.activities.OrdGasInfoActivity" />
+        <activity android:name=".PayActivity"></activity>
     </application>
 
 </manifest>
