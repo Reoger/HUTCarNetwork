@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -71,6 +74,18 @@
         <activity android:name=".OrdGasActivity" />
         <activity android:name="just.activities.OrdGasInfoActivity" />
         <activity android:name=".PayActivity"></activity>
+
+        <activity
+            android:name="c.b.a.A"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name="c.b.a.B"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent" />
+
     </application>
 
 </manifest>

@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
+import c.b.BP;
+import c.b.PListener;
+
 public class PayActivity extends AppCompatActivity {
 
     private RadioGroup radioGroup;
@@ -24,18 +27,20 @@ public class PayActivity extends AppCompatActivity {
     //false汽油 true柴油
     boolean TypeGas;
 
-    int allPrice;
+    int allPrice;//需要支付的总价格
     private double mQuantity;
 
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
 
+        BP.init(getApplication(),"11c50a59fafd8add5a2c19107b769f9d");
         init();
         change(allPrice);
 
@@ -83,11 +88,28 @@ public class PayActivity extends AppCompatActivity {
         });
 
 
-        btn_pay_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "OnClick", 0).show();
-            }
+        btn_pay_ok.setOnClickListener(v -> {//支付接口
+            BP.pay(PayActivity.this, "商品名称", "商品描述", 0.02, false, new PListener() {
+                @Override
+                public void orderId(String s) {
+
+                }
+
+                @Override
+                public void succeed() {
+                    Toast.makeText(getApplicationContext(), "成功支付", 0).show();//支付接口
+                }
+
+                @Override
+                public void fail(int i, String s) {
+
+                }
+
+                @Override
+                public void unknow() {
+
+                }
+            });
         });
 
         add.setOnClickListener(v -> {
