@@ -65,9 +65,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ImageView mImagePause;
     private ImageButton mImageButtonOrder;//用于判断当前是随机播放，顺序播放和循环播放
     private String mCurrSongName;
+    private String mCurrSOngpath;
     private Toolbar toolbar;
     private TextView mTimeStare;
     private TextView mTimeTop;
+    private boolean isFirstRun = true;
 
     private SideBar sideBar;
     private ClearEditText mClearEditText;
@@ -100,6 +102,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mMusicList.setOnItemClickListener(this);
         mMusicList.setOnItemLongClickListener(this);
         initButtonReceiver();
+        if(isFirstRun){
+            Intent inent = new Intent(MainActivity.this, com.cwp.android.baidutest.MainActivity.class);
+            startActivity(inent);
+            isFirstRun= false;
+        }
 
     }
 
@@ -117,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // 根据a-z进行排序源数据
         Collections.sort(mMusicData, pinyinComparator);
+        for (int i = 0; i < mMusicData.size(); i++) {
+            mMusicData.get(i).setCurrentIndex(i);
+        }
         adaper = new MyAdapter(this, mMusicData);
         mMusicList.setAdapter(adaper);
 
@@ -232,7 +242,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // in.setAction(ACTION);
             LogUtils.e("TAG", "歌曲运行了");
             in.setClass(this, ServiceForMusic.class);
-            in.putExtra("path", mMusicData.get(mCurrSongIndex).getmMusicPath());
+            mCurrSOngpath = mMusicData.get(mCurrSongIndex).getmMusicPath();
+            in.putExtra("path",mCurrSOngpath);
             startService(in);//隐式启动service
             bindService(in, conn, Context.BIND_AUTO_CREATE);
         }
@@ -354,10 +365,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (status) {
             case CYCLE:
                 mCurrSongIndex++;
-                Toast.makeText(MainActivity.this, "顺序播放", Toast.LENGTH_SHORT).show();
                 break;
             case RANDER://单曲循环
-                Toast.makeText(MainActivity.this, "单曲循环", Toast.LENGTH_SHORT).show();
                 break;
             case OREDR://随机播放
                 int temp = (int) (0 + Math.random() * (mMusicData.size() - 0 + 1));
@@ -367,7 +376,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     mCurrSongIndex = temp;
                 }
                 LogUtils.d(TAG, mCurrSongIndex + " mMusicData.size()" + mMusicData.size());
-                Toast.makeText(MainActivity.this, "随机播放" + mCurrSongIndex, Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -438,6 +446,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
+
+
     /**
      * 点击歌曲时候的处理逻辑
      *
@@ -448,7 +458,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mCurrSongIndex = position;
+        //mCurrSongIndex = position;
+        //这样写还是原来的序号，会导致无法索搜后的结果播放
+         int index = ((Music)adaper.getItem(position)).getCurrentIndex();
+        mCurrSongIndex = index;
+
         if (in != null && binder != null) {
             binder.restMusic();
             binder.removeMusic();
@@ -593,7 +607,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        showPopupMenu(view,position);
+        int index = ((Music)adaper.getItem(position)).getCurrentIndex();
+        showPopupMenu(view,index);
         return false;
     }
 
@@ -655,7 +670,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // 弹出确认删除的按钮
     public boolean showSureInfo(final int position) {
-        new AlertDialog.Builder(this).setTitle("我的提示").setMessage("确定要删除吗？")
+        new AlertDialog.Builder(this).setTitle("确认信息").setMessage("确定要删除吗？")
                 .setPositiveButton("确定", (dialog1, which) -> {
                     mMusicData.remove(position);
                     // 通过程序我们知道删除了，但是怎么刷新ListView呢？
