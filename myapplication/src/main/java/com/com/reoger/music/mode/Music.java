@@ -9,6 +9,16 @@ public class Music {
     private String mMusicTime;
     private String mMusicArtist; //歌手
     private String sortLetters;  //字母
+    private int currentIndex ;
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
 
     public void setSortLetters(String sortLetters) {
         this.sortLetters = sortLetters;

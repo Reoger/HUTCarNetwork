@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private boolean sLayoutServerPageVisiable = false;
     private boolean POI_true_folse;
     private boolean Search_true_folse;
+    private boolean Gas_Show;
 
     private int[] ivIds = {R.id.iv_b, R.id.iv_c, R.id.iv_d, R.id.iv_e, R.id.iv_a};
     private ImageView[] imageViews = new ImageView[ivIds.length];
@@ -342,10 +343,16 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             @Override
             public void onClick(View v) {
 
+                if (!Gas_Show) {
 //              显示页为第0页的结果
-                boundSearch(0);
-
+                    boundSearch(0);
+                    Gas_Show =true;
+                } else {
+                    Gas_Show =false;
+                    mBaiduMap.clear();
+                }
             }
+
         });
 
 
@@ -491,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         btn_ording.setOnClickListener(v->{
 
             Intent intent = new Intent (MainActivity.this, OrdGasActivity.class);
-            intent.putExtra("bundle",bundle);
+            intent.putExtras(bundle);
             startActivity(intent);
 
         });

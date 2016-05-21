@@ -36,7 +36,7 @@ public class Utils {
      */
     public static ArrayList<Music> getDataFromSD(Context context) {
         ArrayList<Music> data = new ArrayList<>();
-
+        int flag=0;
         ContentResolver musicResolcer = context.getContentResolver();
         Cursor musicCursor = musicResolcer.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null, MediaStore.Audio.Media.SIZE + ">8000", null, null);
@@ -91,7 +91,8 @@ public class Utils {
                 }
 
                 item.setmMusicTime(readableTime);
-
+            //    item.setCurrentIndex(flag);
+                flag++;
                 data.add(item);
             }
         }

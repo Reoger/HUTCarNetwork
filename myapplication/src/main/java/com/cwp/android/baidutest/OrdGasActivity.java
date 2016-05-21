@@ -1,5 +1,6 @@
 package com.cwp.android.baidutest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ public class OrdGasActivity extends AppCompatActivity {
         init();
     }
 
+
+
     private void init() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("预约加油");
@@ -40,6 +43,24 @@ public class OrdGasActivity extends AppCompatActivity {
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {
             AutoInfo autoInfo = mAdapter.getItem(position);
             Log.d("测试->OrdGasActivity", "已经获取汽车的相关信息----");
+
+            Intent intent = new Intent (this,PayActivity.class);
+            Bundle bundle = getIntent().getExtras();
+
+            Log.e("********Ord******", "2222222222");
+
+            Log.e("********Ord******", bundle.getString("NAME"));
+
+            bundle.putString("USERNAME",autoInfo.getUsername());
+            bundle.putString("BRAND",autoInfo.getBrand());
+            bundle.putString("MODEL",autoInfo.getModel());
+            bundle.putString("LICENSEPLATENUM",autoInfo.getLicensePlateNum());
+            bundle.putString("ENGINENUM",autoInfo.getEngineNum());
+            bundle.putString("BODYLEVEL",autoInfo.getBodyLevel());
+            bundle.putString("VIN",autoInfo.getVin());
+            intent.putExtras(bundle);
+            startActivity(intent);
+
         }));
     }
 
@@ -53,5 +74,13 @@ public class OrdGasActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        OrdGasActivity.this.finish();
+        super.onDestroy();
     }
 }
