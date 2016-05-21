@@ -62,7 +62,7 @@
         <activity android:name="just.activities.ProvinceList" />
         <activity android:name="just.activities.CityList" />
 
-        <service android:name="just.services.AutoAndMaInfoSyncService" />
+        <service android:name="just.services.InfoSyncToCloudService" />
 
         <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
 

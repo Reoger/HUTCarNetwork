@@ -4,24 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#4abff1"
+    android:background="@drawable/bj5_min"
     tools:context="just.activities.RegisterActivity">
     
     <TextView
         android:text="1.设置账号"
         android:textSize="25sp"
         android:gravity="center"
-        android:background="#86dbd7"
         android:id="@+id/id_tv_register_step"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"/>
-    
-    <TextView
-        android:id="@+id/id_tv_register_prompt"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
 
     <FrameLayout
         android:layout_marginTop="10dp"
@@ -29,42 +22,47 @@
         android:layout_height="0dp"
         android:layout_weight="4">
         <TextView
-            android:background="#e98b5f"
+            android:text="1"
+            android:textStyle="italic|bold"
+            android:background="#25000000"
             android:id="@+id/id_tv_register_step1"
-            android:visibility="invisible"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="70sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <LinearLayout
+            android:visibility="invisible"
             android:id="@+id/id_ll_register_step1"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="40dp">
             <ImageView
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/phone_no"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent" />
+                android:src="@drawable/ic_register_phone"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
             <EditText
+                android:gravity="center"
                 android:id="@+id/id_et_register_step1"
                 android:textSize="18sp"
+                android:layout_marginLeft="5dp"
                 android:digits="0123456789"
                 android:hint="请输入您的手机号码"
-                android:background="#94c5ed"
+                android:background="#30ffffff"
                 android:maxLength="11"
                 android:inputType="phone"
                 android:layout_weight="13"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
             <Button
+                android:layout_marginLeft="5dp"
                 android:id="@+id/id_bt_register_step1"
                 android:text="确定"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </FrameLayout>
 
@@ -74,31 +72,33 @@
         android:layout_height="0dp"
         android:layout_weight="4">
         <TextView
+            android:text="2"
+            android:textStyle="italic|bold"
+            android:background="#25000000"
             android:id="@+id/id_tv_register_step2"
-            android:background="#f1543c"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="70sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <LinearLayout
             android:id="@+id/id_ll_register_step2"
-            android:visibility="invisible"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="40dp">
             <ImageView
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/verification_code"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent" />
+                android:src="@drawable/ic_register_ver_code"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
             <EditText
+                android:layout_marginLeft="5dp"
                 android:id="@+id/id_et_register_step2"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:hint="请输入验证码"
-                android:background="#94c5ed"
+                android:background="#30ffffff"
                 android:maxLength="6"
                 android:inputType="number"
                 android:layout_weight="13"
