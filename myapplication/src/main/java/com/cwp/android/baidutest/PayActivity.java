@@ -92,7 +92,7 @@ public class PayActivity extends AppCompatActivity {
             String price = "汽油价格"+bundle.getString("price1");
             String price2 = "柴油价格"+bundle.getString("gasprice1");
 
-            BP.pay(PayActivity.this, type, name+address+price+price2, 0.02, false, new PListener() {
+            BP.pay(PayActivity.this, type, name+address+price+price2, allPrice, false, new PListener() {
                 @Override
                 public void orderId(String s) {
 
@@ -100,11 +100,12 @@ public class PayActivity extends AppCompatActivity {
 
                 @Override
                 public void succeed() {
-                    Toast.makeText(getApplicationContext(), "成功支付", 0).show();//支付接口
+                    Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
                 }
 
                 @Override
                 public void fail(int i, String s) {
+                    Toast.makeText(getApplicationContext(), "成功失败", Toast.LENGTH_SHORT).show();//支付接口
 
                 }
 
