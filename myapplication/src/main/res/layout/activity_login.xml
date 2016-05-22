@@ -59,7 +59,7 @@
                 android:id="@+id/id_et_password"
                 android:digits="@string/password_requirement"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:paddingRight="60dp"
                 android:hint="密码"
@@ -102,7 +102,7 @@
             android:background="#30ffffff"
             android:textColor="#ffffff"
             android:gravity="center"
-            android:text="登\t\t\t\t录" />
+            android:text="\t登\t\t\t\t录" />
         <!--<Button-->
             <!--android:id="@+id/id_bt_login_forget"-->
             <!--android:layout_width="wrap_content"-->
@@ -115,13 +115,14 @@
             <!--android:textSize="16sp" />-->
         <Button
             android:id="@+id/id_bt_register"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/id_bt_login"
             android:layout_below="@id/id_bt_login"
-            android:background="#00000000"
-            android:gravity="left|center_vertical"
-            android:text="注册"
+            android:background="#30ffffff"
+            android:gravity="center"
+            android:text="注\t\t\t\t册"
+            android:layout_marginTop="15dip"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:visibility="visible" />
