@@ -50,6 +50,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageView
+
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:src="@drawable/background"/>
+
         <LinearLayout
             android:id="@+id/id_ll_auto_info"
             android:layout_width="match_parent"
