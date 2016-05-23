@@ -1079,4 +1079,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

@@ -32,7 +32,7 @@
                 android:maxLength="11"
                 android:paddingLeft="55dp"
                 android:paddingRight="60dp"
-                android:textColor="#ffffff"></EditText>
+                android:textColor="#ffffff"/>
 
             <ImageView
                 android:layout_width="18dp"
@@ -64,14 +64,14 @@
             <EditText
                 android:id="@+id/id_et_password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:digits="@string/password_requirement"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:maxLength="10"
                 android:paddingLeft="55dp"
                 android:paddingRight="60dp"
-                android:textColor="#ffffff"></EditText>
+                android:textColor="#ffffff"/>
 
             <ImageView
                 android:layout_width="18dp"
@@ -123,14 +123,13 @@
             android:id="@+id/id_bt_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/id_bt_login"
             android:layout_below="@id/id_bt_login"
-            android:layout_marginTop="15dip"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="#30ffffff"
             android:gravity="center"
-            android:text="注\t\t\t\t册"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:visibility="visible" />
+            android:text="\t注\t\t\t\t册"
+            android:textColor="#ffffff"/>
     </RelativeLayout>
 </RelativeLayout>

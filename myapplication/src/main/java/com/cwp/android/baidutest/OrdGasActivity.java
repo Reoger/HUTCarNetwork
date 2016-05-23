@@ -37,7 +37,7 @@ public class OrdGasActivity extends AppCompatActivity {
         mAdapter = new AutoInfoAdapter(this,
                 isShow -> {
                     tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);
-                });
+                },false);
         mLvForIllegal.setAdapter(mAdapter);
 
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {

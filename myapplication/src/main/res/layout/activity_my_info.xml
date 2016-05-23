@@ -44,7 +44,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/id_ll_auto_info_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,27 +52,24 @@
         <ViewFlipper
             android:id="@+id/mviewFlipper"
             android:layout_width="match_parent"
-            android:layout_height="200dip"
+            android:layout_height="200dp"
 
             >
             <ImageView
                 android:id="@+id/iamge1"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background"
-                />
+                android:src="@drawable/background" />
             <ImageView
                 android:id="@+id/iamge2"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background2"
-                />
+                android:src="@drawable/background2" />
             <ImageView
                 android:id="@+id/iamge3"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background3"
-                />
+                android:src="@drawable/background3" />
 
         </ViewFlipper>
 

@@ -105,7 +105,7 @@ public class AutoInfoActivity extends Activity {
         TextView tvHint=(TextView) findViewById(R.id.id_tv_hint);
         mAdapter = new AutoInfoAdapter(this,
                 isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);},
-                mHandler);
+                mHandler,true);
 
         mLvAutoInfo.setAdapter(mAdapter);
 

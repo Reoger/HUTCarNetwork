@@ -40,13 +40,6 @@ public class MyInfoActivity extends AppCompatActivity {
     }
 
     private void init() {
-
-        mViewFlipper =(ViewFlipper) findViewById(R.id.mviewFlipper);
-
-        mViewFlipper.setInAnimation(this,R.anim.slide_in);  //设置图片进入时的动画
-        mViewFlipper.setOutAnimation(this, R.anim.slide_out);//设置图片切出时的动画
-        mViewFlipper.startFlipping();
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("我的信息");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,6 +56,12 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         else {
+            mViewFlipper =(ViewFlipper) findViewById(R.id.mviewFlipper);
+
+            mViewFlipper.setInAnimation(this,R.anim.slide_in);  //设置图片进入时的动画
+            mViewFlipper.setOutAnimation(this, R.anim.slide_out);//设置图片切出时的动画
+            mViewFlipper.startFlipping();
+
             mLlAll.setVisibility(View.VISIBLE);
             mLlHint.setVisibility(View.GONE);
 

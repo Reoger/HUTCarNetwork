@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="just.activities.RegisterActivity"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="7"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <TextView
+                android:visibility="invisible"
+                android:text="1"
+                android:textStyle="italic|bold"
+                android:background="#25000000"
+                android:id="@+id/id_tv_register_step1"
+                android:gravity="center"
+                android:textSize="70sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/id_ll_register_step1"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_register_phone"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/id_et_register_step1"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+                    android:digits="0123456789"
+                    android:hint="请输入您的手机号码"
+                    android:background="#30ffffff"
+                    android:maxLength="11"
+                    android:inputType="phone"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/ic_register_confirm_phone"
+                    android:id="@+id/id_bt_register_step1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <TextView
+                android:text="2"
+                android:textStyle="italic|bold"
+                android:background="#25000000"
+                android:id="@+id/id_tv_register_step2"
+                android:gravity="center"
+                android:textSize="70sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/id_ll_register_step2"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_register_ver_code"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+                <EditText
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/id_et_register_step2"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:hint="请输入验证码"
+                    android:background="#30ffffff"
+                    android:maxLength="6"
+                    android:inputType="number"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/id_bt_register_step2"
+                    android:background="@drawable/ic_register_confirm_ver_code"
+                    android:layout_height="30dp"
+                    android:layout_width="30dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
+
+            <TextView
+                android:text="3"
+                android:id="@+id/id_tv_register_step3"
+                android:background="#25000000"
+                android:gravity="center"
+                android:textSize="70sp"
+                android:textStyle="italic|bold"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/id_ll_register_step3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <ImageView
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_register_password"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+                        <EditText
+                            android:gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/id_et_register_step3_1"
+                            android:textSize="18sp"
+                            android:digits="@string/password_requirement"
+                            android:hint="请设置密码"
+                            android:background="#30ffffff"
+                            android:maxLength="10"
+                            android:inputType="textPassword"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <ImageView
+                            android:layout_marginLeft="3dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_register_password2"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp" />
+
+                        <EditText
+                            android:gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/id_et_register_step3_2"
+                            android:textSize="18sp"
+                            android:digits="@string/password_requirement"
+                            android:hint="请重复上述密码"
+                            android:background="#30ffffff"
+                            android:maxLength="10"
+                            android:inputType="textPassword"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_marginLeft="3dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_register_name"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp" />
+
+                    <EditText
+                        android:gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="9dp"
+                        android:id="@+id/id_et_register_step3_3"
+                        android:textSize="18sp"
+                        android:hint="请您的填写姓名"
+                        android:background="#30ffffff"
+                        android:maxLength="10"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                    <ImageButton
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/id_bt_register_step3"
+                        android:background="@drawable/ic_register_confirm_password"
+                        android:layout_gravity="right"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+                </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
+
