@@ -9,12 +9,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,7 +73,6 @@ import just.activities.MyInfoActivity;
 
 public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener,
         OnGetRoutePlanResultListener {
-
     // 地图View
     MapView mMapView;
     BaiduMap mBaiduMap;
@@ -180,9 +181,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     }
 
     void init() {
-
-
-
         layout_server_page = (LinearLayout) findViewById(R.id.layout_server_page);
 
         arrow = (ImageView) findViewById(R.id.arrow);
@@ -194,19 +192,15 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         }
 
         imageViews[0].setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MyInfoActivity.class);
+            Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
             startActivity(intent);
         });
 
         imageViews[1].setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
+            Intent intent = new Intent(MainActivity.this, MyInfoActivity.class);
             startActivity(intent);
-
         });
         imageViews[2].setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
-            startActivity(intent);
-
         });
 
         imageViews[4].setOnClickListener(v->{
@@ -1047,22 +1041,27 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         float X = imageViews[3].getX();
         float Y = imageViews[3].getY();
 
+        float addValues=X/3;
+
         if (isOpen) {
-
             for (int i = 0; i <= 2; i++) {
+                DisplayMetrics metric = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metric);
+                int width = metric.widthPixels; // 屏幕宽度（像素）
 
-                float x = (float) Math.sin(angel[i]) * 120;
-                float y = -(float) Math.cos(angel[i]) * 120;
+                float x = (float) Math.sin(angel[i]) * (width/6);
+                float y = -(float) Math.cos(angel[i]) * (width/6);
 
                 //Log.i("坐标", angle + " " + x + " " + y);
 
 
                 ObjectAnimator animator1 = ObjectAnimator.ofFloat(imageViews[i], "X", X, x + X);
                 ObjectAnimator animator2 = ObjectAnimator.ofFloat(imageViews[i], "Y", Y, y + Y);
+                ObjectAnimator animator3 = ObjectAnimator.ofFloat(imageViews[i],"alpha",0.0f,1.0f);
 
                 AnimatorSet set = new AnimatorSet();
 
-                set.playTogether(animator1, animator2);
+                set.playTogether(animator1, animator2,animator3);
 
                 set.setDuration(500);
                 set.start();
@@ -1073,15 +1072,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                         X);
                 PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("Y", imageViews[i].getY(),
                         Y);
-                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2)
+                PropertyValuesHolder p3 = PropertyValuesHolder.ofFloat("alpha",1.0f,0.0f);
+                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2,p3)
                         .setDuration(300 * i).start();
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

@@ -1,6 +1,7 @@
 package com.com.reoger.music.View;
 
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -46,6 +47,7 @@ import com.com.reoger.music.constant.Constant;
 import com.com.reoger.music.mode.Music;
 import com.com.reoger.music.mode.Sequence;
 import com.com.reoger.music.service.ServiceForMusic;
+import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
 import java.util.ArrayList;
@@ -733,13 +735,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(MainActivity.this,
-                com.cwp.android.baidutest.MainActivity.class);
-        startActivity(intent);
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        Intent intent = new Intent(MainActivity.this,
+//                com.cwp.android.baidutest.MainActivity.class);
+//        startActivity(intent);
+//    }
 
     /**
      * 设置按钮在短时间内被重复点击的有效标识（true表示点击有效，false表示点击无效）

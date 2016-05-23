@@ -1,5 +1,6 @@
 package com.cwp.android.baidutest;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +17,8 @@ import just.services.InfoSyncToCloudService;
 public class MyApplication extends Application {
     private static Context mContext;
     public static Semaphore mSyncSemaphore;
-    public static String USERNAME;
-    public static String NAME;
+    private static String USERNAME;
+    private static String NAME;
 
     @Override
     public void onCreate() {
