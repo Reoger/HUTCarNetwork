@@ -43,7 +43,8 @@ public class ManualAddAutoInfoActivity extends Activity {
                     !TextUtils.isEmpty(plate)&&!TextUtils.isEmpty(engine)&&
                     !TextUtils.isEmpty(body)&&!TextUtils.isEmpty(vin)) {
                 Intent intent = new Intent();
-                String result="品牌:"+brand+"\n"+
+                String result="汽车信息->\n"+
+                        "品牌:"+brand+"\n"+
                         "型号:"+model+"\n"+
                         "车声级别:"+body+"\n"+
                         "车牌号码:"+plate+"\n"+

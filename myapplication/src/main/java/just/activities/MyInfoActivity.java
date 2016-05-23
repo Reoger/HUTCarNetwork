@@ -23,6 +23,7 @@ public class MyInfoActivity extends AppCompatActivity {
     private LinearLayout mMaInfo;
     private LinearLayout mIllegalInfo;
     private LinearLayout mBespeakInfo;
+    private LinearLayout mSetting;
 
     //ViewFlipper的定义
     private ViewFlipper mViewFlipper;
@@ -69,10 +70,12 @@ public class MyInfoActivity extends AppCompatActivity {
             mMaInfo= (LinearLayout) findViewById(R.id.id_ll_ma_info);
             mIllegalInfo= (LinearLayout) findViewById(R.id.id_ll_illegal_info);
             mBespeakInfo= (LinearLayout) findViewById(R.id.id_ll_bespeak_info);
+            mSetting= (LinearLayout) findViewById(R.id.id_ll_setting);
             mAutoInfo.setOnClickListener(v -> turnActivity(AutoInfoActivity.class));
             mMaInfo.setOnClickListener(v -> turnActivity(MaInfoActivity.class));
             mIllegalInfo.setOnClickListener(v -> turnActivity(IllegalActivity.class));
             mBespeakInfo.setOnClickListener(v -> turnActivity(OrdGasInfoActivity.class));
+            mSetting.setOnClickListener(v -> turnActivity(SettingActivity.class));
 
             MyApplication.startSyncToCloudService();
         }

@@ -68,6 +68,7 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import java.util.Locale;
 
+import just.activities.LoginActivity;
 import just.activities.MyInfoActivity;
 
 
@@ -490,11 +491,16 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         t4.setText(gasprice);
 
         btn_ording.setOnClickListener(v->{
-
-            Intent intent = new Intent (MainActivity.this, OrdGasActivity.class);
-            intent.putExtras(bundle);
+            Intent intent=null;
+            //判断是否已经登陆了
+            if (MyApplication.getUsername()!=null) {
+                intent=new Intent(MainActivity.this,OrdGasActivity.class);
+            } else {
+                Log.d("测试->MainActivity","请先登录");
+                intent=new Intent(MainActivity.this,LoginActivity.class);
+                intent.putExtra("TAG","OrdGAs");
+            }
             startActivity(intent);
-
         });
 
         mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));

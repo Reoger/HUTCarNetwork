@@ -211,7 +211,10 @@ public class AutoInfoActivity extends Activity {
                     Date time=new Date();
                     String result=data.getExtras().getString("result");
                     Log.d("测试->AutoInfoActivity",result);
-
+                    if(!result.substring(0,6).equals("汽车信息->")) {
+                        Log.d("测试->AutoInfoActivity","二维码格式不正确!");
+                        return;
+                    }
                     new OperationTask(result,time).start();
                 }
         }
@@ -220,12 +223,12 @@ public class AutoInfoActivity extends Activity {
     private void dealAddResult(String s,Date date) {
         String[] result=s.split("[:\n]");
         AutoInfo autoInfo=new AutoInfo();
-        autoInfo.setBrand(result[1]);
-        autoInfo.setModel(result[3]);
-        autoInfo.setBodyLevel(result[5]);
-        autoInfo.setEngineNum(result[7]);
-        autoInfo.setLicensePlateNum(result[9]);
-        autoInfo.setVin(result[11]);
+        autoInfo.setBrand(result[2]);
+        autoInfo.setModel(result[4]);
+        autoInfo.setBodyLevel(result[6]);
+        autoInfo.setEngineNum(result[8]);
+        autoInfo.setLicensePlateNum(result[10]);
+        autoInfo.setVin(result[12]);
         autoInfo.setUsername(MyApplication.getUsername());
         autoInfo.setAddTime(date);
 

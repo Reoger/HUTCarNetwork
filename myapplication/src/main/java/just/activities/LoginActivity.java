@@ -20,6 +20,7 @@ import android.widget.EditText;
 
 import com.cwp.android.baidutest.MainActivity;
 import com.cwp.android.baidutest.MyApplication;
+import com.cwp.android.baidutest.OrdGasActivity;
 import com.cwp.android.baidutest.R;
 
 import java.util.List;
@@ -56,7 +57,15 @@ public class LoginActivity extends AppCompatActivity {
                     //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
                     MyApplication.startSyncFromCloudService();
 
-                    Intent intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    Intent intent=null;
+                    String tag=getIntent().getStringExtra("TAG");
+                    Log.d("+++++++++++",tag);
+                    if(!TextUtils.isEmpty(tag)&&tag.equals("OrdGAs")) {
+                        intent=new Intent(LoginActivity.this, OrdGasActivity.class);
+                    }
+                    else {
+                        intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    }
                     startActivity(intent);
                     finish();
                     break;
