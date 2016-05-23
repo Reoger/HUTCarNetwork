@@ -50,6 +50,33 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ViewFlipper
+            android:id="@+id/mviewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+
+            >
+            <ImageView
+                android:id="@+id/iamge1"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background"
+                />
+            <ImageView
+                android:id="@+id/iamge2"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background2"
+                />
+            <ImageView
+                android:id="@+id/iamge3"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background3"
+                />
+
+        </ViewFlipper>
+
         <LinearLayout
             android:id="@+id/id_ll_auto_info"
             android:layout_width="match_parent"
