@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:ems="10"
+                    android:cursorVisible="false"
                     android:singleLine="true"
                     android:text="株洲">
 
@@ -65,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:ems="10"
+                    android:cursorVisible="false"
                     android:text="长沙">
 
                     <requestFocus />
@@ -210,14 +212,7 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dip"
-        android:layout_gravity="bottom">
-
-        <include layout="@layout/bottom" />
-    </LinearLayout>
+    <include layout="@layout/satellite_menu" />
 </FrameLayout>
 
 

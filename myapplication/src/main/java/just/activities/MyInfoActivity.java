@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ViewFlipper;
 
 import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
@@ -23,6 +24,9 @@ public class MyInfoActivity extends AppCompatActivity {
     private LinearLayout mIllegalInfo;
     private LinearLayout mBespeakInfo;
 
+    //ViewFlipper的定义
+    private ViewFlipper mViewFlipper;
+
     public static final String FILE_NAME="LoginInfo";
     public static final String USERNAME="username";
     public static final String NAME="name";
@@ -37,7 +41,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
     private void init() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("我的");
+        actionBar.setTitle("我的信息");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mLlHint= (LinearLayout) findViewById(R.id.id_fl_auto_info_hint);
@@ -52,6 +56,12 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         else {
+            mViewFlipper =(ViewFlipper) findViewById(R.id.mviewFlipper);
+
+            mViewFlipper.setInAnimation(this,R.anim.slide_in);  //设置图片进入时的动画
+            mViewFlipper.setOutAnimation(this, R.anim.slide_out);//设置图片切出时的动画
+            mViewFlipper.startFlipping();
+
             mLlAll.setVisibility(View.VISIBLE);
             mLlHint.setVisibility(View.GONE);
 

@@ -3,117 +3,159 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#f2f3f6"
+    android:orientation="vertical"
     tools:context="just.activities.MyInfoActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="@drawable/login_bg"
         android:id="@+id/id_fl_auto_info_hint"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/login_bg"
+        android:orientation="vertical"
+        android:visibility="visible">
+
         <ImageView
-            android:layout_marginTop="130dp"
-            android:src="@drawable/image_head"
             android:id="@+id/id_iv_auto_info_login"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="130dp"
+            android:src="@drawable/image_head" />
+
         <TextView
-            android:textStyle="bold"
-            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textColor="#ffffff"
-            android:layout_gravity="center"
             android:text="立即登陆"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
             android:textColor="#ffffff"
-            android:layout_marginTop="5dp"
-            android:textSize="12sp"
-            android:layout_gravity="center"
-            android:text="我们将为您提供更好的服务"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="我们将为您提供更好的服务"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/id_ll_auto_info_all"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ViewFlipper
+            android:id="@+id/mviewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+
+            >
+            <ImageView
+                android:id="@+id/iamge1"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background" />
+            <ImageView
+                android:id="@+id/iamge2"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background2" />
+            <ImageView
+                android:id="@+id/iamge3"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/background3" />
+
+        </ViewFlipper>
 
         <LinearLayout
             android:id="@+id/id_ll_auto_info"
-            android:background="#ffffff"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/just_auto_info" />
+                android:gravity="center_vertical"
+                android:src="@drawable/just_info" />
 
             <TextView
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
-                android:text="个人车辆信息"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="个人车辆信息" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/id_ll_ma_info"
-            android:background="#ffffff"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="4dip"
+                android:gravity="center_vertical"
+                android:src="@drawable/just_protect" />
 
             <TextView
-                android:text="维护信息"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="车辆维护信息" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/id_ll_illegal_info"
-            android:background="#ffffff"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="4dip"
+                android:src="@drawable/just_illegal" />
 
             <TextView
-                android:text="交通违章信息"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="交通违章信息" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/id_ll_bespeak_info"
-            android:background="#ffffff"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="4dip"
+                android:src="@drawable/just_order" />
 
             <TextView
-                android:text="预约加油"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="预约加油订单" />
         </LinearLayout>
     </LinearLayout>
 

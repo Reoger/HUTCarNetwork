@@ -10,14 +10,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.com.reoger.music.Utils.LogUtils;
-
 import java.text.DecimalFormat;
 
 import c.b.BP;
 import c.b.PListener;
-import cn.bmob.v3.listener.SaveListener;
-import just.beans.OrdGasInfo;
 
 public class PayActivity extends AppCompatActivity {
 
@@ -96,12 +92,10 @@ public class PayActivity extends AppCompatActivity {
             String price = "汽油价格"+bundle.getString("price1");
             String price2 = "柴油价格"+bundle.getString("gasprice1");
 
-            BP.pay(PayActivity.this, type, name+address+price+price2, 0.02, false, new PListener() {
+            BP.pay(PayActivity.this, type, name+address+price+price2, allPrice, false, new PListener() {
                 @Override
                 public void orderId(String s) {
-                    LogUtils.d("TAG","订单编号："+s);
-                    //保存数据
-                    saveDateOnYun(s);
+
                 }
 
                 @Override
@@ -111,12 +105,13 @@ public class PayActivity extends AppCompatActivity {
 
                 @Override
                 public void fail(int i, String s) {
-                    Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "成功失败", Toast.LENGTH_SHORT).show();//支付接口
+
                 }
 
                 @Override
                 public void unknow() {
-                    Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
+
                 }
             });
         });
@@ -193,28 +188,5 @@ public class PayActivity extends AppCompatActivity {
         price.setText(allPrice + " RMB ");
     }
 
-/**
- * 保存数据到云端
- */
-    public void saveDateOnYun(String data){
-        OrdGasInfo info = new OrdGasInfo();
-        info.setPayId(data);
-        info.setLicensePlateNum(bundle.getString("LICENSEPLATENUM"));
-        info.setBrand(bundle.getString("BRAND"));
-        info.setEngineNum(bundle.getString("ENGINENUM"));
-        info.setModel(bundle.getString("MODEL"));
-        info.setUsername(MyApplication.getUsername()+"user");
-        info.save(PayActivity.this, new SaveListener() {
-            @Override
-            public void onSuccess() {
-                LogUtils.i("TAG","保存到云端成功");
-            }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(PayActivity.this,"保存到云端失败",Toast.LENGTH_SHORT).show();
-                LogUtils.i("TAG","保存到云端失败");
-            }
-        });
-    }
 }

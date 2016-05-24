@@ -4,30 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#e8e8e8"
     tools:context="just.activities.AutoInfoActivity">
 
     <include layout="@layout/top_bar"/>
     
     <TextView
-        android:background="#a7a5a5"
+        android:background="#f4d3d3"
         android:textColor="#403737"
         android:gravity="center_horizontal"
         android:textSize="13sp"
         android:layout_marginTop="10dp"
-        android:text="温馨提示:如果车辆信息未手动添加,将会在添加维护信息时自动添加"
+        android:text="温馨提示\n如果车辆信息未手动添加,将会在添加维护信息时自动添加"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <RelativeLayout
-        android:background="#c6c4c4"
+
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <just.swipemenulistview.SwipeMenuListView
-            android:divider="#010101"
-            android:dividerHeight="3px"
+            android:scrollbars="none"
+            android:divider="@null"
+            android:layout_margin="4dip"
+            android:padding="6dip"
             android:id="@+id/id_lv_auto_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

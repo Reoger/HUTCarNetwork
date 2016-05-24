@@ -33,9 +33,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEtUsername, mEtPassword;
     private Button mBtRegister, mBtLogin, mBtForget,mBtUsernameClear,mBtPasswordClear,mBtEyePassword;
 
-    private static final int START_VERIFY=1;
-    private static final int SUCCEED_VERIFY=2;
-    private static final int FAILED_VERIFY=3;
+    public static final int START_VERIFY=1;
+    public static final int SUCCEED_VERIFY=2;
+    public static final int FAILED_VERIFY=3;
 
     private Handler mHandler=new Handler() {
         ProgressDialog progressDialog;
@@ -49,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.show();
                     break;
                 case SUCCEED_VERIFY:
-                    MyApplication.setUsername(mEtUsername.getText().toString());
-                    MyApplication.setName((String) msg.obj);
                     progressDialog.dismiss();
                     progressDialog =null;
                     Log.d("测试->LoginActivity","验证成功");
@@ -184,8 +182,9 @@ public class LoginActivity extends AppCompatActivity {
                         query.findObjects(LoginActivity.this, new FindListener<MyUser>() {
                             @Override
                             public void onSuccess(List<MyUser> list) {
-                                String name=list.get(0).getTableName();
+                                String name=list.get(0).getName();
                                 saveLoginInfoToLocal(username,name);
+
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cwp.android.baidutest.MyApplication;
@@ -35,19 +36,26 @@ public class AutoInfoAdapter extends BaseAdapter {
 
     private Handler mHandler;
 
-    public AutoInfoAdapter(Context context, AboutHint aboutHint,Handler handler) {
-        mInflater = LayoutInflater.from(context);
-        mContext=context;
-        mAboutHint=aboutHint;
+    private boolean isShowPrompt;
+
+    public AutoInfoAdapter(Context context, AboutHint aboutHint,Handler handler,boolean isShowPrompt) {
+        this(context,aboutHint,isShowPrompt);
         mHandler=handler;
-        setData();
     }
 
-    public AutoInfoAdapter(Context context,AboutHint aboutHint) {
+    /**
+     *
+     * @param context
+     * @param aboutHint
+     * @param isShowPrompt 1-代表显示用于显示提示右滑的图标，0-代表不显示
+     */
+    public AutoInfoAdapter(Context context,AboutHint aboutHint,boolean isShowPrompt) {
+        mContext=context;
         mAboutHint=aboutHint;
         mInflater = LayoutInflater.from(context);
         mData = AutoInfoLocalDBOperation.queryBy(context, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",new String[]{"0"});
         mAboutHint.setHint(mData.size()<=0?true:false);
+        this.isShowPrompt=isShowPrompt;
     }
 
     @Override
@@ -74,6 +82,7 @@ public class AutoInfoAdapter extends BaseAdapter {
             viewHolder.brand = (TextView) convertView.findViewById(R.id.id_item_tv_brand);
             viewHolder.model = (TextView) convertView.findViewById(R.id.id_item_tv_model);
             viewHolder.plateNo = (TextView) convertView.findViewById(R.id.id_item_tv_plate_no);
+            viewHolder.prompt = (ImageView) convertView.findViewById(R.id.id_item_iv_prompt);
 
             convertView.setTag(viewHolder);
         } else {
@@ -84,6 +93,7 @@ public class AutoInfoAdapter extends BaseAdapter {
         viewHolder.brand.setText(autoInfo.getBrand());
         viewHolder.model.setText(autoInfo.getModel());
         viewHolder.plateNo.setText(autoInfo.getLicensePlateNum());
+        viewHolder.prompt.setVisibility(isShowPrompt?View.VISIBLE:View.INVISIBLE);
 
         return convertView;
     }
@@ -100,6 +110,7 @@ public class AutoInfoAdapter extends BaseAdapter {
         TextView brand;
         TextView model;
         TextView plateNo;
+        ImageView prompt;
     }
 
     @Override

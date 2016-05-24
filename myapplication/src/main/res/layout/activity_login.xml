@@ -3,127 +3,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@drawable/bj3_min"
+    android:fitsSystemWindows="true"
     tools:context="just.activities.IllegalActivity">
+
     <RelativeLayout
         android:id="@+id/id_login_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center" >
+        android:gravity="center">
+
         <FrameLayout
             android:id="@+id/id_username_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
-            android:gravity="center" >
+            android:gravity="center">
+
             <EditText
-                android:hint="手机号码"
                 android:id="@+id/id_et_username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
+                android:hint="手机号码"
                 android:inputType="phone"
-                android:textColor="#ffffff"
-                android:paddingRight="60dp"
                 android:maxLength="11"
-                android:paddingLeft="55dp">
-            </EditText>
+                android:paddingLeft="55dp"
+                android:paddingRight="60dp"
+                android:textColor="#ffffff"/>
+
             <ImageView
-                android:background="@drawable/m_telephone"
                 android:layout_width="18dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/m_telephone"
                 android:visibility="visible" />
+
             <Button
-                android:background="@drawable/ic_delete_register_nick"
                 android:id="@+id/id_bt_username_clear"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
                 android:layout_gravity="right|center_vertical"
-                android:visibility="invisible"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_delete_register_nick"
+                android:visibility="invisible" />
         </FrameLayout>
+
         <FrameLayout
             android:id="@+id/id_usercode_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/id_username_layout"
             android:layout_marginTop="6dp"
-            android:gravity="center" >
+            android:gravity="center">
+
             <EditText
                 android:id="@+id/id_et_password"
-                android:digits="@string/password_requirement"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:inputType="textPassword"
-                android:paddingRight="60dp"
+                android:layout_height="50dp"
+                android:digits="@string/password_requirement"
                 android:hint="密码"
-                android:textColor="#ffffff"
+                android:inputType="textPassword"
                 android:maxLength="10"
-                android:paddingLeft="55dp" >
-            </EditText>
+                android:paddingLeft="55dp"
+                android:paddingRight="60dp"
+                android:textColor="#ffffff"/>
+
             <ImageView
-                android:background="@drawable/m_locklock"
                 android:layout_width="18dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="7dp"
+                android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="7dp"
-                android:layout_gravity="left|center_vertical" />
+                android:layout_marginStart="7dp"
+                android:background="@drawable/m_locklock" />
             <!--<Button-->
-                <!--android:background="@drawable/ic_login_eye"-->
-                <!--android:id="@+id/id_bt_pwd_eye"-->
-                <!--android:layout_width="23dp"-->
-                <!--android:layout_height="23dp"-->
-                <!--android:layout_gravity="right|center_vertical"-->
-                <!--android:layout_marginRight="10dp" />-->
+            <!--android:background="@drawable/ic_login_eye"-->
+            <!--android:id="@+id/id_bt_pwd_eye"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_gravity="right|center_vertical"-->
+            <!--android:layout_marginRight="10dp" />-->
             <Button
-                android:background="@drawable/ic_delete_register_nick"
                 android:id="@+id/id_bt_password_clear"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                android:visibility="invisible"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_delete_register_nick"
+                android:visibility="invisible" />
         </FrameLayout>
 
         <Button
             android:id="@+id/id_bt_login"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/id_usercode_layout"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="30dp"
             android:background="#30ffffff"
-            android:textColor="#ffffff"
             android:gravity="center"
-            android:text="登\t\t\t\t录" />
+            android:text="\t登\t\t\t\t录"
+            android:textColor="#ffffff" />
         <!--<Button-->
-            <!--android:id="@+id/id_bt_login_forget"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignRight="@id/id_bt_login"-->
-            <!--android:layout_below="@id/id_bt_login"-->
-            <!--android:background="#00000000"-->
-            <!--android:text="忘记密码"-->
-            <!--android:textColor="#467fd9"-->
-            <!--android:textSize="16sp" />-->
+        <!--android:id="@+id/id_bt_login_forget"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignRight="@id/id_bt_login"-->
+        <!--android:layout_below="@id/id_bt_login"-->
+        <!--android:background="#00000000"-->
+        <!--android:text="忘记密码"-->
+        <!--android:textColor="#467fd9"-->
+        <!--android:textSize="16sp" />-->
         <Button
             android:id="@+id/id_bt_register"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/id_bt_login"
             android:layout_below="@id/id_bt_login"
-            android:background="#00000000"
-            android:gravity="left|center_vertical"
-            android:text="注册"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:visibility="visible" />
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#30ffffff"
+            android:gravity="center"
+            android:text="\t注\t\t\t\t册"
+            android:textColor="#ffffff"/>
     </RelativeLayout>
 </RelativeLayout>
