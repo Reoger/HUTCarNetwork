@@ -59,17 +59,20 @@
                 android:id="@+id/iamge1"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background" />
+                android:src="@drawable/background"
+                android:onClick="image1"/>
             <ImageView
                 android:id="@+id/iamge2"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background2" />
+                android:src="@drawable/background2"
+                android:onClick="image2"/>
             <ImageView
                 android:id="@+id/iamge3"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:src="@drawable/background3" />
+                android:src="@drawable/background3"
+                android:onClick="image3"/>
 
         </ViewFlipper>
 

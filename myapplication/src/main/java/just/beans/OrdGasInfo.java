@@ -13,6 +13,27 @@ public class OrdGasInfo extends BmobObject {
     private String model;//汽车型号
     private String licensePlateNum;//车牌号
     private String engineNum;//发动机号
+    private String reservationTime;//预约时间
+    private String name;//姓名
+    
+    public String getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(String reservationTime) {
+        this.reservationTime = reservationTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
 
     public String getUsername() {
         return username;

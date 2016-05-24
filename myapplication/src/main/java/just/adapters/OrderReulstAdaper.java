@@ -11,6 +11,8 @@ import com.com.reoger.music.Utils.LogUtils;
 import com.cwp.android.baidutest.R;
 
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import just.beans.BodyInfo;
@@ -58,20 +60,24 @@ public class OrderReulstAdaper extends BaseAdapter {
             p.TV_type = (TextView) convertView.findViewById(R.id.item_order_pay_type);
             p.TV_fee = (TextView) convertView.findViewById(R.id.item_order_total_fee);
             p.TV_state = (TextView) convertView.findViewById(R.id.item_order_trade_state);
+            p.TV_id = (TextView) convertView.findViewById(R.id.item_order_id_weiyi);
 
             convertView.setTag(p);
         } else {
             p = (hodler) convertView.getTag();
         }
 
-        p.TV_NUM.setText("第"+position+"条");
+        p.TV_NUM.setText("第"+position+1+"条");
 
-        p.TV_body.setText("具体内容："+mData.get(position).getBody());
-        p.TV_time.setText("交易时间："+mData.get(position).getCreate_time());
-        p.TV_name.setText("交易物品："+mData.get(position).getName());
-        p.TV_type.setText("支付类型："+mData.get(position).getPay_type());
-        p.TV_fee.setText("总金额  ："+mData.get(position).getTotal_fee());
-        p.TV_state.setText("支付状态："+mData.get(position).getTrade_state());
+        String type = mData.get(position).getPay_type().equals("WECHATPAY")?"微信支付":"其他支付";
+        String state = mData.get(position).getTrade_state().equals("NOTPAY")?"未支付":"支付成功";
+        p.TV_body.setText(mData.get(position).getBody());
+        p.TV_time.setText(mData.get(position).getCreate_time());
+        p.TV_name.setText(mData.get(position).getName());
+        p.TV_type.setText(type);
+        p.TV_id.setText(mData.get(position).getTransaction_id());
+        p.TV_fee.setText("￥"+mData.get(position).getTrade_state());
+        p.TV_state.setText(state);
 
         return convertView;
     }
@@ -85,6 +91,7 @@ public class OrderReulstAdaper extends BaseAdapter {
         TextView TV_type;//内容
         TextView TV_fee;//总金额
         TextView TV_state;//状态
+        TextView TV_id;//交易号
 
     }
 

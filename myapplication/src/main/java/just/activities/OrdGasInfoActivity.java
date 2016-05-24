@@ -3,6 +3,7 @@ package just.activities;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +41,7 @@ import just.adapters.OrderReulstAdaper;
 import just.beans.BodyInfo;
 import just.beans.OrdGasInfo;
 
-public class OrdGasInfoActivity extends AppCompatActivity {
+public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private static final String X_Bmob_Application_Id = "11c50a59fafd8add5a2c19107b769f9d";
     private static final String X_Bmob_REST_API_Key = "90801024742efbf9e06a93cbb86070dc";
     private static final String dataUrl = "https://api.bmob.cn/1/pay/";
@@ -100,6 +102,7 @@ public class OrdGasInfoActivity extends AppCompatActivity {
         getObjectIdDateFromYun();//从云端获取订单id信息
         adaper = new OrderReulstAdaper(OrdGasInfoActivity.this, mBodyData);
         mListView.setAdapter(adaper);
+        mListView.setOnItemClickListener(OrdGasInfoActivity.this);
     }
 
     private void initContent() {
@@ -121,7 +124,7 @@ public class OrdGasInfoActivity extends AppCompatActivity {
 
             BmobQuery<OrdGasInfo> query = new BmobQuery<>();
           //  query.addWhereNotEqualTo("PayId", "0");
-        query.addWhereEqualTo("username", MyApplication.getUsername()+"user");
+        query.addWhereEqualTo("username", MyApplication.getUsername());
             Log.i("AATT", "查询ing");
             query.setLimit(10);
             //执行查询方法
@@ -267,6 +270,8 @@ public class OrdGasInfoActivity extends AppCompatActivity {
                 String pay_type = jsonObject.getString("pay_type");
                 String total_fee = jsonObject.getString("total_fee");
                 String trade_state = jsonObject.getString("trade_state");
+                String transaction_id = jsonObject.getString("transaction_id");
+                String out_trade_no = jsonObject.getString("out_trade_no");
 
 
                 item.setBody(body);
@@ -275,6 +280,8 @@ public class OrdGasInfoActivity extends AppCompatActivity {
                 item.setPay_type(pay_type);
                 item.setTotal_fee(total_fee);
                 item.setTrade_state(trade_state);
+                item.setOut_trade_no(out_trade_no);
+                item.setTransaction_id(transaction_id);
 
                 mBodyData.add(item);
 
@@ -301,4 +308,11 @@ public class OrdGasInfoActivity extends AppCompatActivity {
         mDialog.show();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(OrdGasInfoActivity.this,DetailedBilingActivity.class);
+       // Bundle bundle = new Bundle();
+       // bundle.putParcelable();
+        startActivity(intent);
+    }
 }

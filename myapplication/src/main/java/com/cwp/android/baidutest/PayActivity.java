@@ -1,5 +1,7 @@
 package com.cwp.android.baidutest;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +12,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.com.reoger.music.Utils.LogUtils;
+
 import java.text.DecimalFormat;
 
 import c.b.BP;
 import c.b.PListener;
+import cn.bmob.v3.listener.SaveListener;
+import just.beans.OrdGasInfo;
 
 public class PayActivity extends AppCompatActivity {
 
@@ -29,6 +35,8 @@ public class PayActivity extends AppCompatActivity {
 
     int allPrice;//需要支付的总价格
     private double mQuantity;
+
+    private ProgressDialog mDialog;
 
     Bundle bundle;
 
@@ -86,16 +94,19 @@ public class PayActivity extends AppCompatActivity {
 
 
         btn_pay_ok.setOnClickListener(v -> {//支付接口
+            showMainDialog();
             String type = TypeGas?"柴油":"汽油";
             String name = "加油站名字"+bundle.getString("NAME");
             String address = "地址"+bundle.getString("ADDRESS");
             String price = "汽油价格"+bundle.getString("price1");
             String price2 = "柴油价格"+bundle.getString("gasprice1");
 
-            BP.pay(PayActivity.this, type, name+address+price+price2, allPrice, false, new PListener() {
+            BP.pay(PayActivity.this, type, name, 0.02, false, new PListener() {
                 @Override
                 public void orderId(String s) {
-
+                    LogUtils.d("TAG","订单编号："+s);
+                    //保存数据
+                    saveDateOnYun(s);
                 }
 
                 @Override
@@ -105,13 +116,12 @@ public class PayActivity extends AppCompatActivity {
 
                 @Override
                 public void fail(int i, String s) {
-                    Toast.makeText(getApplicationContext(), "成功失败", Toast.LENGTH_SHORT).show();//支付接口
-
+                    Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void unknow() {
-
+                    Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -159,6 +169,8 @@ public class PayActivity extends AppCompatActivity {
 
     }
 
+
+
     void change(int priceNum) {
 
         double priceTemp = 1;
@@ -188,5 +200,45 @@ public class PayActivity extends AppCompatActivity {
         price.setText(allPrice + " RMB ");
     }
 
+    /**
+     * 保存数据到云端
+     */
+    public void saveDateOnYun(String data){
+        OrdGasInfo info = new OrdGasInfo();
+        info.setPayId(data);
+        info.setLicensePlateNum(bundle.getString("LICENSEPLATENUM"));
+        info.setBrand(bundle.getString("BRAND"));
+        info.setEngineNum(bundle.getString("ENGINENUM"));
+        info.setModel(bundle.getString("MODEL"));
+        info.setName(MyApplication.getName());
+        info.setReservationTime("2016:5.29");//预约时间
+        info.setUsername(MyApplication.getUsername());
+        info.save(PayActivity.this, new SaveListener() {
+            @Override
+            public void onSuccess() {
 
+                mDialog.dismiss();
+                LogUtils.i("TAG","保存到云端成功");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Toast.makeText(PayActivity.this,"保存到云端失败",Toast.LENGTH_SHORT).show();
+                LogUtils.i("TAG","保存到云端失败");
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    private void showMainDialog(){
+        mDialog = new ProgressDialog(PayActivity.this);
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mDialog.setTitle("Loading...");
+        mDialog.setMessage("正在加载中，请稍后...");
+        mDialog.setCancelable(false);
+        mDialog.setButton("取消", (dialog, which) -> {
+            finish();
+        });
+        mDialog.show();
+    }
 }

@@ -36,10 +36,12 @@
             android:visibility="invisible"
             />
         <ListView
+            android:divider="#00ffffff"
+            android:dividerHeight="10dp"
             android:id="@+id/list_order_info"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </ListView>
     </FrameLayout>
 
