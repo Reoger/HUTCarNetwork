@@ -48,6 +48,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        
+        <TextView
+            android:gravity="center"
+            android:textSize="20sp"
+            android:id="@+id/id_tv_personal_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <ViewFlipper
             android:id="@+id/mviewFlipper"

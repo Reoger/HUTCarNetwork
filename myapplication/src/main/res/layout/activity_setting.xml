@@ -25,7 +25,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:textSize="20sp"
-            android:text="关于" />
+            android:text="相关声明" />
     </LinearLayout>
     
     <Button

@@ -117,7 +117,7 @@
         jar="F:\Android\HUTCarNetwork\myapplication\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="69e225d00ebbdda6033aeebb169c92920bc7140e">
+        sha1="1a4be847f95371526cdb225918e2c36dda83e457">
         <dex dex="F:\Android\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_7150631fdeab0041badcf0903d0bc30c4130408c\classes.dex" />
     </item>
     <item
@@ -131,14 +131,14 @@
         jar="F:\Android\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\HUTCarNetwork\libzxing\unspecified\jars\libs\zxing.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="949f9ec6ba59726c2b81d624afda6005d3bcfe76">
+        sha1="f5b6349a5be1d64e10d643001340e1f48131a229">
         <dex dex="F:\Android\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\8\zxing_67786770aada552ca392843ea68af639a622e96a\classes.dex" />
     </item>
     <item
         jar="F:\Android\HUTCarNetwork\myapplication\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="0672c7f39007430fc6e04a1a0b5cb339de3a0af3">
+        sha1="a172f38d0880bf420fc466b43d18f659a802d1b2">
         <dex dex="F:\Android\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_a4ad13ff5a0f9ee19b3c34a858ab6d6cb187ac63\classes.dex" />
     </item>
     <item

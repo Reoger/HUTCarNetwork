@@ -47,10 +47,6 @@ public class OrdGasActivity extends AppCompatActivity {
             Intent intent = new Intent (this,PayActivity.class);
             Bundle bundle = getIntent().getExtras();
 
-            Log.e("********Ord******", "2222222222");
-
-            Log.e("********Ord******", bundle.getString("NAME"));
-
             bundle.putString("USERNAME",autoInfo.getUsername());
             bundle.putString("BRAND",autoInfo.getBrand());
             bundle.putString("MODEL",autoInfo.getModel());

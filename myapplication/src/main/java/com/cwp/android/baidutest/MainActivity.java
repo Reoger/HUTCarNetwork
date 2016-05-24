@@ -495,6 +495,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             //判断是否已经登陆了
             if (MyApplication.isLanded()) {
                 intent=new Intent(MainActivity.this,OrdGasActivity.class);
+                intent.putExtras(bundle);
             } else {
                 Log.d("测试->MainActivity","请先登录");
                 intent=new Intent(MainActivity.this,LoginActivity.class);

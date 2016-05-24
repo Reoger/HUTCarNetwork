@@ -138,7 +138,7 @@ public class MaInfoAdapter extends BaseAdapter {
      */
     private void setData() {
         //从数据库获取数据
-        mData = MaInfoLocalDBOperation.queryBy(mContext, MaInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? and "+MaInfoConstants.COLUMN_USERNAME,new String[]{"0",MyApplication.getUsername()});
+        mData = MaInfoLocalDBOperation.queryBy(mContext, MaInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? and "+MaInfoConstants.COLUMN_USERNAME+" = ?",new String[]{"0",MyApplication.getUsername()});
         mAboutHint.setHint(mData.size()<=0);
     }
 

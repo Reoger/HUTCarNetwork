@@ -210,23 +210,6 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         }).start();
     }
 
-
-    public void showDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.dialog_loading_wait, (ViewGroup) findViewById(R.id.dialog_loading));
-        //    AlertDialog.Builder aa= new AlertDialog.Builder(this);
-        mBuilder = new AlertDialog.Builder(this);
-        mBuilder.setTitle("请稍后，正在加载中...")
-                .setView(layout)
-                .setPositiveButton("确定", (dialog, which) -> {
-                    Toast.makeText(OrdGasInfoActivity.this, "请等待", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("取消", null)
-                .setCancelable(false)
-                .setTitle("Loading...")
-                .show();
-    }
-
     public void test(View view) {
         LogUtils.i("YY", "mBodyData.size()=" + mBodyData.size());
         LogUtils.i("YY", "jsonDate.size()=" + jsonDate.size());
@@ -245,7 +228,6 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
             LogUtils.i("YY", "订单Id" + mDate.get(i).getPayId());
             LogUtils.i("YY", "时间" + mDate.get(i).getTime());
         }
-        showDialog();
         OrderReulstAdaper adaper = new OrderReulstAdaper(OrdGasInfoActivity.this, mBodyData);
         mListView.setAdapter(adaper);
     }

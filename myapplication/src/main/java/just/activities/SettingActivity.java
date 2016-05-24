@@ -2,8 +2,10 @@ package just.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -25,12 +27,20 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void init() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("设置");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         mLlAbout= (LinearLayout) findViewById(R.id.id_ll_setting_about);
-        mLlAbout.setOnClickListener(v -> {});
+        mLlAbout.setOnClickListener(v -> {
+            Intent intent=new Intent(SettingActivity.this,AboutStatementActivity.class);
+            startActivity(intent);
+            finish();
+        });
         mBtLogoutAccount = (Button) findViewById(R.id.id_bt_setting_logout_account);
         if(!MyApplication.isLanded()) {
             mBtLogoutAccount.setText("登陆");
-            mBtLogoutAccount.setBackgroundColor(getResources().getColor(R.color.not_landing));
+            mBtLogoutAccount.setBackgroundResource(R.drawable.bt_login_account);
         }
         mBtLogoutAccount.setOnClickListener(v -> {
             String currentState= mBtLogoutAccount.getText().toString();
@@ -51,5 +61,17 @@ public class SettingActivity extends AppCompatActivity {
             MyActivityUtil.getInstance().removeTemporaryActivityForKey("KEY_FOR_SETTING");
             finish();
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
