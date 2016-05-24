@@ -53,7 +53,7 @@ public class AutoInfoAdapter extends BaseAdapter {
         mContext=context;
         mAboutHint=aboutHint;
         mInflater = LayoutInflater.from(context);
-        mData = AutoInfoLocalDBOperation.queryBy(context, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",new String[]{"0"});
+        mData = AutoInfoLocalDBOperation.queryBy(context, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? and "+AutoInfoConstants.COLUMN_USERNAME+" = ?",new String[]{"0",MyApplication.getUsername()});
         mAboutHint.setHint(mData.size()<=0?true:false);
         this.isShowPrompt=isShowPrompt;
     }
@@ -102,7 +102,7 @@ public class AutoInfoAdapter extends BaseAdapter {
      * 查询所有的数据
      */
     private void setData() {
-        mData = AutoInfoLocalDBOperation.queryBy(mContext, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ?",new String[]{"0"});
+        mData = AutoInfoLocalDBOperation.queryBy(mContext, AutoInfoConstants.COLUMN_IS_DEL_WITH_CLOUD+" = ? and "+AutoInfoConstants.COLUMN_USERNAME+" = ?",new String[]{"0",MyApplication.getUsername()});
         mAboutHint.setHint(mData.size()<=0?true:false);
     }
 
@@ -179,6 +179,7 @@ public class AutoInfoAdapter extends BaseAdapter {
      * @param vin
      */
     private void delRelatedMaInfo(String vin) {
+        //因为车架号是唯一的，所以这里不需要以username作为限制条件
         List<MaInfo> needsDelList= MaInfoLocalDBOperation.queryBy(mContext, MaInfoConstants.COLUMN_VIN+" = ?",new String[]{vin});
         for (MaInfo maInfo:needsDelList) {
             MaInfoLocalDBOperation.updateForIsDelWithCloud(mContext,maInfo.getScanTime(),vin,1);

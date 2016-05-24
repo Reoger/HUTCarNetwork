@@ -20,6 +20,7 @@ import android.widget.EditText;
 
 import com.cwp.android.baidutest.MainActivity;
 import com.cwp.android.baidutest.MyApplication;
+import com.cwp.android.baidutest.OrdGasActivity;
 import com.cwp.android.baidutest.R;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import just.beans.MaInfo;
 import just.beans.MyUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,7 +58,14 @@ public class LoginActivity extends AppCompatActivity {
                     //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
                     MyApplication.startSyncFromCloudService();
 
-                    Intent intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    Intent intent=null;
+                    String tag=getIntent().getStringExtra("TAG");
+                    if(!TextUtils.isEmpty(tag)&&tag.equals("OrdGAs")) {
+                        intent=new Intent(LoginActivity.this, OrdGasActivity.class);
+                    }
+                    else {
+                        intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    }
                     startActivity(intent);
                     finish();
                     break;
@@ -183,14 +192,14 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(List<MyUser> list) {
                                 String name=list.get(0).getName();
-                                saveLoginInfoToLocal(username,name);
+                                MyApplication.saveLoginInfo(username,name);
 
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
 
                             @Override
                             public void onError(int i, String s) {
-                                saveLoginInfoToLocal(username,"null");
+                                MyApplication.saveLoginInfo(username,MyApplication.NULL_NAME);
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
                         });
@@ -219,14 +228,6 @@ public class LoginActivity extends AppCompatActivity {
 //        mBtForget.setOnClickListener(v -> {
 //            Log.d("测试->LoginActivity","忘记密码");
 //        });
-    }
-
-    private void saveLoginInfoToLocal(String username,String name) {
-        SharedPreferences.Editor editor = getSharedPreferences(MyInfoActivity.FILE_NAME,
-                MODE_PRIVATE).edit();
-        editor.putString(MyInfoActivity.USERNAME, username);
-        editor.putString(MyInfoActivity.NAME, name);
-        editor.commit();
     }
 
     @Override
