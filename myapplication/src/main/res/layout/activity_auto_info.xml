@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#f5f5f5"
     tools:context="just.activities.AutoInfoActivity">
 
     <include layout="@layout/top_bar"/>
@@ -21,6 +22,7 @@
     <RelativeLayout
 
         android:layout_marginTop="15dp"
+
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -32,7 +34,7 @@
             android:padding="6dip"
             android:id="@+id/id_lv_auto_info"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="200dip">
         </just.swipemenulistview.SwipeMenuListView>
 
         <TextView
