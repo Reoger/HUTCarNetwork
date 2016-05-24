@@ -2,6 +2,11 @@ package com.cwp.android.baidutest;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +19,9 @@ import android.widget.Toast;
 
 import com.com.reoger.music.Utils.LogUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import c.b.BP;
@@ -117,6 +125,23 @@ public class PayActivity extends AppCompatActivity {
                 @Override
                 public void fail(int i, String s) {
                     Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
+                    //需要安装插件
+                    if(i==-3) {
+                        new AlertDialog.Builder(PayActivity.this)
+                                .setMessage(
+                                        "监测到你尚未安装支付插件,无法进行微信支付,请先安装插件(已打包在本地,无流量消耗)！")
+                                .setPositiveButton("安装",
+                                        (dialog, which) -> {
+                                            Log.d("+++++++++++++++","+++++++++++++++++");
+                                            //安装插件
+                                            installBmobPayPlugin("bp_wx.db");
+                                        })
+                                .setNegativeButton("取消",
+                                        (dialog, which) -> {
+                                            //取消安装
+                                            finish();
+                                        }).create().show();
+                    }
                 }
 
                 @Override
@@ -125,6 +150,7 @@ public class PayActivity extends AppCompatActivity {
                 }
             });
         });
+
 
         add.setOnClickListener(v -> {
 
@@ -167,6 +193,37 @@ public class PayActivity extends AppCompatActivity {
         price.setText(allPrice + "");
 
 
+    }
+
+    void installBmobPayPlugin(String fileName) {
+        Log.d("测试->PayActivity","开始安装插件");
+        try {
+            InputStream is = getAssets().open(fileName);
+            Log.d("_________________","1");
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + File.separator + fileName + ".apk");
+            if (file.exists())
+                file.delete();
+            file.createNewFile();
+            Log.d("_________________","2");
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i = 0;
+            while ((i = is.read(temp)) > 0) {
+                fos.write(temp, 0, i);
+            }
+            fos.close();
+            is.close();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.parse("file://" + file),
+                    "application/vnd.android.package-archive");
+            startActivity(intent);
+            Log.d("测试->PayActivity","跳转");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
