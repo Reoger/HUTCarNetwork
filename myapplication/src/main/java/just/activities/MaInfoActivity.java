@@ -243,7 +243,7 @@ public class MaInfoActivity extends Activity {
             autoInfo.setLicensePlateNum(result[5]);
             autoInfo.setEngineNum(result[7]);
             autoInfo.setBodyLevel(result[9]);
-            autoInfo.setUsername(MyApplication.getUsername());
+            autoInfo.setUsername(MyApplication.getUsername()+"");
             autoInfo.setVin(vin);
             autoInfo.setAddTime(date);
             autoInfo.save(this, new SaveListener() {
