@@ -2,35 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:background="#4e5eba"
-    android:layout_height="40dp">
+    android:background="#4d5eba"
+    android:layout_height="55dp">
 
     <ImageButton
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
         android:id="@+id/id_ib_top_bar_back"
         android:background="@drawable/back"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:padding="15dip"
-        android:layout_margin="10dp"
-        android:layout_height="match_parent" />
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 
     <TextView
         android:id="@+id/id_tv_top_bar_title"
+        android:layout_gravity="center"
+        android:padding="5dp"
         android:gravity="center"
         android:text="XXX"
-        android:textSize="20sp"
-        android:background="#59b0ca"
-        android:layout_width="0dp"
-        android:layout_weight="10"
-        android:layout_height="match_parent" />
-
-    <ImageButton
-        android:id="@+id/id_ib_top_bar_add"
-        android:background="@drawable/code"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:padding="15dip"
-        android:layout_margin="5dp"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
+    <ImageButton
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/id_ib_top_bar_add"
+        android:background="@drawable/code"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
 </LinearLayout>

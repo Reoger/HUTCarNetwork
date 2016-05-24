@@ -20,6 +20,7 @@ import android.widget.EditText;
 
 import com.cwp.android.baidutest.MainActivity;
 import com.cwp.android.baidutest.MyApplication;
+import com.cwp.android.baidutest.OrdGasActivity;
 import com.cwp.android.baidutest.R;
 
 import java.util.List;
@@ -27,15 +28,16 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import just.beans.MaInfo;
 import just.beans.MyUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mEtUsername, mEtPassword;
     private Button mBtRegister, mBtLogin, mBtForget,mBtUsernameClear,mBtPasswordClear,mBtEyePassword;
 
-    private static final int START_VERIFY=1;
-    private static final int SUCCEED_VERIFY=2;
-    private static final int FAILED_VERIFY=3;
+    public static final int START_VERIFY=1;
+    public static final int SUCCEED_VERIFY=2;
+    public static final int FAILED_VERIFY=3;
 
     private Handler mHandler=new Handler() {
         ProgressDialog progressDialog;
@@ -49,8 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.show();
                     break;
                 case SUCCEED_VERIFY:
-                    MyApplication.setUsername(mEtUsername.getText().toString());
-                    MyApplication.setName((String) msg.obj);
                     progressDialog.dismiss();
                     progressDialog =null;
                     Log.d("测试->LoginActivity","验证成功");
@@ -58,7 +58,14 @@ public class LoginActivity extends AppCompatActivity {
                     //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
                     MyApplication.startSyncFromCloudService();
 
-                    Intent intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    Intent intent=null;
+                    String tag=getIntent().getStringExtra("TAG");
+                    if(!TextUtils.isEmpty(tag)&&tag.equals("OrdGAs")) {
+                        intent=new Intent(LoginActivity.this, OrdGasActivity.class);
+                    }
+                    else {
+                        intent=new Intent(LoginActivity.this, MyInfoActivity.class);
+                    }
                     startActivity(intent);
                     finish();
                     break;
@@ -184,14 +191,15 @@ public class LoginActivity extends AppCompatActivity {
                         query.findObjects(LoginActivity.this, new FindListener<MyUser>() {
                             @Override
                             public void onSuccess(List<MyUser> list) {
-                                String name=list.get(0).getTableName();
-                                saveLoginInfoToLocal(username,name);
+                                String name=list.get(0).getName();
+                                MyApplication.saveLoginInfo(username,name);
+
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
 
                             @Override
                             public void onError(int i, String s) {
-                                saveLoginInfoToLocal(username,"null");
+                                MyApplication.saveLoginInfo(username,MyApplication.NULL_NAME);
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
                         });
@@ -220,14 +228,6 @@ public class LoginActivity extends AppCompatActivity {
 //        mBtForget.setOnClickListener(v -> {
 //            Log.d("测试->LoginActivity","忘记密码");
 //        });
-    }
-
-    private void saveLoginInfoToLocal(String username,String name) {
-        SharedPreferences.Editor editor = getSharedPreferences(MyInfoActivity.FILE_NAME,
-                MODE_PRIVATE).edit();
-        editor.putString(MyInfoActivity.USERNAME, username);
-        editor.putString(MyInfoActivity.NAME, name);
-        editor.commit();
     }
 
     @Override

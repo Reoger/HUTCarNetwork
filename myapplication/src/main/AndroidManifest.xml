@@ -31,7 +31,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -74,7 +73,7 @@
         <activity android:name=".OrdGasActivity" />
         <activity android:name="just.activities.OrdGasInfoActivity" />
         <activity android:name=".PayActivity"></activity>
-
+        <activity android:name="just.activities.DetailedBilingActivity"/>
         <activity
             android:name="c.b.a.A"
             android:configChanges="orientation|keyboardHidden|navigation"

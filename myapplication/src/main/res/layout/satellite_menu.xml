@@ -1,45 +1,46 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
     android:layout_gravity="center" >
 
     <ImageView
+        android:alpha="0"
         android:id="@+id/iv_e"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="15dip"
         android:src="@drawable/e"/>
 
     <ImageView
+        android:alpha="0"
         android:id="@+id/iv_d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="15dip"
         android:src="@drawable/d"/>
 
     <ImageView
+        android:alpha="0"
         android:id="@+id/iv_c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="15dip"
-        android:src="@drawable/c"/>
+        android:src="@drawable/ic_my_info"/>
 
     <ImageView
+        android:alpha="0"
         android:id="@+id/iv_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="15dip"
-        android:src="@drawable/b"/>
+        android:src="@drawable/ic_music"/>
 
     <ImageView
         android:id="@+id/iv_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="bottom|center"
-        android:src="@drawable/a"/>
+        android:src="@drawable/ic_moon_menu"/>
 
 </FrameLayout>

@@ -49,7 +49,7 @@ public class IllegalActivity extends Activity {
         mLvForIllegal= (ListView) findViewById(R.id.id_lv_auto_info_for_illegal);
         TextView tvHint=(TextView) findViewById(R.id.id_tv_hint);
         mAdapter = new AutoInfoAdapter(this,
-                isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);});
+                isShow -> {tvHint.setVisibility(isShow ? View.VISIBLE : View.GONE);},false);
         mLvForIllegal.setAdapter(mAdapter);
 
         mLvForIllegal.setOnItemClickListener(((parent, view, position, id) -> {

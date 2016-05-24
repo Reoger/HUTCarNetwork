@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/code_cel" android:state_pressed="true"/>
-    <item android:drawable="@mipmap/code"/>
+    <item android:drawable="@mipmap/ic_add_info_cel" android:state_pressed="true"/>
+    <item android:drawable="@mipmap/ic_add_info"/>
 </selector>

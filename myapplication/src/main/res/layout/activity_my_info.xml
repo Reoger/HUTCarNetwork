@@ -44,7 +44,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/id_ll_auto_info_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,7 +52,7 @@
         <ViewFlipper
             android:id="@+id/mviewFlipper"
             android:layout_width="match_parent"
-            android:layout_height="200dip"
+            android:layout_height="200dp"
 
             >
             <ImageView
@@ -61,19 +60,19 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:src="@drawable/background"
-                />
+                android:onClick="image1"/>
             <ImageView
                 android:id="@+id/iamge2"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:src="@drawable/background2"
-                />
+                android:onClick="image2"/>
             <ImageView
                 android:id="@+id/iamge3"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:src="@drawable/background3"
-                />
+                android:onClick="image3"/>
 
         </ViewFlipper>
 
@@ -160,6 +159,27 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="15dp"
                 android:text="预约加油订单" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_ll_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="4dip"
+                android:src="@drawable/ic_setting" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="设置" />
         </LinearLayout>
     </LinearLayout>
 

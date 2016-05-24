@@ -182,6 +182,10 @@ public class MaInfoActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 Date time=new Date();
                 String result=data.getExtras().getString("result");
+                if(!result.substring(0,6).equals("维护信息->")) {
+                    Log.d("测试","维护信息二维码格式不正确");
+                    return;
+                }
                 Log.d("测试->MaInfoActivity",result);
 
                 new AddOperationTask(result,time).start();
@@ -221,28 +225,28 @@ public class MaInfoActivity extends Activity {
     private void dealAddResult(String s,Date date) {
         String[] result=s.split("[:\n]");
 
-        String vin=result[11].trim();
+        String vin=result[12].trim();
         String username=MyApplication.getUsername();
         List<AutoInfo> list=AutoInfoLocalDBOperation.queryBy(this,AutoInfoConstants.COLUMN_VIN+" = ?",new String[]{vin});
 
         MaInfo maInfo=new MaInfo();
         maInfo.setVin(vin);
-        maInfo.setMileage(Float.parseFloat(result[13].replace("km","").trim()));
-        maInfo.setGasolineVolume(Integer.parseInt(result[15].trim()));
-        maInfo.setEnginePerfor(result[17].trim());
-        maInfo.setTransmissionPerfor(result[19].trim());
-        maInfo.setLamp(result[21].trim());
+        maInfo.setMileage(Float.parseFloat(result[14].replace("km","").trim()));
+        maInfo.setGasolineVolume(Integer.parseInt(result[16].trim()));
+        maInfo.setEnginePerfor(result[18].trim());
+        maInfo.setTransmissionPerfor(result[20].trim());
+        maInfo.setLamp(result[22].trim());
         maInfo.setScanTime(date);
         maInfo.setUsername(username);
 
         //维护信息中的汽车信息不存在，需要自动添加汽车信息
         if(list.size()<=0) {
             AutoInfo autoInfo=new AutoInfo();
-            autoInfo.setBrand(result[1]);
-            autoInfo.setModel(result[3]);
-            autoInfo.setLicensePlateNum(result[5]);
-            autoInfo.setEngineNum(result[7]);
-            autoInfo.setBodyLevel(result[9]);
+            autoInfo.setBrand(result[2]);
+            autoInfo.setModel(result[4]);
+            autoInfo.setLicensePlateNum(result[6]);
+            autoInfo.setEngineNum(result[8]);
+            autoInfo.setBodyLevel(result[10]);
             autoInfo.setUsername(MyApplication.getUsername());
             autoInfo.setVin(vin);
             autoInfo.setAddTime(date);

@@ -2,6 +2,7 @@ package just.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,22 +32,17 @@ public class MyInfoActivity extends AppCompatActivity {
     public static final String USERNAME="username";
     public static final String NAME="name";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
-        
+
         init();
     }
 
     private void init() {
-
-        mViewFlipper =(ViewFlipper) findViewById(R.id.mviewFlipper);
-
-        mViewFlipper.setInAnimation(this,R.anim.slide_in);  //设置图片进入时的动画
-        mViewFlipper.setOutAnimation(this, R.anim.slide_out);//设置图片切出时的动画
-        mViewFlipper.startFlipping();
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("我的信息");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,6 +59,12 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         else {
+            mViewFlipper =(ViewFlipper) findViewById(R.id.mviewFlipper);
+
+            mViewFlipper.setInAnimation(this,R.anim.slide_in);  //设置图片进入时的动画
+            mViewFlipper.setOutAnimation(this, R.anim.slide_out);//设置图片切出时的动画
+            mViewFlipper.startFlipping();
+
             mLlAll.setVisibility(View.VISIBLE);
             mLlHint.setVisibility(View.GONE);
 
@@ -108,4 +110,20 @@ public class MyInfoActivity extends AppCompatActivity {
             return true;
         }
     }
+    public void image1(View view){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("http://www.baidu.com"));
+        startActivity(intent);
+    }
+    public void image2(View view){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("http://www.autohome.com.cn/beijing/"));
+        startActivity(intent);
+    }
+    public void image3(View view){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("http://news.163.com/?360se"));
+        startActivity(intent);
+    }
+
 }
