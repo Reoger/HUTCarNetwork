@@ -39,12 +39,6 @@ public class MyInfoActivity extends AppCompatActivity {
     //ViewFlipper的定义
     private ViewFlipper mViewFlipper;
 
-    public static final String FILE_NAME="LoginInfo";
-    public static final String USERNAME="username";
-    public static final String NAME="name";
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -226,8 +226,8 @@ public class AutoInfoActivity extends Activity {
         autoInfo.setBrand(result[2]);
         autoInfo.setModel(result[4]);
         autoInfo.setBodyLevel(result[6]);
-        autoInfo.setEngineNum(result[8]);
-        autoInfo.setLicensePlateNum(result[10]);
+        autoInfo.setLicensePlateNum(result[8]);
+        autoInfo.setEngineNum(result[10]);
         autoInfo.setVin(result[12]);
         autoInfo.setUsername(MyApplication.getUsername());
         autoInfo.setAddTime(date);

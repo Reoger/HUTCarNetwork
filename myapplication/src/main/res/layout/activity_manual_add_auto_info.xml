@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cfcdcd"
     android:fillViewport="true" >
@@ -8,6 +8,7 @@
     <!-- 设置fillViewport属性表示充满整个ScrollView -->
 
     <LinearLayout
+        android:background="@drawable/bj2_min"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -15,8 +16,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -35,8 +35,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -55,8 +54,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -75,8 +73,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -95,8 +92,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -115,8 +111,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:gravity="center"
@@ -136,12 +131,12 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_height="60dp">
 
             <Button
                 android:id="@+id/id_bt_add_confirm"
                 android:layout_margin="5dp"
+                android:background="#40ec4e4e"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="确定" />
@@ -149,6 +144,7 @@
             <Button
                 android:id="@+id/id_bt_add_cancel"
                 android:layout_margin="5dp"
+                android:background="#40baf198"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="取消" />

@@ -44,12 +44,18 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/bg_center"
         android:id="@+id/id_ll_auto_info_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         
         <TextView
+            android:background="#50e38e8e"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
             android:textSize="20sp"
             android:id="@+id/id_tv_personal_info"

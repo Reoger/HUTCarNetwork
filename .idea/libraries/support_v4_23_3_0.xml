@@ -2,6 +2,7 @@
   <library name="support-v4-23.3.0">
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/annotations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/res" />
@@ -10,6 +11,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://E:/Android/Android_SDK/extras/android/m2repository/com/android/support/support-v4/23.3.0/support-v4-23.3.0-sources.jar!/" />
       <root url="jar://E:/Android/Android_SDK/extras/android/m2repository/com/android/support/support-v4/23.3.0/support-v4-23.3.0-sources.jar!/" />
       <root url="jar://F:/SDK/extras/android/m2repository/com/android/support/support-v4/23.3.0/support-v4-23.3.0-sources.jar!/" />
       <root url="jar://D:/eclipse/SDk/android-sdk-windows/extras/android/m2repository/com/android/support/support-v4/23.3.0/support-v4-23.3.0-sources.jar!/" />
