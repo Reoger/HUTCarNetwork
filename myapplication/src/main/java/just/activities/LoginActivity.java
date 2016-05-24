@@ -28,6 +28,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import just.beans.MaInfo;
 import just.beans.MyUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -59,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent=null;
                     String tag=getIntent().getStringExtra("TAG");
-                    Log.d("+++++++++++",tag);
                     if(!TextUtils.isEmpty(tag)&&tag.equals("OrdGAs")) {
                         intent=new Intent(LoginActivity.this, OrdGasActivity.class);
                     }
@@ -192,14 +192,14 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(List<MyUser> list) {
                                 String name=list.get(0).getName();
-                                saveLoginInfoToLocal(username,name);
+                                MyApplication.saveLoginInfo(username,name);
 
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
 
                             @Override
                             public void onError(int i, String s) {
-                                saveLoginInfoToLocal(username,"null");
+                                MyApplication.saveLoginInfo(username,MyApplication.NULL_NAME);
                                 mHandler.sendEmptyMessage(SUCCEED_VERIFY);
                             }
                         });
@@ -228,14 +228,6 @@ public class LoginActivity extends AppCompatActivity {
 //        mBtForget.setOnClickListener(v -> {
 //            Log.d("测试->LoginActivity","忘记密码");
 //        });
-    }
-
-    private void saveLoginInfoToLocal(String username,String name) {
-        SharedPreferences.Editor editor = getSharedPreferences(MyInfoActivity.FILE_NAME,
-                MODE_PRIVATE).edit();
-        editor.putString(MyInfoActivity.USERNAME, username);
-        editor.putString(MyInfoActivity.NAME, name);
-        editor.commit();
     }
 
     @Override

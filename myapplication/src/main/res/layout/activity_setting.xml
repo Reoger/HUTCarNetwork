@@ -29,7 +29,7 @@
     </LinearLayout>
     
     <Button
-        android:id="@+id/id_bt_setting_exit_account"
+        android:id="@+id/id_bt_setting_logout_account"
         android:background="@drawable/bt_exit_account"
         android:padding="10dp"
         android:layout_gravity="center_horizontal"

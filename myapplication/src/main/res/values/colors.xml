@@ -19,4 +19,6 @@
 
     <color name="step_focus">#90000000</color>
     <color name="step_unfocus">#70ffffff</color>
+
+    <color name="not_landing">#4aa7e6</color>
 </resources>

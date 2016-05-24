@@ -117,7 +117,7 @@
         jar="F:\Android\HUTCarNetwork\myapplication\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="3e59be1798d2b3740daf05a77dafdb166fe7a41a">
+        sha1="69e225d00ebbdda6033aeebb169c92920bc7140e">
         <dex dex="F:\Android\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_7150631fdeab0041badcf0903d0bc30c4130408c\classes.dex" />
     </item>
     <item
@@ -138,7 +138,7 @@
         jar="F:\Android\HUTCarNetwork\myapplication\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="60d38a35914c939415eaf7494cee753b5823c7b7">
+        sha1="0672c7f39007430fc6e04a1a0b5cb339de3a0af3">
         <dex dex="F:\Android\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_a4ad13ff5a0f9ee19b3c34a858ab6d6cb187ac63\classes.dex" />
     </item>
     <item

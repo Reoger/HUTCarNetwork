@@ -309,11 +309,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onSuccess() {
                             Log.i("测试->RegisterActivity", "注册成功");
 
-                            SharedPreferences.Editor editor = getSharedPreferences(MyInfoActivity.FILE_NAME,
-                                    MODE_PRIVATE).edit();
-                            editor.putString(MyInfoActivity.USERNAME, mEtStep1.getText().toString());
-                            editor.putString(MyInfoActivity.NAME, name);
-                            editor.commit();
+                            MyApplication.saveLoginInfo(mEtStep1.getText().toString(),name);
 
                             mHandler.sendEmptyMessage(SUCCEED_REGISTER);
                         }

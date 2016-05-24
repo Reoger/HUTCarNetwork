@@ -1,10 +1,11 @@
 package just.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,7 +14,11 @@ import android.widget.ViewFlipper;
 import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
-public class MyInfoActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+import just.utils.MyActivityUtil;
+
+public class MyInfoActivity extends AppCompatActivity implements Serializable {
     //未登陆需要显示的内容
     private LinearLayout mLlHint;
 
@@ -28,15 +33,13 @@ public class MyInfoActivity extends AppCompatActivity {
     //ViewFlipper的定义
     private ViewFlipper mViewFlipper;
 
-    public static final String FILE_NAME="LoginInfo";
-    public static final String USERNAME="username";
-    public static final String NAME="name";
+    private MyInfoActivity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
-        
+        mActivity=this;
         init();
     }
 
@@ -47,7 +50,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
         mLlHint= (LinearLayout) findViewById(R.id.id_fl_auto_info_hint);
         mLlAll= (LinearLayout) findViewById(R.id.id_ll_auto_info_all);
-        if(!isLogged()) {
+        if(!MyApplication.isLanded()) {
             mLlAll.setVisibility(View.GONE);
             mLlHint.setOnClickListener(v -> {
                 Intent intent=new Intent(MyInfoActivity.this,LoginActivity.class);
@@ -75,7 +78,10 @@ public class MyInfoActivity extends AppCompatActivity {
             mMaInfo.setOnClickListener(v -> turnActivity(MaInfoActivity.class));
             mIllegalInfo.setOnClickListener(v -> turnActivity(IllegalActivity.class));
             mBespeakInfo.setOnClickListener(v -> turnActivity(OrdGasInfoActivity.class));
-            mSetting.setOnClickListener(v -> turnActivity(SettingActivity.class));
+            mSetting.setOnClickListener(v -> {
+                MyActivityUtil.getInstance().addTemporaryActivity("KEY_FOR_SETTING",mActivity);
+                turnActivity(SettingActivity.class);
+            });
 
             MyApplication.startSyncToCloudService();
         }
@@ -93,21 +99,19 @@ public class MyInfoActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.id_item_menu_setting:
+                Intent intent=new Intent(this,SettingActivity.class);
+                MyActivityUtil.getInstance().addTemporaryActivity("KEY_FOR_SETTING",mActivity);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private boolean isLogged() {
-        SharedPreferences pref = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-        String username = pref.getString(USERNAME, "null");
-        String name = pref.getString(NAME, "null");
-        if (username.equals("null")) {
-            return false;
-        } else {
-            MyApplication.setUsername(username);
-            MyApplication.setName(name);
-            return true;
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_for_my_info,menu);
+        return true;
     }
 }
