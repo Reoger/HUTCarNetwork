@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -41,14 +42,14 @@ public class PayActivity extends AppCompatActivity {
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;
-
+    private EditText mEditDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
 
-        BP.init(getApplication(),"11c50a59fafd8add5a2c19107b769f9d");
+        BP.init(getApplication(), "11c50a59fafd8add5a2c19107b769f9d");
         init();
         change(allPrice);
 
@@ -71,6 +72,7 @@ public class PayActivity extends AppCompatActivity {
         stationAddress = (TextView) findViewById(R.id.stationAddress);
         price = (TextView) findViewById(R.id.price);
         quantity = (TextView) findViewById(R.id.quantity);
+        mEditDate = (EditText) findViewById(R.id.edit_date);
 
         radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
         radioButton1 = (RadioButton) findViewById(R.id.RadioButton1);
@@ -94,36 +96,41 @@ public class PayActivity extends AppCompatActivity {
 
 
         btn_pay_ok.setOnClickListener(v -> {//支付接口
-            showMainDialog();
-            String type = TypeGas?"柴油":"汽油";
-            String name = "加油站名字"+bundle.getString("NAME");
-            String address = "地址"+bundle.getString("ADDRESS");
-            String price = "汽油价格"+bundle.getString("price1");
-            String price2 = "柴油价格"+bundle.getString("gasprice1");
+            if (mEditDate.getText().toString().equals("")) {
+                Toast.makeText(PayActivity.this, "请输入加油的日期", Toast.LENGTH_SHORT).show();
 
-            BP.pay(PayActivity.this, type, name, 0.02, false, new PListener() {
-                @Override
-                public void orderId(String s) {
-                    LogUtils.d("TAG","订单编号："+s);
-                    //保存数据
-                    saveDateOnYun(s);
-                }
+            } else {
+                showMainDialog();
+                String type = TypeGas ? "柴油" : "汽油";
+                String name = "加油站名字" + bundle.getString("NAME");
+                String address = "地址" + bundle.getString("ADDRESS");
+                String price = "汽油价格" + bundle.getString("price1");
+                String price2 = "柴油价格" + bundle.getString("gasprice1");
 
-                @Override
-                public void succeed() {
-                    Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
-                }
+                BP.pay(PayActivity.this, type, name, 0.02, false, new PListener() {
+                    @Override
+                    public void orderId(String s) {
+                        LogUtils.d("TAG", "订单编号：" + s);
+                        //保存数据
+                        saveDateOnYun(s);
+                    }
 
-                @Override
-                public void fail(int i, String s) {
-                    Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void succeed() {
+                        Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
+                    }
 
-                @Override
-                public void unknow() {
-                    Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void fail(int i, String s) {
+                        Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void unknow() {
+                        Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
 
         add.setOnClickListener(v -> {
@@ -170,7 +177,6 @@ public class PayActivity extends AppCompatActivity {
     }
 
 
-
     void change(int priceNum) {
 
         double priceTemp = 1;
@@ -182,19 +188,19 @@ public class PayActivity extends AppCompatActivity {
             priceTemp = Double.parseDouble(bundle.getString("gasprice1"));
 
         }
-        Log.e("********temp******", priceTemp+"");
+        Log.e("********temp******", priceTemp + "");
         if (priceTemp == 0) {
             priceTemp = 1;
         }
 
-        mQuantity = priceNum /priceTemp;
+        mQuantity = priceNum / priceTemp;
 
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
         String p = decimalFormat.format(mQuantity);//format 返回的是字符串
 //        mQuantity = Math.round((priceNum / priceTemp * 100) / 100);
 
 
-        Log.e("********temp******",mQuantity+"");
+        Log.e("********temp******", mQuantity + "");
 
         quantity.setText(p + " L ");
         price.setText(allPrice + " RMB ");
@@ -203,7 +209,7 @@ public class PayActivity extends AppCompatActivity {
     /**
      * 保存数据到云端
      */
-    public void saveDateOnYun(String data){
+    public void saveDateOnYun(String data) {
         OrdGasInfo info = new OrdGasInfo();
         info.setPayId(data);
         info.setLicensePlateNum(bundle.getString("LICENSEPLATENUM"));
@@ -211,26 +217,27 @@ public class PayActivity extends AppCompatActivity {
         info.setEngineNum(bundle.getString("ENGINENUM"));
         info.setModel(bundle.getString("MODEL"));
         info.setName(MyApplication.getName());
-        info.setReservationTime("2016:5.29");//预约时间
+        info.setReservationTime(mEditDate.getText().toString());//预约时间
         info.setUsername(MyApplication.getUsername());
+        info.setLiter(mQuantity);
         info.save(PayActivity.this, new SaveListener() {
+
             @Override
             public void onSuccess() {
-
                 mDialog.dismiss();
-                LogUtils.i("TAG","保存到云端成功");
+                LogUtils.i("TAG", "保存到云端成功");
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Toast.makeText(PayActivity.this,"保存到云端失败",Toast.LENGTH_SHORT).show();
-                LogUtils.i("TAG","保存到云端失败");
+                Toast.makeText(PayActivity.this, "保存到云端失败", Toast.LENGTH_SHORT).show();
+                LogUtils.i("TAG", "保存到云端失败");
                 mDialog.dismiss();
             }
         });
     }
 
-    private void showMainDialog(){
+    private void showMainDialog() {
         mDialog = new ProgressDialog(PayActivity.this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setTitle("Loading...");

@@ -1,9 +1,11 @@
 package just.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by 24540 on 2016/5/23.
  */
-public class BodyInfo {
+public class BodyInfo implements Serializable{
     private String body;
     private String create_time;
     private String name;

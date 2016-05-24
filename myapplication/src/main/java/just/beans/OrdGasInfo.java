@@ -15,7 +15,16 @@ public class OrdGasInfo extends BmobObject {
     private String engineNum;//发动机号
     private String reservationTime;//预约时间
     private String name;//姓名
-    
+    private double liter;
+
+    public double getLiter() {
+        return liter;
+    }
+
+    public void setLiter(double liter) {
+        this.liter = liter;
+    }
+
     public String getReservationTime() {
         return reservationTime;
     }

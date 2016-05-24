@@ -26,7 +26,13 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name="com.baidu.location.f"
@@ -44,11 +50,6 @@
             android:name="com.com.reoger.music.View.MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />

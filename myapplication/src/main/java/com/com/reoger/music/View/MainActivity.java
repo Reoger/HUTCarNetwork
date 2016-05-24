@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Toolbar toolbar;
     private TextView mTimeStare;
     private TextView mTimeTop;
-    private boolean isFirstRun = true;//判断是否为第一次运行
     private boolean processFlag = true;//反之过快点击
 
     private SideBar sideBar;
@@ -105,11 +104,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mMusicList.setOnItemClickListener(this);
         mMusicList.setOnItemLongClickListener(this);
         initButtonReceiver();
-        if (isFirstRun) {
-            Intent inent = new Intent(MainActivity.this, com.cwp.android.baidutest.MainActivity.class);
-            startActivity(inent);
-            isFirstRun = false;
-        }
+
 
     }
 
@@ -127,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // 根据a-z进行排序源数据
         Collections.sort(mMusicData, pinyinComparator);
+        //
+      for (int i=0;i<mMusicData.size();i++){
+          mMusicData.get(i).setCurrentIndex(i);
+      }
         for (int i = 0; i < mMusicData.size(); i++) {
             mMusicData.get(i).setCurrentIndex(i);
         }
@@ -761,5 +760,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 e.printStackTrace();
             }
         }
+    }
+
+    public void updataForMusic(View view){
+        mMusicData = filledData();
+        adaper.notifyDataSetChanged();
+        Toast.makeText(MainActivity.this,"刷新成功",Toast.LENGTH_SHORT).show();
     }
 }

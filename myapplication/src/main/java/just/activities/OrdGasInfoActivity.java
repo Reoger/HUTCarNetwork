@@ -210,27 +210,9 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         }).start();
     }
 
-    public void test(View view) {
-        LogUtils.i("YY", "mBodyData.size()=" + mBodyData.size());
-        LogUtils.i("YY", "jsonDate.size()=" + jsonDate.size());
-        LogUtils.i("YY", "mDate.size()=" + mDate.size());
 
-        getDateFromOrderInfoCloube(mDate);//通过订单id，查询影响的订单信息
 
-        for (int i = 0; i < mBodyData.size(); i++) {
-            LogUtils.i("YY", "时间" + mBodyData.get(i).getCreate_time());
-            LogUtils.i("YY", "内容" + mBodyData.get(i).getBody());
-        }
-        for (int i = 0; i < jsonDate.size(); i++) {
-            LogUtils.i("YY", "json数据" + jsonDate.get(i) + "这是json数据");
-        }
-        for (int i = 0; i < mDate.size(); i++) {
-            LogUtils.i("YY", "订单Id" + mDate.get(i).getPayId());
-            LogUtils.i("YY", "时间" + mDate.get(i).getTime());
-        }
-        OrderReulstAdaper adaper = new OrderReulstAdaper(OrdGasInfoActivity.this, mBodyData);
-        mListView.setAdapter(adaper);
-    }
+
 
     /**
      * 将json格式的数据解析并存储到mBodyData中。
@@ -293,8 +275,10 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(OrdGasInfoActivity.this,DetailedBilingActivity.class);
-       // Bundle bundle = new Bundle();
-       // bundle.putParcelable();
+        BodyInfo info = mBodyData.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info",info);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }
