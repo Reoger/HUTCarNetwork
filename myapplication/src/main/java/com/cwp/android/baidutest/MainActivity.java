@@ -3,6 +3,7 @@ package com.cwp.android.baidutest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     //卫星菜单的角度
     private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
 
-
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +182,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     }
 
     void init() {
+
+        //初始化对话框
+        showMainDialog();
         layout_server_page = (LinearLayout) findViewById(R.id.layout_server_page);
 
         arrow = (ImageView) findViewById(R.id.arrow);
@@ -507,6 +511,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             Intent intent=null;
             //判断是否已经登陆了
             if (MyApplication.isLanded()) {
+                mDialog.show();
                 intent=new Intent(MainActivity.this,OrdGasActivity.class);
                 intent.putExtras(bundle);
             } else {
@@ -528,6 +533,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             mBaiduMap.animateMapStatus(msu);
 
             mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
+        }
+        if(mDialog.isShowing()) {
+            mDialog.dismiss();
         }
     }
 
@@ -1066,12 +1074,22 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
+    private void showMainDialog(){
+        mDialog = new ProgressDialog(MainActivity.this);
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mDialog.setTitle("Loading...");
+        mDialog.setMessage("正在加载中，请稍后...");
+        mDialog.setCancelable(false);
+        mDialog.setButton("取消", (dialog, which) -> {
+//            finish();
+        });
+
+    }
+
     private void executeAnim(boolean isOpen) {
 
         float X = imageViews[3].getX();
         float Y = imageViews[3].getY();
-
-        float addValues=X/3;
 
         if (isOpen) {
             for (int i = 0; i <= 2; i++) {
