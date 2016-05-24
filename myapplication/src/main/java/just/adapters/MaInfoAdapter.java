@@ -297,4 +297,5 @@ public class MaInfoAdapter extends BaseAdapter {
             }
         }
     }
+
 }
