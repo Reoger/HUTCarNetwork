@@ -3,7 +3,7 @@
     android:id="@+id/myView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#d4d4d4"
+    android:background="#ffffff"
     android:padding="10dp"
     android:orientation="vertical">
 

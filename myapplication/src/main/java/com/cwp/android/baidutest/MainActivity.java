@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -223,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
                 if (POI_true_folse) {
 
+                    POI_true_folse =false;
                     mBaiduMap.clear();
 
                     LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
@@ -236,6 +236,8 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                             .to(enNode));
                 } else {
                     mBaiduMap.clear();
+                    mBtnPre.setVisibility(View.INVISIBLE);
+                    mBtnNext.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
                 }
         });
@@ -246,7 +248,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
                     POI_true_folse = true;
 
-                    centerToMyLocation(mLatitue,mLongLatitue);
+//                    centerToMyLocation(mLatitue,mLongLatitue);
+
+                    LatLng latLng = new LatLng(mLatitue, mLongLatitue);
+                    MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+
+                    mBaiduMap.animateMapStatus(msu);
+
                     LatLng point = new LatLng(mLatitue, mLongLatitue + 0.004);
                     BitmapDescriptor bitmap = BitmapDescriptorFactory
                             .fromResource(R.drawable.icon_en);
@@ -320,6 +328,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                         bundle = msg.getData();
                         updata(bundle);
                         break;
+                    case 0x13:
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString("NAME","error");
+                        updata(bundle1);
                     default:
                         break;
                 }
@@ -386,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
                     Toast.makeText(
                             MainActivity.this,
-                            "总共搜索到" + result.getTotalPoiNum() + "加油站", Toast.LENGTH_SHORT).show();
+                            "已经搜索到附近加油站", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -430,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     if (result != TextToSpeech.LANG_MISSING_DATA &&
                             result != TextToSpeech.LANG_NOT_SUPPORTED) {
 
-                        Toast.makeText(MainActivity.this, "语音系统加载失败，请确保你的设备安装了语音系统！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "语音系统加载成功！", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -484,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         String address = (String) bundle.get("ADDRESS");
         String price = (String) bundle.get("price1");
         String gasprice = (String) bundle.get("gasprice1");
+//        Toast.makeText(this,gasprice+"ccc",Toast.LENGTH_SHORT).show();
 
         t1.setText(name);
         t2.setText(address);
@@ -499,13 +512,23 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             } else {
                 Log.d("测试->MainActivity","请先登录");
                 intent=new Intent(MainActivity.this,LoginActivity.class);
+                intent.putExtras(bundle);
                 intent.putExtra("TAG","OrdGAs");
             }
             startActivity(intent);
         });
+        if (bundle.getString("NAME").equals("error")){
+            Toast.makeText(this, "暂无该加油站具体数据。", Toast.LENGTH_SHORT).show();
 
-        mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
+        }else {
+            //聚焦
+            LatLng latLng = new LatLng(nodeLocation.latitude, nodeLocation.longitude);
+            MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
 
+            mBaiduMap.animateMapStatus(msu);
+
+            mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
+        }
     }
 
     class MyPoiOverlay extends PoiOverlay {
