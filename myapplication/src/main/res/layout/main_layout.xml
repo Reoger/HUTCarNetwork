@@ -13,7 +13,7 @@
             android:clickable="true" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -24,13 +24,13 @@
 
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp">
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp">
 
                 <TextView
                     android:id="@+id/textView1"
@@ -38,36 +38,48 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:singleLine="true"
-                    android:text="起点：" />
+                    android:text="起点" />
 
                 <EditText
                     android:id="@+id/start"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:ems="10"
                     android:cursorVisible="false"
+                    android:ems="10"
                     android:singleLine="true"
-                    android:text="株洲">
+                    android:text="株洲"
+                    android:textSize="15sp">
 
                     <requestFocus />
                 </EditText>
+
+                <Button
+                    android:id="@+id/drive_end"
+                    android:layout_width="0dip"
+                    android:layout_height="30dip"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="0.6"
+                    android:background="@drawable/change"
+                    android:onClick="ChangeSearchButtonProcess" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="终点：" />
+                    android:text="终点" />
 
                 <EditText
                     android:id="@+id/end"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:ems="10"
                     android:cursorVisible="false"
-                    android:text="长沙">
+                    android:ems="10"
+                    android:text="长沙"
+                    android:textSize="15sp">
 
                     <requestFocus />
                 </EditText>
@@ -78,12 +90,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="#cacaca" />
+
             <ImageView
                 android:id="@+id/arrow"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/arrow"
-                />
+                android:src="@drawable/arrow" />
 
             <LinearLayout
                 android:id="@+id/layout_server_page"
@@ -92,26 +104,20 @@
                 android:orientation="horizontal"
                 android:paddingBottom="10dip"
                 android:paddingLeft="10dip"
-                android:paddingRight="10dip" >
+                android:paddingRight="10dip">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
                     android:text="服务栏" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
 
-
-                    <Button
-                        android:id="@+id/drive_end"
-                        android:layout_width="30dip"
-                        android:layout_height="30dip"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/change"
-                        android:onClick="ChangeSearchButtonProcess" />
 
                     <Button
                         android:id="@+id/drive_st"
@@ -120,13 +126,6 @@
                         android:layout_margin="5dp"
                         android:background="@drawable/car"
                         android:onClick="SearchButtonProcess" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
                     <Button
                         android:id="@+id/button"
@@ -144,15 +143,18 @@
 
                 </LinearLayout>
 
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
                     android:text="选址" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:orientation="horizontal">
 
                     <ImageView
