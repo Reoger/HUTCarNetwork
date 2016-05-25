@@ -75,8 +75,8 @@ public class OrderReulstAdaper extends BaseAdapter {
         p.TV_time.setText(mData.get(position).getCreate_time());
         p.TV_name.setText(mData.get(position).getName());
         p.TV_type.setText(type);
-        p.TV_id.setText(mData.get(position).getTransaction_id());
-        p.TV_fee.setText("￥"+mData.get(position).getTrade_state());
+        p.TV_id.setText(mData.get(position).getOut_trade_no());
+        p.TV_fee.setText("￥"+mData.get(position).getTotal_fee());
         p.TV_state.setText(state);
 
         return convertView;

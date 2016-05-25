@@ -53,6 +53,8 @@ import com.cwp.android.baidutest.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import just.activities.ActivityCollector;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private ListView mMusicList;
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Toolbar toolbar;
     private TextView mTimeStare;
     private TextView mTimeTop;
-    private boolean isFirstRun = true;//判断是否为第一次运行
     private boolean processFlag = true;//反之过快点击
 
     private SideBar sideBar;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_music);
         getSupportActionBar().hide();
+        ActivityCollector.addActivity(this);
 
         initView();
         initEvent();
@@ -105,11 +107,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mMusicList.setOnItemClickListener(this);
         mMusicList.setOnItemLongClickListener(this);
         initButtonReceiver();
-        if (isFirstRun) {
-            Intent inent = new Intent(MainActivity.this, com.cwp.android.baidutest.MainActivity.class);
-            startActivity(inent);
-            isFirstRun = false;
-        }
+
 
     }
 
@@ -127,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // 根据a-z进行排序源数据
         Collections.sort(mMusicData, pinyinComparator);
+        //
+      for (int i=0;i<mMusicData.size();i++){
+          mMusicData.get(i).setCurrentIndex(i);
+      }
         for (int i = 0; i < mMusicData.size(); i++) {
             mMusicData.get(i).setCurrentIndex(i);
         }
@@ -257,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (binder != null) {
                     binder.init(mSeekBar, mTimeStare, mTimeTop, () -> {
                         nextMusic(null);//自动播放下一曲
-
 
                         LogUtils.e(TAG, "这是在主函数里面的的自动播放下一曲");
 
@@ -407,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             initIntent();
             if (onlyPlayMusic()) {
+                showButtonNotify();
                 LogUtils.d(TAG, "下一曲");
             }
             new TimeThread().start();
@@ -424,6 +426,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onPause() {
         super.onPause();
+        showButtonNotify();
         Utils.saveDate(mCurrSongIndex, this);
     }
 
@@ -440,11 +443,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //这里需要添加保存数据的逻辑代码
+
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-
+        ActivityCollector.removeActivity(this);
         Utils.cancelNotication(this);
     }
 
@@ -539,9 +542,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mRemoteViews.setViewVisibility(R.id.ll_custom_button, View.VISIBLE);
 
         if (mIsMusicPlaying) {
-            mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_pause);
-        } else {
             mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_play);
+        } else {
+            mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_pause);
         }
         //点击的事件处理
         Intent buttonIntent = new Intent(Constant.ACTION_BUTTON);
@@ -735,12 +738,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent(MainActivity.this,
-//                com.cwp.android.baidutest.MainActivity.class);
-//        startActivity(intent);
-//    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(MainActivity.this,
+                com.cwp.android.baidutest.MainActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * 设置按钮在短时间内被重复点击的有效标识（true表示点击有效，false表示点击无效）
@@ -761,5 +764,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 e.printStackTrace();
             }
         }
+    }
+
+    public void updataForMusic(View view){
+        mMusicData = filledData();
+        adaper.notifyDataSetChanged();
+        Toast.makeText(MainActivity.this,"刷新成功",Toast.LENGTH_SHORT).show();
     }
 }

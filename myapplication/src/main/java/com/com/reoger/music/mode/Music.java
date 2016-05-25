@@ -10,6 +10,7 @@ public class Music {
     private String mMusicArtist; //歌手
     private String sortLetters;  //字母
     private int currentIndex ;
+    private int mMusicRating;
 
     public int getCurrentIndex() {
         return currentIndex;
@@ -43,7 +44,7 @@ public class Music {
     }
 
 
-    private int mMusicRating;
+
 
 
     public void setmMusicRating(int mMusicRating) {

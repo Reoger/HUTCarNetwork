@@ -25,6 +25,7 @@ public class IllegalActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_illegal);
+        ActivityCollector.addActivity(this);
 
         /**
          * 接口的初始化操作
@@ -63,12 +64,15 @@ public class IllegalActivity extends Activity {
     }
 
     public void startResultList(String cityId){
+        //查询所需要的数据
+        //省级简称+车牌后的后六位
+        //车架号
+        //发动机号
+        //目前仅仅限于查询小汽车
         CarInfo car = new CarInfo();
         car.setChepai_no(autoInfo.getLicensePlateNum());
         car.setChejia_no(autoInfo.getVin());
         car.setEngine_no(autoInfo.getEngineNum());
-        car.setRegister_no("");
-
         int a = Integer.valueOf(cityId);
         //这里需要通过用户选择要查询的地区，
         car.setCity_id(a);
@@ -95,4 +99,9 @@ public class IllegalActivity extends Activity {
         startResultList(cityId);//查询结果
      }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

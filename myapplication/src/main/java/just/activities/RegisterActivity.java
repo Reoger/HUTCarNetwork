@@ -173,6 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActivityCollector.addActivity(this);
 
         init();
 
@@ -390,6 +391,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityCollector.removeActivity(this);
         registerReceiver(messageReceiver, receiveFilter);
     }
 
@@ -416,4 +418,6 @@ public class RegisterActivity extends AppCompatActivity {
         mTvStep3.setVisibility(View.VISIBLE);
         mLlStep3.setVisibility(View.INVISIBLE);
     }
+
+
 }

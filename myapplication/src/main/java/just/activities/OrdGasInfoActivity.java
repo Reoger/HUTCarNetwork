@@ -10,9 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,7 +52,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
 
     private ListView mListView;
     private TextView mTextView;
-    private List<OrdGasInfo> mDate = new ArrayList<>();;
+    private List<OrdGasInfo> mDate = new ArrayList<>();
     private List<String> jsonDate = new ArrayList<>();
     private List<BodyInfo> mBodyData = new ArrayList<>();
 
@@ -93,6 +91,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ord_gas_info);
+        ActivityCollector.addActivity(this);
 
 
         mListView = (ListView) findViewById(R.id.list_order_info);
@@ -105,25 +104,13 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         mListView.setOnItemClickListener(OrdGasInfoActivity.this);
     }
 
-    private void initContent() {
-        LogUtils.i("AATT", "最终，加载适配器，下面是运行结果");
-        for (int i = 0; i < mDate.size(); i++) {
-            LogUtils.i("AATT", "mDate的内容" + mDate.get(i).getPayId() + "---..");
-        }
-        //   getDateFromOrderInfoCloube( mDate);//通过订单id，查询影响的订单信息
-
-        for (int i = 0; i < mBodyData.size(); i++) {
-            LogUtils.i("AATT", mBodyData.get(i).getBody() + "---..");
-            LogUtils.i("AATT", mBodyData.get(i).getCreate_time() + "---..");
-        }
-    }
-
 
     public void getObjectIdDateFromYun() {
         new Thread(() -> {
 
             BmobQuery<OrdGasInfo> query = new BmobQuery<>();
           //  query.addWhereNotEqualTo("PayId", "0");
+            //通过用户名查询相关的信息
         query.addWhereEqualTo("username", MyApplication.getUsername());
             Log.i("AATT", "查询ing");
             query.setLimit(10);
@@ -131,20 +118,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
             query.findObjects(OrdGasInfoActivity.this, new FindListener<OrdGasInfo>() {
                 @Override
                 public void onSuccess(List<OrdGasInfo> object) {
-                    for (OrdGasInfo gameScore : object) {
-                        OrdGasInfo item = new OrdGasInfo();
-                        LogUtils.i("AATT", "id是：" + gameScore.getPayId());
-                        LogUtils.i("AATT", "唯一标识：：" + gameScore.getObjectId());
-                        LogUtils.i("AATT", "创建时间：：" + gameScore.getCreatedAt());
-                        item.setPayId(gameScore.getPayId());
-                        item.setTime(gameScore.getCreatedAt());
-                        item.setEngineNum(gameScore.getEngineNum());
-                        item.setUsername(gameScore.getUsername());
-                        item.setBrand(gameScore.getBrand());
-                        item.setLicensePlateNum(gameScore.getLicensePlateNum());
-                        mDate.add(item);
-                    }
-                //    mDate = object; 有待验证
+                    mDate = object; //有待验证
                     LogUtils.i("AATT", "到这里，获取到了mData的值");
                     if(mDate.size() ==0){
                         Message msg = new Message();
@@ -210,27 +184,9 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         }).start();
     }
 
-    public void test(View view) {
-        LogUtils.i("YY", "mBodyData.size()=" + mBodyData.size());
-        LogUtils.i("YY", "jsonDate.size()=" + jsonDate.size());
-        LogUtils.i("YY", "mDate.size()=" + mDate.size());
 
-        getDateFromOrderInfoCloube(mDate);//通过订单id，查询影响的订单信息
 
-        for (int i = 0; i < mBodyData.size(); i++) {
-            LogUtils.i("YY", "时间" + mBodyData.get(i).getCreate_time());
-            LogUtils.i("YY", "内容" + mBodyData.get(i).getBody());
-        }
-        for (int i = 0; i < jsonDate.size(); i++) {
-            LogUtils.i("YY", "json数据" + jsonDate.get(i) + "这是json数据");
-        }
-        for (int i = 0; i < mDate.size(); i++) {
-            LogUtils.i("YY", "订单Id" + mDate.get(i).getPayId());
-            LogUtils.i("YY", "时间" + mDate.get(i).getTime());
-        }
-        OrderReulstAdaper adaper = new OrderReulstAdaper(OrdGasInfoActivity.this, mBodyData);
-        mListView.setAdapter(adaper);
-    }
+
 
     /**
      * 将json格式的数据解析并存储到mBodyData中。
@@ -255,6 +211,11 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
                 String transaction_id = jsonObject.getString("transaction_id");
                 String out_trade_no = jsonObject.getString("out_trade_no");
 
+                String Car_info = mDate.get(i).getBrand();
+                String username = mDate.get(i).getUsername();
+                String orienTime = mDate.get(i).getReservationTime();
+                boolean mCanUsed= mDate.get(i).ismIsUsed();
+                double liter = mDate.get(i).getLiter();
 
                 item.setBody(body);
                 item.setCreate_time(create_time);
@@ -264,6 +225,12 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
                 item.setTrade_state(trade_state);
                 item.setOut_trade_no(out_trade_no);
                 item.setTransaction_id(transaction_id);
+
+                item.setCar_info(Car_info);
+                item.setUsename(username);
+                item.setOrien_time(orienTime);
+                item.setmCanUsed(mCanUsed);
+                item.setLiter(liter);
 
                 mBodyData.add(item);
 
@@ -275,7 +242,6 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         message.what = 10086;
         LogUtils.i("AATT", "json数据解析完毕，sendMessage");
         handler.sendMessage(message); // 将Message对象发送出去
-
     }
 
     private void showMainDialog(){
@@ -293,8 +259,16 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(OrdGasInfoActivity.this,DetailedBilingActivity.class);
-       // Bundle bundle = new Bundle();
-       // bundle.putParcelable();
+        BodyInfo info = mBodyData.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info",info);
+        intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

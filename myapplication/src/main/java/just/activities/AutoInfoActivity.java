@@ -73,6 +73,7 @@ public class AutoInfoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_info);
+        ActivityCollector.addActivity(this);
 
         init();
     }
@@ -301,5 +302,11 @@ public class AutoInfoActivity extends Activity {
                 mAdapter.deletePosition(position);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }
