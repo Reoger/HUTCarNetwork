@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="F:\AndroidAppliction\HUTCarNetwork\myapplication\libs\Bmob_Push_V0.9beta_20160520.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="faef33e869bfbc3949cc789948e4f57ec61a1cab">
+        <dex dex="F:\AndroidAppliction\HUTCarNetwork\myapplication\build\intermediates\pre-dexed\debug\Bmob_Push_V0.9beta_20160520_13999e38d249fe53874fa55127a448a4f3ded0af.jar" />
+    </item>
+
+</items>

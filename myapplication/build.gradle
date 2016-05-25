@@ -45,6 +45,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile files('libs/weizhang_sdk.jar')
     compile files('libs/BmobPay_v2.7_160427.jar')
+    compile files('libs/Bmob_Push_V0.9beta_20160520.jar')
 }
 
 apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要
