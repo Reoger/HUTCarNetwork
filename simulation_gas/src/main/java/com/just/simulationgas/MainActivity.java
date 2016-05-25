@@ -10,6 +10,10 @@ import android.widget.Button;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.util.Date;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 
 public class MainActivity extends AppCompatActivity {
     private Button mBtGas;
@@ -37,5 +41,24 @@ public class MainActivity extends AppCompatActivity {
                 String result=data.getExtras().getString("result");
             }
         }
+    }
+
+    private void dealResult() {
+        //先取得订单号
+        String payId="";
+
+        BmobQuery<OrdGasInfo> query=new BmobQuery<>();
+        query.addWhereEqualTo("payId",payId);
+        query.setLimit(1);
+        query.findObjects(this, new FindListener<OrdGasInfo>() {
+            @Override
+            public void onSuccess(List<OrdGasInfo> list) {
+                OrdGasInfo ordGasInfo=list.get(0);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+            }
+        });
     }
 }

@@ -24,4 +24,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile project(':libzxing')
+    compile files('libs/BmobSDK_V3.4.6_0415.jar')
 }
