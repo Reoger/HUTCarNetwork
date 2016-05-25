@@ -34,6 +34,7 @@ public class ProvinceList extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.csy_activity_citys);
+		ActivityCollector.addActivity(this);
 
 		
 		//标题
@@ -108,5 +109,11 @@ public class ProvinceList extends Activity {
 		setResult(2002, intent);
 
 		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ActivityCollector.removeActivity(this);
 	}
 }

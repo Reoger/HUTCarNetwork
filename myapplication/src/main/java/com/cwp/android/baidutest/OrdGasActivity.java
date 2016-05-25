@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import just.activities.ActivityCollector;
 import just.adapters.AutoInfoAdapter;
 import just.beans.AutoInfo;
 
@@ -21,6 +22,7 @@ public class OrdGasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ord_gas);
+        ActivityCollector.addActivity(this);
 
         init();
     }
@@ -77,6 +79,7 @@ public class OrdGasActivity extends AppCompatActivity {
     protected void onDestroy() {
 
         OrdGasActivity.this.finish();
+        ActivityCollector.removeActivity(this);
         super.onDestroy();
     }
 }

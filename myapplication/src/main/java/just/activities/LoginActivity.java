@@ -55,8 +55,8 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog =null;
                     Log.d("测试->LoginActivity","验证成功");
 
-                    //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
-                    MyApplication.startSyncFromCloudService();
+//                    //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
+//                    MyApplication.startSyncFromCloudService();
 
                     Intent intent=null;
                     String tag=getIntent().getStringExtra("TAG");
@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ActivityCollector.addActivity(this);
         init();
     }
 
@@ -240,5 +241,11 @@ public class LoginActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

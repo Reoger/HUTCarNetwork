@@ -90,6 +90,7 @@
             android:layout_height="40dp"
             android:layout_gravity="end|center"
             android:background="@drawable/menu"
+            android:onClick="updataForMusic"
             android:clickable="true" />
     </LinearLayout>
 
