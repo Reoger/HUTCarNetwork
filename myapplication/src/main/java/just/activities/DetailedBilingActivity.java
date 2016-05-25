@@ -8,17 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.cwp.android.baidutest.R;
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
-import org.w3c.dom.Text;
 
 import just.beans.BodyInfo;
 
 /**
  * Created by 24540 on 2016/5/24.
  */
-public class DetailedBilingActivity extends AppCompatActivity{
+public class DetailedBilingActivity extends AppCompatActivity {
 
     private ImageView mImage;
     private String s;
@@ -32,6 +32,9 @@ public class DetailedBilingActivity extends AppCompatActivity{
     private TextView mType;
     private TextView mUserName;
     private TextView mCarInfo;
+    private TextView mTransactionId;
+    private TextView mCanUsed;
+    private TextView mLiter;
 
 
     @Override
@@ -44,45 +47,60 @@ public class DetailedBilingActivity extends AppCompatActivity{
 
         mInfo = (BodyInfo) getIntent().getSerializableExtra("info");
         setDate(mInfo);
-        s ="结账二维码:总金额是"+mInfo.getTotal_fee()+""+"账单号是"+mInfo.getOut_trade_no();
-        createResult(s);
+        if (mInfo.ismCanUsed()) {
+            s = mInfo.getOut_trade_no();//二位码中的信息只有一个商品号，
+            createResult(s);
+        } else {
+            Toast.makeText(DetailedBilingActivity.this, "该账单未支付，不能生成二维码", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void initView() {
-        mCarInfo = (TextView)findViewById(R.id.biling_car_info);
-        mName = (TextView)findViewById(R.id.biling_name);
-        mMoney = (TextView)findViewById(R.id.biling_money);
-        mState = (TextView)findViewById(R.id.biling_state);
-        mId = (TextView)findViewById(R.id.biling_id);
-        mTime = (TextView)findViewById(R.id.biling_time);
-        mUserName = (TextView)findViewById(R.id.biling_username);
-        mType =(TextView)findViewById(R.id.biling_type);
+        mCarInfo = (TextView) findViewById(R.id.biling_car_info);
+        mName = (TextView) findViewById(R.id.biling_name);
+        mMoney = (TextView) findViewById(R.id.biling_money);
+        mState = (TextView) findViewById(R.id.biling_state);
+        mId = (TextView) findViewById(R.id.biling_id);
+        mTime = (TextView) findViewById(R.id.biling_time);
+        mUserName = (TextView) findViewById(R.id.biling_username);
+        mType = (TextView) findViewById(R.id.biling_type);
+        mUserName = (TextView) findViewById(R.id.biling_username);
+        mCarInfo = (TextView) findViewById(R.id.biling_car_info);
+        mTransactionId = (TextView) findViewById(R.id.biling_id_jiaoyi);
+        mCanUsed = (TextView) findViewById(R.id.biling_can_cost);
+        mLiter = (TextView) findViewById(R.id.biling_liter);
+
         mImage = (ImageView) findViewById(R.id.biling_image);
     }
 
     /**
      * 生成二维码
-     * @param s
+     *
+     * @param
      */
     private void createResult(String s) {
-        Bitmap log = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        if(s.equals("")){
-            Toast.makeText(this,"输出为空",Toast.LENGTH_SHORT).show();
-        }else{
-            Bitmap bitmap = EncodingUtils.createQRCode(s,500,500,log);
+        Bitmap log = BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo);
+        if (s.equals("")) {
+            Toast.makeText(this, "输出为空", Toast.LENGTH_SHORT).show();
+        } else {
+            Bitmap bitmap = EncodingUtils.createQRCode(s, 500, 500, log);
             mImage.setImageBitmap(bitmap);
         }
     }
 
     public void setDate(BodyInfo date) {
-         mName.setText(date.getName());
-         mMoney.setText(date.getTransaction_id());
-         mState.setText(date.getTrade_state());
-         mId.setText(date.getOut_trade_no());
-         mTime.setText(date.getCreate_time());
-         mType.setText(date.getPay_type());
-         //mUserName.setText();
-         //mCarInfo;
+        mName.setText(date.getName());
+        mMoney.setText(date.getTotal_fee());
+        mState.setText(date.getTrade_state());
+        mId.setText(date.getOut_trade_no());
+        mTime.setText(date.getCreate_time());
+        mType.setText(date.getPay_type());
+        mUserName.setText(date.getUsename());
+        mCarInfo.setText(date.getCar_info());
+        mTransactionId.setText(date.getTransaction_id());
+        mCanUsed.setText(date.ismCanUsed() ? "可以消费" : "不能消费");
+        mLiter.setText(date.getLiter()+"升");
     }
 
     @Override

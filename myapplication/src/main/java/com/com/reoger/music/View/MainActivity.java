@@ -408,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             initIntent();
             if (onlyPlayMusic()) {
+                showButtonNotify();
                 LogUtils.d(TAG, "下一曲");
             }
             new TimeThread().start();
@@ -425,6 +426,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onPause() {
         super.onPause();
+        showButtonNotify();
         Utils.saveDate(mCurrSongIndex, this);
     }
 
@@ -540,9 +542,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mRemoteViews.setViewVisibility(R.id.ll_custom_button, View.VISIBLE);
 
         if (mIsMusicPlaying) {
-            mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_pause);
-        } else {
             mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_play);
+        } else {
+            mRemoteViews.setImageViewResource(R.id.btn_custom_play, R.mipmap.ic_pause);
         }
         //点击的事件处理
         Intent buttonIntent = new Intent(Constant.ACTION_BUTTON);

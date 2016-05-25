@@ -31,6 +31,7 @@ public class WeizhangResul extends Activity {
     final Handler cwjHandler = new Handler();
     WeizhangResponseJson info = null;
     private View popLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +39,9 @@ public class WeizhangResul extends Activity {
         ActivityCollector.addActivity(this);
 
         Intent intent = this.getIntent();
-        CarInfo car = (CarInfo)intent.getSerializableExtra("carInfo");
+        CarInfo car = (CarInfo) intent.getSerializableExtra("carInfo");
 
-        Log.e("TAG", car.getChejia_no()+" --"+car.getChepai_no()+"--"+car.getCity_id()+"--"+car.getEngine_no());
+        Log.e("TAG", car.getChejia_no() + " --" + car.getChepai_no() + "--" + car.getCity_id() + "--" + car.getEngine_no());
         // 返回按钮
         Button btnBack = (Button) findViewById(R.id.btnBack);
         btnBack.setVisibility(View.VISIBLE);
@@ -120,8 +121,16 @@ public class WeizhangResul extends Activity {
                 result_null.setText("你访问的速度过快, 请后再试");
             } else if (info.getStatus() == 5008) {
                 result_null.setText("输入的车辆信息有误，请查证后重新输入");
-            } else {
+            } else if (info.getStatus() == 1005) {
+                result_null.setText("输入的车辆信息有误，请查证后重新输入");
+            }else if (info.getStatus() == 1004) {
+                result_null.setText("车牌号，汽车类型，违章城市 等字段不能为空");
+            } else if(info.getStatus() == 2000){
                 result_null.setText("恭喜, 没有查到违章记录！");
+            }else if(info.getStatus() == 1003){
+                result_null.setText("sign加密有误！");
+            }else{
+                result_null.setText("没有数据！");
             }
 
             result_title.setVisibility(View.GONE);

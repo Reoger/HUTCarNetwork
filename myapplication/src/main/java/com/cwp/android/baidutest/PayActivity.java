@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import c.b.BP;
 import c.b.PListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import just.activities.ActivityCollector;
 import just.beans.OrdGasInfo;
 
@@ -40,11 +41,15 @@ public class PayActivity extends AppCompatActivity {
     private double mQuantity;
 
     private ProgressDialog mDialog;
+    OrdGasInfo info = new OrdGasInfo();
+    private String mObjectId;
+
 
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;
     private EditText mEditDate;
+    private boolean mFlag=true;//用于判断是否加油成功
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,15 +126,18 @@ public class PayActivity extends AppCompatActivity {
                     @Override
                     public void succeed() {
                         Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
+
                     }
 
                     @Override
                     public void fail(int i, String s) {
+                        updateBoolean();
                         Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void unknow() {
+                        updateBoolean();
                         Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -212,7 +220,7 @@ public class PayActivity extends AppCompatActivity {
      * 保存数据到云端
      */
     public void saveDateOnYun(String data) {
-        OrdGasInfo info = new OrdGasInfo();
+
         info.setPayId(data);
         info.setLicensePlateNum(bundle.getString("LICENSEPLATENUM"));
         info.setBrand(bundle.getString("BRAND"));
@@ -222,11 +230,13 @@ public class PayActivity extends AppCompatActivity {
         info.setReservationTime(mEditDate.getText().toString());//预约时间
         info.setUsername(MyApplication.getUsername());
         info.setLiter(mQuantity);
+        info.setmIsUsed(mFlag);
         info.save(PayActivity.this, new SaveListener() {
 
             @Override
             public void onSuccess() {
                 mDialog.dismiss();
+                mObjectId = info.getObjectId();
                 LogUtils.i("TAG", "保存到云端成功");
             }
 
@@ -249,6 +259,24 @@ public class PayActivity extends AppCompatActivity {
             finish();
         });
         mDialog.show();
+    }
+
+    private void  updateBoolean(){
+
+        info.setValue("mIsUsed",false);
+        info.update(this, mObjectId, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                // TODO Auto-generated method stub
+                Log.i("bmob","更新成功：");
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                // TODO Auto-generated method stub
+                Log.i("bmob","更新失败："+msg);
+            }
+        });
     }
 
     @Override
