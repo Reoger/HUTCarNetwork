@@ -33,7 +33,7 @@ public class CityList extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.csy_activity_citys);
-
+		ActivityCollector.addActivity(this);
 		
 		//标题
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
@@ -98,5 +98,10 @@ public class CityList extends Activity {
 
 		return list;
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ActivityCollector.removeActivity(this);
+	}
 }

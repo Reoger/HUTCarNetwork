@@ -93,7 +93,7 @@ public class MaInfoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ma_info);
-
+        ActivityCollector.addActivity(this);
         init();
     }
 
@@ -302,5 +302,11 @@ public class MaInfoActivity extends Activity {
     private void saveToLocal(MaInfo maInfo, int isSyncToCloud) {
         MaInfoLocalDBOperation.insert(this,maInfo,isSyncToCloud);
         mHandler.sendEmptyMessage(FINISHED_ADD);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

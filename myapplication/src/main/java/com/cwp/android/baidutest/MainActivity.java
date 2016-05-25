@@ -68,6 +68,7 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import java.util.Locale;
 
+import just.activities.ActivityCollector;
 import just.activities.LoginActivity;
 import just.activities.MyInfoActivity;
 
@@ -148,11 +149,14 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     private ProgressDialog mDialog;
 
+    private long exitTime;//记录按下返回键的系统时间
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_layout);
+        ActivityCollector.addActivity(this);
 
         init();
 
@@ -436,18 +440,15 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
 
         //***************语音合成系统************************
-        tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
+        tts = new TextToSpeech(MainActivity.this, status -> {
 
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = tts.setLanguage(Locale.CHINA);
+            if (status == TextToSpeech.SUCCESS) {
+                int result = tts.setLanguage(Locale.CHINA);
 
-                    if (result != TextToSpeech.LANG_MISSING_DATA &&
-                            result != TextToSpeech.LANG_NOT_SUPPORTED) {
+                if (result != TextToSpeech.LANG_MISSING_DATA &&
+                        result != TextToSpeech.LANG_NOT_SUPPORTED) {
 
-                        Toast.makeText(MainActivity.this, "语音系统加载成功！", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(MainActivity.this, "语音系统加载成功！", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1039,6 +1040,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mMapView.onDestroy();
         mPoiSearch.destroy();
         mSearch.destroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override
@@ -1126,4 +1128,16 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            // ToastUtil.makeToastInBottom("再按一次退出应用", MainMyselfActivity);
+            Toast.makeText(MainActivity.this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+            return;
+        }
+        ActivityCollector.finishAll();
+    }
+
 }

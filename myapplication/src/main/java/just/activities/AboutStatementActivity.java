@@ -13,10 +13,17 @@ public class AboutStatementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_statement);
+        ActivityCollector.addActivity(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("相关声明");
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

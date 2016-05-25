@@ -25,6 +25,7 @@ public class IllegalActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_illegal);
+        ActivityCollector.addActivity(this);
 
         /**
          * 接口的初始化操作
@@ -95,4 +96,9 @@ public class IllegalActivity extends Activity {
         startResultList(cityId);//查询结果
      }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

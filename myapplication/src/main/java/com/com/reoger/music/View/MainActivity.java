@@ -53,6 +53,8 @@ import com.cwp.android.baidutest.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import just.activities.ActivityCollector;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private ListView mMusicList;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_music);
         getSupportActionBar().hide();
+        ActivityCollector.addActivity(this);
 
         initView();
         initEvent();
@@ -256,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (binder != null) {
                     binder.init(mSeekBar, mTimeStare, mTimeTop, () -> {
                         nextMusic(null);//自动播放下一曲
-
 
                         LogUtils.e(TAG, "这是在主函数里面的的自动播放下一曲");
 
@@ -439,11 +441,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //这里需要添加保存数据的逻辑代码
+
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-
+        ActivityCollector.removeActivity(this);
         Utils.cancelNotication(this);
     }
 
@@ -734,12 +736,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent(MainActivity.this,
-//                com.cwp.android.baidutest.MainActivity.class);
-//        startActivity(intent);
-//    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(MainActivity.this,
+                com.cwp.android.baidutest.MainActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * 设置按钮在短时间内被重复点击的有效标识（true表示点击有效，false表示点击无效）

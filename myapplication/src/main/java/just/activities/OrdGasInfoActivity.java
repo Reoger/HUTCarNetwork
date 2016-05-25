@@ -93,6 +93,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ord_gas_info);
+        ActivityCollector.addActivity(this);
 
 
         mListView = (ListView) findViewById(R.id.list_order_info);
@@ -280,5 +281,11 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
         bundle.putSerializable("info",info);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

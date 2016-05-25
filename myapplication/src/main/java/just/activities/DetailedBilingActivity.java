@@ -38,6 +38,7 @@ public class DetailedBilingActivity extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detaile_biling);
+        ActivityCollector.addActivity(this);
 
         initView();
 
@@ -82,5 +83,11 @@ public class DetailedBilingActivity extends AppCompatActivity{
          mType.setText(date.getPay_type());
          //mUserName.setText();
          //mCarInfo;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

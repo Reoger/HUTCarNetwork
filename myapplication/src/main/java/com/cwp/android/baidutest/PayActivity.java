@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.platform.comapi.map.A;
 import com.com.reoger.music.Utils.LogUtils;
 
 import java.text.DecimalFormat;
@@ -20,6 +21,7 @@ import java.text.DecimalFormat;
 import c.b.BP;
 import c.b.PListener;
 import cn.bmob.v3.listener.SaveListener;
+import just.activities.ActivityCollector;
 import just.beans.OrdGasInfo;
 
 public class PayActivity extends AppCompatActivity {
@@ -49,6 +51,7 @@ public class PayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
 
+        ActivityCollector.addActivity(this);
         BP.init(getApplication(), "11c50a59fafd8add5a2c19107b769f9d");
         init();
         change(allPrice);
@@ -173,7 +176,6 @@ public class PayActivity extends AppCompatActivity {
         stationAddress.setText(bundle.getString("ADDRESS"));
         price.setText(allPrice + "");
 
-
     }
 
 
@@ -247,5 +249,11 @@ public class PayActivity extends AppCompatActivity {
             finish();
         });
         mDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

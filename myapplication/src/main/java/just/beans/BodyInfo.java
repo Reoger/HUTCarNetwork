@@ -12,8 +12,8 @@ public class BodyInfo implements Serializable{
     private String pay_type;//支付方式
     private String total_fee;//交易总额
     private String trade_state;//交易状态
-    private String out_trade_no;//交易单号
-    private String transaction_id;//
+    private String out_trade_no;//商品单号
+    private String transaction_id;//交易单号
 
 
     public String getOut_trade_no() {

@@ -43,10 +43,10 @@ public class MyApplication extends Application {
         SDKInitializer.initialize(mContext);//百度地图初始化
     }
 
-    //当用账号登陆的时候，需要开启一个服务从云端同步数据至本地
-    public static void startSyncFromCloudService() {
-        
-    }
+//    //当用账号登陆的时候，需要开启一个服务从云端同步数据至本地
+//    public static void startSyncFromCloudService() {
+//
+//    }
 
     //当记住了账号的时候，直接开启将本地数据同步至云端的服务
     public static void startSyncToCloudService() {

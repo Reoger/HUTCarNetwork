@@ -35,6 +35,7 @@ public class WeizhangResul extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_result_list);
+        ActivityCollector.addActivity(this);
 
         Intent intent = this.getIntent();
         CarInfo car = (CarInfo)intent.getSerializableExtra("carInfo");
@@ -147,5 +148,11 @@ public class WeizhangResul extends Activity {
         }
 
         return list;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

@@ -1,12 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
+<items version="2" />
 
-    <item
-        jar="H:\news\HUTCarNetwork\myapplication\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="505175ec12d8f2d643ef46b918bf17690e23a7d4">
-        <dex dex="H:\news\HUTCarNetwork\myapplication\build\intermediates\pre-dexed\debug\instant-run-bootstrap_56a12838c238eb160bb72498659087576435dd31.jar" />
-    </item>
-
-</items>

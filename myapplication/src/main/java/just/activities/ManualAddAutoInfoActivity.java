@@ -18,6 +18,7 @@ public class ManualAddAutoInfoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_add_auto_info);
+        ActivityCollector.addActivity(this);
         
         init();
     }
@@ -67,5 +68,11 @@ public class ManualAddAutoInfoActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }
