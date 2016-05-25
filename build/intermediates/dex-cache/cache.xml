@@ -1,3 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ef7b56b6048a716ba92e03983f9d59827551b0c9">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3b75ed34865e59ae10a2d11c8cfb500bd5b09566\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_2537fcbd3bedc7aa3a2d8bcaff7fd98a676fad3e\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\.gradle\caches\modules-2\files-2.1\io.reactivex\rxjava\1.1.0\748f0546d5c3c27f1aef07270ffea0c45f0c42a4\rxjava-1.1.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="748f0546d5c3c27f1aef07270ffea0c45f0c42a4">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\rxjava-1.1.0_e344ea6cc72b0f6d1edda4844123ca6496eb3374\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_map_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="b18498f0ff59163574118729da41b7e89971d713">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_map_v3_7_3_8af4c9a9c669cd723e13aa033510cff75882ea90\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.3.0_31256860f6aa790498c535f98808061d648dbe29\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_radar_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="285cb61966027336b8cc418a6a3ec159039aa0c2">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_radar_v3_7_3_2344d4dc6ec9ad6f3195f1439340d9ddbe719145\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-23.3.0_04df56792742da3ae1fcb5690e7dbae851c0485f\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\HUTCarNetwork\libzxing\unspecified\jars\libs\zxing.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1870e350d9b0a4f2e3c2cee166c72d552a080b1e">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\8\zxing_9958216cacb7fb27eb3c087899f1470ba1686f10\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_search_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="dea8cea1cf2639d2a92718333f47f5a7bef25b17">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_search_v3_7_3_7e515401f98c8518fc258de48c7de06528c6e8e3\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_util_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="77f23565c6bc14129d2ec152c809161343cdeaad">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_util_v3_7_3_7d6d50414711911dc954a2f56c84abeccd88c3a3\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\BmobSDK_V3.4.6_0415.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="41f54bb2846705eea0de5df48ddbcba378bd54e5">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\BmobSDK_V3.4.6_0415_aab54a9bb76fca68001f14b9bc80eb4b4f4cc6bd\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\io.reactivex\rxandroid\1.1.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d4c4b83de2f6412072d2a29b1b7a5b03edaad5ff">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\io.reactivex-rxandroid-1.1.0_ed62a92c0423b188d0db3be8a0c1f60e7994216d\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_16486a12dbc97e4993fb0a19e5c5046bf8c0e32a\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\weizhang_sdk.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="7a43c225fe1c4a8c20d3fe112738d88f13909a47">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\weizhang_sdk_bafc95214e59c3eac08779b00d2d73179b4392f4\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\org.apache.http.legacy.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="5320fd78dd7f154e586970d4f02befc9b58432aa">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\org.apache.http.legacy_01009d14ecf1bfafbaf7631b1f1bfe31278c50ae\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_cloud_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1bfd60b172276bd6c127e1b020578ba8943cb817">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_cloud_v3_7_3_ccc6520b8ec2e838315c6ec40af17025047a01b9\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\okio-1.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\okio-1.4.0_e8a50141de9b51efc2020f41ddd75f9642df0bd8\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\okhttp-2.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\okhttp-2.4.0_5cf6f6a4eaffcd8e97e4d2a0f18b199499b6f6e8\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="3cf019ee541cd714bc65d90637f7055b17f26fa3">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_042180d99b1307c6e417059f5bc44bb3f53c255f\classes.dex" />
+    </item>
+    <item
+        jar="D:\eclipse\SDk\android-sdk-windows\extras\android\m2repository\com\android\support\support-annotations\23.3.0\support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.3.0_055b3a9da908ccba95812bba08ae6782986091bb\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\BmobPay_v2.7_160427.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d91d3b35e5833473e2b8f2345c8bde37abb54208">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\BmobPay_v2.7_160427_5466ab6185c29054e7d708aebb3669b13fd9b2ef\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\BaiduLBS_Android.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="6f01713a57140ee3d45ec63e850d4c445a61acc7">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\BaiduLBS_Android_bd178a4a50e6b12338898b14435f25bf6ceccbe7\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.3.0_ded33497ebdb69e398de340e80494bb596ce9d86\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\libs\baidumapapi_base_v3_7_3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="26aec1b74c9e42fb4f27432b79cf9e65365f5612">
+        <dex dex="C:\Users\Adminis\AndroidStudioProjects\Git\HUTCarNetwork\myapplication\build\intermediates\transforms\dex\debug\folders\1000\2\baidumapapi_base_v3_7_3_63ee16781af0e90c6523da782d03b549de1c7eae\classes.dex" />
+    </item>
+
+</items>

@@ -1,14 +1,12 @@
 package com.cwp.android.baidutest;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +44,8 @@ public class PayActivity extends AppCompatActivity {
 
     private ProgressDialog mDialog;
 
+    private View progress;
+
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;
@@ -64,6 +64,8 @@ public class PayActivity extends AppCompatActivity {
 
     public void init() {
         bundle = getIntent().getExtras();
+
+        progress= findViewById(R.id.loadView);
 
         add = (Button) findViewById(R.id.add);
         sub = (Button) findViewById(R.id.sub);
@@ -274,7 +276,8 @@ public class PayActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
 
-                mDialog.dismiss();
+//                mDialog.dismiss();
+                progress.setVisibility(View.GONE);
                 LogUtils.i("TAG","保存到云端成功");
             }
 
@@ -282,20 +285,22 @@ public class PayActivity extends AppCompatActivity {
             public void onFailure(int i, String s) {
                 Toast.makeText(PayActivity.this,"保存到云端失败",Toast.LENGTH_SHORT).show();
                 LogUtils.i("TAG","保存到云端失败");
-                mDialog.dismiss();
+//                mDialog.dismiss();
+                progress.setVisibility(View.GONE);
             }
         });
     }
 
     private void showMainDialog(){
-        mDialog = new ProgressDialog(PayActivity.this);
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mDialog.setTitle("Loading...");
-        mDialog.setMessage("正在加载中，请稍后...");
-        mDialog.setCancelable(false);
-        mDialog.setButton("取消", (dialog, which) -> {
-            finish();
-        });
-        mDialog.show();
+//        mDialog = new ProgressDialog(PayActivity.this);
+//        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        mDialog.setTitle("Loading...");
+//        mDialog.setMessage("正在加载中，请稍后...");
+//        mDialog.setCancelable(false);
+//        mDialog.setButton("取消", (dialog, which) -> {
+//            finish();
+//        });
+//        mDialog.show();
+        progress.setVisibility(View.VISIBLE);
     }
 }
