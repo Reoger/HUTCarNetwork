@@ -35,6 +35,8 @@ public class DetailedBilingActivity extends AppCompatActivity {
     private TextView mTransactionId;
     private TextView mCanUsed;
     private TextView mLiter;
+    private TextView mBilingBody;
+
 
 
     @Override
@@ -48,7 +50,7 @@ public class DetailedBilingActivity extends AppCompatActivity {
         mInfo = (BodyInfo) getIntent().getSerializableExtra("info");
         setDate(mInfo);
         if (mInfo.ismCanUsed()) {
-            s = mInfo.getOut_trade_no();//二位码中的信息只有一个商品号，
+            s = mInfo.getObjectId();//二位码中的信息只有一个ObjectId的信息
             createResult(s);
         } else {
             Toast.makeText(DetailedBilingActivity.this, "该账单未支付，不能生成二维码", Toast.LENGTH_SHORT).show();
@@ -70,6 +72,7 @@ public class DetailedBilingActivity extends AppCompatActivity {
         mTransactionId = (TextView) findViewById(R.id.biling_id_jiaoyi);
         mCanUsed = (TextView) findViewById(R.id.biling_can_cost);
         mLiter = (TextView) findViewById(R.id.biling_liter);
+        mBilingBody = (TextView) findViewById(R.id.biling_body);
 
         mImage = (ImageView) findViewById(R.id.biling_image);
     }
@@ -92,13 +95,14 @@ public class DetailedBilingActivity extends AppCompatActivity {
     public void setDate(BodyInfo date) {
         mName.setText(date.getName());
         mMoney.setText(date.getTotal_fee());
-        mState.setText(date.getTrade_state());
+        mState.setText(date.getTrade_state().equals("SUCCESS")?"支付成功":"支付失败");
         mId.setText(date.getOut_trade_no());
         mTime.setText(date.getCreate_time());
-        mType.setText(date.getPay_type());
+        mType.setText(date.getPay_type().equals("WECHATPAY")?"微信支付":"其他支付");
         mUserName.setText(date.getUsename());
         mCarInfo.setText(date.getCar_info());
         mTransactionId.setText(date.getTransaction_id());
+        mBilingBody.setText(date.getBody());
         mCanUsed.setText(date.ismCanUsed() ? "可以消费" : "不能消费");
         mLiter.setText(date.getLiter()+"升");
     }

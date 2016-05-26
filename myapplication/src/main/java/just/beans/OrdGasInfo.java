@@ -16,6 +16,15 @@ public class OrdGasInfo extends BmobObject {
     private String reservationTime;//预约时间
     private String name;//姓名
     private double liter;//加油的升数
+    private String goodsName;//商品的名字
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
 
     public boolean ismIsUsed() {
         return mIsUsed;
