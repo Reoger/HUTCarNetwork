@@ -16,9 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -74,6 +70,7 @@ import java.util.Locale;
 import just.activities.ActivityCollector;
 import just.activities.LoginActivity;
 import just.activities.MyInfoActivity;
+import utils.ShapeLoadingDialog;
 
 
 public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener,
@@ -151,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
 
     private ProgressDialog mDialog;
+    private ShapeLoadingDialog shapeLoadingDialog;
 
     private long exitTime;//记录按下返回键的系统时间
     private ListView mListView;
@@ -169,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         init();
 
+        initLoadDialong();
+
         initLocation();
 
         initlistview();
@@ -179,6 +179,11 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
+    public void initLoadDialong(){
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
+        shapeLoadingDialog.setLoadingText("加载中...");
+
+    }
     public void initlistview() {
 
         mListView = (ListView) findViewById(R.id.listview);
@@ -186,74 +191,52 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         mListView.setAdapter(adapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position % 9) {
-                    case 0:
+        mListView.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position % 9) {
+                case 0:
 
-                        Log.e("***********", "OnClick a ");
-                        Toast.makeText(MainActivity.this, "Click a ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
+                    Log.e("***********", "OnClick a ");
+                    Toast.makeText(MainActivity.this, "Click a ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
 
-                        Toast.makeText(MainActivity.this, "Click b ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2:
+                    Toast.makeText(MainActivity.this, "Click b ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
 
-                        Toast.makeText(MainActivity.this, "Click c ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
+                    Toast.makeText(MainActivity.this, "Click c ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
 
-                        Toast.makeText(MainActivity.this, "Click d ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 4:
+                    Toast.makeText(MainActivity.this, "Click d ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
 
-                        Toast.makeText(MainActivity.this, "Click e ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 5:
+                    Toast.makeText(MainActivity.this, "Click e ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
 
-                        Toast.makeText(MainActivity.this, "Click f ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 6:
+                    Toast.makeText(MainActivity.this, "Click f ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 6:
 
-                        Toast.makeText(MainActivity.this, "Click g ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 7:
+                    Toast.makeText(MainActivity.this, "Click g ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 7:
 
-                        Toast.makeText(MainActivity.this, "Click h ", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 8:
+                    Toast.makeText(MainActivity.this, "Click h ", Toast.LENGTH_SHORT).show();
+                    break;
+                case 8:
 
-                        Toast.makeText(MainActivity.this, "Click i ", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(MainActivity.this, "Click default ", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+                    Toast.makeText(MainActivity.this, "Click i ", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(MainActivity.this, "Click default ", Toast.LENGTH_SHORT).show();
+                    break;
             }
         });
 
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if (firstVisibleItem == 0) {
-                    Log.e("log", "滑到顶部");
-                    firstVisibleItem = 12;
-
-//                   mListView.smoothScrollToPosition(10);
-                }
-                if (visibleItemCount + firstVisibleItem == totalItemCount) {
-                    Log.e("log", "滑到底部");
-                }
-            }
-        });
 
     }
 
@@ -454,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
                 if (!Gas_Show) {
 //              显示页为第0页的结果
+                    shapeLoadingDialog.show();
                     boundSearch(0);
                     Gas_Show = true;
                 } else {
@@ -498,12 +482,14 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     poiOverlay.addToMap();// 将所有的overlay添加到地图上
                     poiOverlay.zoomToSpan();
 
+
                     Toast.makeText(
                             MainActivity.this,
                             "已经搜索到附近加油站", Toast.LENGTH_SHORT).show();
 
                 }
 
+                shapeLoadingDialog.dismiss();
             }
 
             public void onGetPoiDetailResult(PoiDetailResult result) {
@@ -1225,6 +1211,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     @Override
     public void onBackPressed() {
+
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             // ToastUtil.makeToastInBottom("再按一次退出应用", MainMyselfActivity);
             Toast.makeText(MainActivity.this, "再按一次退出应用", Toast.LENGTH_SHORT).show();

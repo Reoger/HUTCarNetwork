@@ -53,7 +53,6 @@ public class PayActivity extends AppCompatActivity {
 
     private ShapeLoadingDialog shapeLoadingDialog;
 
-
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;

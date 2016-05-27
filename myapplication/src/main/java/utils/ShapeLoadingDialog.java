@@ -3,6 +3,7 @@ package utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -33,6 +34,22 @@ public class ShapeLoadingDialog {
 
         mLoadingView= (LoadingView) mDialogContentView.findViewById(R.id.loadView);
         mDialog.setContentView(mDialogContentView);
+        mDialog.setCancelable(false);
+
+        mDialog.setOnKeyListener((dialog, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK)
+            {
+                dialog.dismiss();
+
+                //此处把dialog dismiss掉，然后把本身的activity finish掉
+                //   BarcodeActivity.this.finish();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        });
     }
 
     public void setBackground(int color){
