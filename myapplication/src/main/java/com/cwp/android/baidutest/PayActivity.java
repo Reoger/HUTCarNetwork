@@ -1,17 +1,14 @@
 package com.cwp.android.baidutest;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -19,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.platform.comapi.map.A;
 import com.com.reoger.music.Utils.LogUtils;
 
 import java.io.File;
@@ -34,6 +30,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import just.activities.ActivityCollector;
 import just.beans.OrdGasInfo;
+import utils.ShapeLoadingDialog;
 
 public class PayActivity extends AppCompatActivity {
 
@@ -53,6 +50,8 @@ public class PayActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
     OrdGasInfo info = new OrdGasInfo();
     private String mObjectId;
+
+    private ShapeLoadingDialog shapeLoadingDialog;
 
 
     Bundle bundle;
@@ -74,6 +73,11 @@ public class PayActivity extends AppCompatActivity {
     }
 
     public void init() {
+
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
+        shapeLoadingDialog.setLoadingText("加载中...");
+
+
         bundle = getIntent().getExtras();
 
         add = (Button) findViewById(R.id.add);
@@ -118,7 +122,8 @@ public class PayActivity extends AppCompatActivity {
                 Toast.makeText(PayActivity.this, "请输入加油的日期", Toast.LENGTH_SHORT).show();
 
             } else {
-                showMainDialog();
+//                showMainDialog();
+                shapeLoadingDialog.show();
                 String type = TypeGas ? "柴油" : "汽油";
                 String name = "加油站名字" + bundle.getString("NAME");
                 String address = "地址" + bundle.getString("ADDRESS");
@@ -263,7 +268,7 @@ public class PayActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess() {
-                mDialog.dismiss();
+//                mDialog.dismiss();
                 mObjectId = info.getObjectId();
                 LogUtils.i("TAG", "保存到云端成功");
             }
@@ -275,7 +280,7 @@ public class PayActivity extends AppCompatActivity {
 
 
 
-                mDialog.dismiss();
+//                mDialog.dismiss();
             }
         });
     }
