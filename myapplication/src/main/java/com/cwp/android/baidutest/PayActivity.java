@@ -1,7 +1,13 @@
 package com.cwp.android.baidutest;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +22,10 @@ import android.widget.Toast;
 import com.baidu.platform.comapi.map.A;
 import com.com.reoger.music.Utils.LogUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import c.b.BP;
@@ -126,18 +136,34 @@ public class PayActivity extends AppCompatActivity {
                     @Override
                     public void succeed() {
                         Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
-
+                        updateBoolean(false);
                     }
 
                     @Override
-                    public void fail(int i, String s) {
-                        updateBoolean();
+                    public void fail(int code, String s) {
+                        updateBoolean(false);
+
+                        if (code == -3) {
+                            if(copyApkFromAssets(PayActivity.this, "BmobPayPlugin.apk", Environment.getExternalStorageDirectory().getAbsolutePath()+"/BmobPayPlugin.apk")){
+                                android.support.v7.app.AlertDialog.Builder m = new android.support.v7.app.AlertDialog.Builder(PayActivity.this)
+                                        .setIcon(R.mipmap.ic_launcher).setMessage("检测到未安装微信支付插件，是否安装？")
+                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setPositiveButton("yes", (dialog, which) -> {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.setDataAndType(Uri.parse("file://" + Environment.getExternalStorageDirectory().getAbsolutePath()+"/BmobPayPlugin.apk"),
+                                                    "application/vnd.android.package-archive");
+                                            startActivity(intent);
+                                        });
+                                m.show();
+                            }
+                    }
                         Toast.makeText(getApplicationContext(), "支付失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void unknow() {
-                        updateBoolean();
+                        updateBoolean(false);;
                         Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -246,6 +272,9 @@ public class PayActivity extends AppCompatActivity {
             public void onFailure(int i, String s) {
                 Toast.makeText(PayActivity.this, "保存到云端失败", Toast.LENGTH_SHORT).show();
                 LogUtils.i("TAG", "保存到云端失败");
+
+
+
                 mDialog.dismiss();
             }
         });
@@ -263,9 +292,9 @@ public class PayActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    private void  updateBoolean(){
+    private void  updateBoolean(boolean flag){
 
-        info.setValue("mIsUsed",false);
+        info.setValue("mIsUsed",flag);
         info.update(this, mObjectId, new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -279,6 +308,27 @@ public class PayActivity extends AppCompatActivity {
                 Log.i("bmob","更新失败："+msg);
             }
         });
+    }
+
+    public boolean copyApkFromAssets(Context context, String fileName, String path) {
+        boolean copyIsFinish = false;
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            File file = new File(path);
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i = 0;
+            while ((i = is.read(temp)) > 0) {
+                fos.write(temp, 0, i);
+            }
+            fos.close();
+            is.close();
+            copyIsFinish = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return copyIsFinish;
     }
 
     @Override

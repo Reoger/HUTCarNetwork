@@ -36,6 +36,7 @@ public class DetailedBilingActivity extends AppCompatActivity {
     private TextView mCanUsed;
     private TextView mLiter;
     private TextView mBilingBody;
+    private TextView mOritenTime;
 
 
 
@@ -73,6 +74,7 @@ public class DetailedBilingActivity extends AppCompatActivity {
         mCanUsed = (TextView) findViewById(R.id.biling_can_cost);
         mLiter = (TextView) findViewById(R.id.biling_liter);
         mBilingBody = (TextView) findViewById(R.id.biling_body);
+        mOritenTime = (TextView) findViewById(R.id.biling_time_reservation);
 
         mImage = (ImageView) findViewById(R.id.biling_image);
     }
@@ -103,6 +105,7 @@ public class DetailedBilingActivity extends AppCompatActivity {
         mCarInfo.setText(date.getCar_info());
         mTransactionId.setText(date.getTransaction_id());
         mBilingBody.setText(date.getBody());
+        mOritenTime.setText(date.getOrien_time());
         mCanUsed.setText(date.ismCanUsed() ? "可以消费" : "不能消费");
         mLiter.setText(date.getLiter()+"升");
     }
