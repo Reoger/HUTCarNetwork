@@ -17,10 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,6 +153,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private ProgressDialog mDialog;
 
     private long exitTime;//记录按下返回键的系统时间
+    private ListView mListView;
+
+    private int[] ls = new int[]{
+            R.drawable.map_a, R.drawable.map_b, R.drawable.map_c,
+            R.drawable.map_d, R.drawable.map_e, R.drawable.map_f,
+            R.drawable.map_g, R.drawable.map_h, R.drawable.map_i};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +171,91 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         initLocation();
 
+        initlistview();
+        mListView.setSelection(Integer.MAX_VALUE / 2);
+
         editCityEt = "株洲";
         editSearchKeyEt = "加油站";
 
     }
 
+    public void initlistview() {
+
+        mListView = (ListView) findViewById(R.id.listview);
+        ImageAdapter adapter = new ImageAdapter(this, ls);
+
+        mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position % 9) {
+                    case 0:
+
+                        Log.e("***********", "OnClick a ");
+                        Toast.makeText(MainActivity.this, "Click a ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+
+                        Toast.makeText(MainActivity.this, "Click b ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+
+                        Toast.makeText(MainActivity.this, "Click c ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+
+                        Toast.makeText(MainActivity.this, "Click d ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+
+                        Toast.makeText(MainActivity.this, "Click e ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 5:
+
+                        Toast.makeText(MainActivity.this, "Click f ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 6:
+
+                        Toast.makeText(MainActivity.this, "Click g ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 7:
+
+                        Toast.makeText(MainActivity.this, "Click h ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 8:
+
+                        Toast.makeText(MainActivity.this, "Click i ", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this, "Click default ", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem == 0) {
+                    Log.e("log", "滑到顶部");
+                    firstVisibleItem = 12;
+
+//                   mListView.smoothScrollToPosition(10);
+                }
+                if (visibleItemCount + firstVisibleItem == totalItemCount) {
+                    Log.e("log", "滑到底部");
+                }
+            }
+        });
+
+    }
 
     private void initLocation() {
 
@@ -209,18 +298,23 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             startActivity(intent);
         });
         imageViews[2].setOnClickListener(v -> {
+            if(mListView.getVisibility()==View.GONE){
+                mListView.setVisibility(View.VISIBLE);
+            }else{
+                mListView.setVisibility(View.GONE);
+            }
         });
 
-        imageViews[4].setOnClickListener(v->{
-                switch (v.getId()) {
-                    case R.id.iv_a:
-                        executeAnim(isOpen);
-                        isOpen = !isOpen;
-                        break;
-                    default:
-                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+        imageViews[4].setOnClickListener(v -> {
+            switch (v.getId()) {
+                case R.id.iv_a:
+                    executeAnim(isOpen);
+                    isOpen = !isOpen;
+                    break;
+                default:
+                    Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
         });
         //卫星菜单是否打开
@@ -228,56 +322,56 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         route_to.setOnClickListener(v -> {
 
-                if (POI_true_folse) {
+            if (POI_true_folse) {
 
-                    POI_true_folse =false;
-                    mBaiduMap.clear();
+                POI_true_folse = false;
+                mBaiduMap.clear();
 
-                    LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
-                    LatLng enPosition = mMarker.getPosition();
+                LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
+                LatLng enPosition = mMarker.getPosition();
 
-                    PlanNode stNode = PlanNode.withLocation(stPosition);
-                    PlanNode enNode = PlanNode.withLocation(enPosition);
+                PlanNode stNode = PlanNode.withLocation(stPosition);
+                PlanNode enNode = PlanNode.withLocation(enPosition);
 
-                    mSearch.drivingSearch((new DrivingRoutePlanOption())
-                            .from(stNode)
-                            .to(enNode));
-                } else {
-                    mBaiduMap.clear();
-                    mBtnPre.setVisibility(View.INVISIBLE);
-                    mBtnNext.setVisibility(View.INVISIBLE);
-                    Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
-                }
+                mSearch.drivingSearch((new DrivingRoutePlanOption())
+                        .from(stNode)
+                        .to(enNode));
+            } else {
+                mBaiduMap.clear();
+                mBtnPre.setVisibility(View.INVISIBLE);
+                mBtnNext.setVisibility(View.INVISIBLE);
+                Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
+            }
         });
 
         poi.setOnClickListener(v -> {
 
-                if (!POI_true_folse) {
+            if (!POI_true_folse) {
 
-                    POI_true_folse = true;
+                POI_true_folse = true;
 
 //                    centerToMyLocation(mLatitue,mLongLatitue);
 
-                    LatLng latLng = new LatLng(mLatitue, mLongLatitue);
-                    MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+                LatLng latLng = new LatLng(mLatitue, mLongLatitue);
+                MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
 
-                    mBaiduMap.animateMapStatus(msu);
+                mBaiduMap.animateMapStatus(msu);
 
-                    LatLng point = new LatLng(mLatitue, mLongLatitue + 0.004);
-                    BitmapDescriptor bitmap = BitmapDescriptorFactory
-                            .fromResource(R.drawable.icon_en);
-                    OverlayOptions options = new MarkerOptions()
-                            .position(point)  //设置marker的位置
-                            .icon(bitmap)  //设置marker图标
-                            .zIndex(9)  //设置marker所在层级
-                            .draggable(true);  //设置手势拖拽
+                LatLng point = new LatLng(mLatitue, mLongLatitue + 0.004);
+                BitmapDescriptor bitmap = BitmapDescriptorFactory
+                        .fromResource(R.drawable.icon_en);
+                OverlayOptions options = new MarkerOptions()
+                        .position(point)  //设置marker的位置
+                        .icon(bitmap)  //设置marker图标
+                        .zIndex(9)  //设置marker所在层级
+                        .draggable(true);  //设置手势拖拽
 
-                    mMarker = (Marker) (mBaiduMap.addOverlay(options));
+                mMarker = (Marker) (mBaiduMap.addOverlay(options));
 
-                } else {
-                    mMarker.remove();
-                    POI_true_folse = false;
-                }
+            } else {
+                mMarker.remove();
+                POI_true_folse = false;
+            }
 
         });
 
@@ -338,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                         break;
                     case 0x13:
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString("NAME","error");
+                        bundle1.putString("NAME", "error");
                         updata(bundle1);
                     default:
                         break;
@@ -361,9 +455,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                 if (!Gas_Show) {
 //              显示页为第0页的结果
                     boundSearch(0);
-                    Gas_Show =true;
+                    Gas_Show = true;
                 } else {
-                    Gas_Show =false;
+                    Gas_Show = false;
                     mBaiduMap.clear();
                 }
             }
@@ -373,8 +467,8 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         btn_myPosition.setOnClickListener(v -> {
 
-                //定位功能,以自己为中点定位
-                centerToMyLocation(mLatitue, mLongLatitue);
+            //定位功能,以自己为中点定位
+            centerToMyLocation(mLatitue, mLongLatitue);
 
         });
 
@@ -508,25 +602,25 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         t3.setText(price);
         t4.setText(gasprice);
 
-        btn_ording.setOnClickListener(v->{
-            Intent intent=null;
+        btn_ording.setOnClickListener(v -> {
+            Intent intent = null;
             //判断是否已经登陆了
             if (MyApplication.isLanded()) {
                 mDialog.show();
-                intent=new Intent(MainActivity.this,OrdGasActivity.class);
+                intent = new Intent(MainActivity.this, OrdGasActivity.class);
                 intent.putExtras(bundle);
             } else {
-                Log.d("测试->MainActivity","请先登录");
-                intent=new Intent(MainActivity.this,LoginActivity.class);
+                Log.d("测试->MainActivity", "请先登录");
+                intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.putExtras(bundle);
-                intent.putExtra("TAG","OrdGAs");
+                intent.putExtra("TAG", "OrdGAs");
             }
             startActivity(intent);
         });
-        if (bundle.getString("NAME").equals("error")){
+        if (bundle.getString("NAME").equals("error")) {
             Toast.makeText(this, "暂无该加油站具体数据。", Toast.LENGTH_SHORT).show();
 
-        }else {
+        } else {
             //聚焦
             LatLng latLng = new LatLng(nodeLocation.latitude, nodeLocation.longitude);
             MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
@@ -535,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
             mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
         }
-        if(mDialog.isShowing()) {
+        if (mDialog.isShowing()) {
             mDialog.dismiss();
         }
     }
@@ -1076,7 +1170,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
-    private void showMainDialog(){
+    private void showMainDialog() {
         mDialog = new ProgressDialog(MainActivity.this);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setTitle("Loading...");
@@ -1099,19 +1193,19 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                 getWindowManager().getDefaultDisplay().getMetrics(metric);
                 int width = metric.widthPixels; // 屏幕宽度（像素）
 
-                float x = (float) Math.sin(angel[i]) * (width/6);
-                float y = -(float) Math.cos(angel[i]) * (width/6);
+                float x = (float) Math.sin(angel[i]) * (width / 6);
+                float y = -(float) Math.cos(angel[i]) * (width / 6);
 
                 //Log.i("坐标", angle + " " + x + " " + y);
 
 
                 ObjectAnimator animator1 = ObjectAnimator.ofFloat(imageViews[i], "X", X, x + X);
                 ObjectAnimator animator2 = ObjectAnimator.ofFloat(imageViews[i], "Y", Y, y + Y);
-                ObjectAnimator animator3 = ObjectAnimator.ofFloat(imageViews[i],"alpha",0.0f,1.0f);
+                ObjectAnimator animator3 = ObjectAnimator.ofFloat(imageViews[i], "alpha", 0.0f, 1.0f);
 
                 AnimatorSet set = new AnimatorSet();
 
-                set.playTogether(animator1, animator2,animator3);
+                set.playTogether(animator1, animator2, animator3);
 
                 set.setDuration(500);
                 set.start();
@@ -1122,8 +1216,8 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                         X);
                 PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("Y", imageViews[i].getY(),
                         Y);
-                PropertyValuesHolder p3 = PropertyValuesHolder.ofFloat("alpha",1.0f,0.0f);
-                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2,p3)
+                PropertyValuesHolder p3 = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0.0f);
+                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2, p3)
                         .setDuration(300 * i).start();
             }
         }
