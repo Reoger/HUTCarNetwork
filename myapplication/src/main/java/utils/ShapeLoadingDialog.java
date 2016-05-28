@@ -23,58 +23,57 @@ public class ShapeLoadingDialog {
 
 
     public ShapeLoadingDialog(Context context) {
-        this.mContext=context;
+        this.mContext = context;
         init();
     }
 
     private void init() {
         mDialog = new Dialog(mContext, R.style.custom_dialog);
-        mDialogContentView= LayoutInflater.from(mContext).inflate(R.layout.layout_dialog,null);
+        mDialogContentView = LayoutInflater.from(mContext).inflate(R.layout.layout_dialog, null);
 
 
-        mLoadingView= (LoadingView) mDialogContentView.findViewById(R.id.loadView);
+        mLoadingView = (LoadingView) mDialogContentView.findViewById(R.id.loadView);
         mDialog.setContentView(mDialogContentView);
         mDialog.setCancelable(false);
 
         mDialog.setOnKeyListener((dialog, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK)
-            {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 dialog.dismiss();
 
                 //此处把dialog dismiss掉，然后把本身的activity finish掉
                 //   BarcodeActivity.this.finish();
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         });
     }
 
-    public void setBackground(int color){
-        GradientDrawable gradientDrawable= (GradientDrawable) mDialogContentView.getBackground();
+    public void setBackground(int color) {
+        GradientDrawable gradientDrawable = (GradientDrawable) mDialogContentView.getBackground();
         gradientDrawable.setColor(color);
     }
 
-    public void setLoadingText(CharSequence charSequence){
+    public void setLoadingText(CharSequence charSequence) {
         mLoadingView.setLoadingText(charSequence);
     }
 
-    public void show(){
+    public void show() {
         mDialog.show();
 
     }
 
-    public void dismiss(){
-        mDialog.dismiss();
+    public void dismiss() {
+        if (mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
     }
 
-    public Dialog getDialog(){
-        return  mDialog;
+    public Dialog getDialog() {
+        return mDialog;
     }
 
-    public void setCanceledOnTouchOutside(boolean cancel){
+    public void setCanceledOnTouchOutside(boolean cancel) {
         mDialog.setCanceledOnTouchOutside(cancel);
     }
 }

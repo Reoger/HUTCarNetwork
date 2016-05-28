@@ -3,7 +3,6 @@ package com.cwp.android.baidutest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -75,6 +74,7 @@ import utils.ShapeLoadingDialog;
 
 public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener,
         OnGetRoutePlanResultListener {
+
     // 地图View
     MapView mMapView;
     BaiduMap mBaiduMap;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private RoutePlanSearch mSearch = null;
     //显示popou窗口位置
 
-    static Handler myhandler;
+    public static Handler myhandler;
     //用于更新加油站数据
     Bundle bundle = null;
     //语音TTS
@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     //卫星菜单的角度
     private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
 
-    private ProgressDialog mDialog;
     private ShapeLoadingDialog shapeLoadingDialog;
 
     private long exitTime;//记录按下返回键的系统时间
@@ -260,8 +259,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     void init() {
 
-        //初始化对话框
-        showMainDialog();
+
         layout_server_page = (LinearLayout) findViewById(R.id.layout_server_page);
 
         arrow = (ImageView) findViewById(R.id.arrow);
@@ -459,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
 
         //****************************检索功能***********************
-        //
+
 
         poiListener = new OnGetPoiSearchResultListener() {
 
@@ -590,9 +588,13 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         btn_ording.setOnClickListener(v -> {
             Intent intent = null;
+
+
             //判断是否已经登陆了
             if (MyApplication.isLanded()) {
-                mDialog.show();
+
+//                shapeLoadingDialog.show();
+
                 intent = new Intent(MainActivity.this, OrdGasActivity.class);
                 intent.putExtras(bundle);
             } else {
@@ -601,8 +603,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                 intent.putExtras(bundle);
                 intent.putExtra("TAG", "OrdGAs");
             }
+//            shapeLoadingDialog.dismiss();
             startActivity(intent);
         });
+
         if (bundle.getString("NAME").equals("error")) {
             Toast.makeText(this, "暂无该加油站具体数据。", Toast.LENGTH_SHORT).show();
 
@@ -615,9 +619,11 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
             mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
         }
-        if (mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
+        shapeLoadingDialog.dismiss();
+
+//        if (mDialog.isShowing()) {
+//            mDialog.dismiss();
+//        }
     }
 
     class MyPoiOverlay extends PoiOverlay {
@@ -1156,17 +1162,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
-    private void showMainDialog() {
-        mDialog = new ProgressDialog(MainActivity.this);
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mDialog.setTitle("Loading...");
-        mDialog.setMessage("正在加载中，请稍后...");
-        mDialog.setCancelable(false);
-        mDialog.setButton("取消", (dialog, which) -> {
-//            finish();
-        });
 
-    }
 
     private void executeAnim(boolean isOpen) {
 
