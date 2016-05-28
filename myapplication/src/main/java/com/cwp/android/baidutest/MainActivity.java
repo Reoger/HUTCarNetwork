@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     PoiSearch mPoiSearch;
     OnGetPoiSearchResultListener poiListener;
 
+
     //定位用的按钮
     Button btn_myPosition;
     //加油站搜索按钮
@@ -505,11 +506,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                     //获取pupouWindow的显示位置
                     nodeLocation = result.getLocation();
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JSON_DATA.getRequest2(nodeLocation.latitude, nodeLocation.longitude);
-                        }
+                    new Thread(() -> {
+
+                        GasJsonDataParse.getInstance().getGasDetailsData(nodeLocation.latitude, nodeLocation.longitude);
+
                     }).start();
 
                 }
