@@ -32,6 +32,7 @@ public class GasJsonDataParse {
     //懒汉模式
     public static GasJsonDataParse getInstance() {
 
+        MyLog.LogE("GasJsonDataParse","getInstance ");
         bundle = new Bundle();
 
         if (mJsonDataParse == null) {
@@ -46,6 +47,7 @@ public class GasJsonDataParse {
 
     public void getGasDetailsData(double lat, double lon) {
 
+        MyLog.LogE("GasJsonDataParse","getGasDetailsData ");
         String data = null;
         data = getUrlData(lat, lon);
 
@@ -60,9 +62,9 @@ public class GasJsonDataParse {
         //请求接口地址
         String urlAddress = "http://apis.juhe.cn/oil/local?key=" + APPKEY + "&lon=" + lon + "&lat=" + lat + "&format=2&r=200";
 
-        MyLog.LogE("********DATA******", "111111111111");
-        MyLog.LogE("********DATA_lat******", "1**" + lat);
-        MyLog.LogE("********DATA_lon******", "1**" + lon);
+        MyLog.LogE("GasJsonDataParse", "111111111111");
+        MyLog.LogE("GasJsonDataParse", "1**" + lat);
+        MyLog.LogE("GasJsonDataParse", "1**" + lon);
 
         /**
          *解析网络数据
@@ -87,10 +89,10 @@ public class GasJsonDataParse {
                 result += line;
             }
 
-            MyLog.LogE("********DATA******", result);
+            MyLog.LogE("GasJsonDataParse", result);
 
         } catch (IOException e) {
-            MyLog.LogE("****DATA*****", "加油站，网络数据请求错误");
+            MyLog.LogE("GasJsonDataParse", "加油站，网络数据请求错误");
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -112,12 +114,12 @@ public class GasJsonDataParse {
 
         try {
 
-            MyLog.LogE("*****JSON*******", "解析数据进行中》》》");
+            MyLog.LogE("GasJsonDataParse", "解析数据进行中》》》");
             //第一层数据
             JSONObject object = new JSONObject(data);
 
-            MyLog.LogE("*****JSON*******", "解析数据进行中》》》+id=" + object.getString("resultcode"));
-            MyLog.LogE("*****JSON*******", "解析数据进行中》》》+reason=" + object.getString("reason"));
+            MyLog.LogE("GasJsonDataParse", "解析数据进行中》》》+id=" + object.getString("resultcode"));
+            MyLog.LogE("GasJsonDataParse", "解析数据进行中》》》+reason=" + object.getString("reason"));
 
             //result数据
             JSONObject object1 = object.getJSONObject("result");
@@ -146,7 +148,7 @@ public class GasJsonDataParse {
 
                 String type = price.getJSONObject(i).getString("type");
                 String price1 = price.getJSONObject(i).getString("price");
-                Log.e("*****JSON*******", "解析数据进行中》》》+type=" + type + " price:" + price1);
+                Log.e("GasJsonDataParse", "解析数据进行中》》》+type=" + type + " price:" + price1);
 
                 bundle.putString("type" + i, type);
                 bundle.putString("price" + i, price1);
@@ -157,7 +159,7 @@ public class GasJsonDataParse {
 
                 String name = gasprice.getJSONObject(i).getString("name");
                 String gaspricedata = gasprice.getJSONObject(i).getString("price");
-                MyLog.LogE("*****JSON*******", "解析数据进行中》》》+name=" + name + " price:" + gaspricedata);
+                MyLog.LogE("GasJsonDataParse", "解析数据进行中》》》+name=" + name + " price:" + gaspricedata);
 
                 bundle.putString("name" + i, name);
                 bundle.putString("gasprice" + i, gaspricedata);
@@ -166,7 +168,7 @@ public class GasJsonDataParse {
 
             sendMessgeToUI(0x12,bundle);
 
-            MyLog.LogE("*******JSON******", "已经结束了解析！");
+            MyLog.LogE("GasJsonDataParse", "已经结束了解析！");
 
 
         } catch (Exception e) {
@@ -178,15 +180,17 @@ public class GasJsonDataParse {
 
     private void sendMessgeToUI(int what,Bundle bundle) {
 
+        MyLog.LogE("GasJsonDataParse", "sendMessgeToUI！");
         Message msg = new Message();
         //0x12 是正确，0x13是错误
         switch (what) {
             case 0x12:
-
+                MyLog.LogE("GasJsonDataParse", "sendMessgeToUI 0x12");
                 msg.what = 0x12;
                 msg.setData(bundle);
                 break;
             case 0x13:
+                MyLog.LogE("GasJsonDataParse", "sendMessgeToUI 0x13");
                 msg.what = 0x13;
                 break;
 

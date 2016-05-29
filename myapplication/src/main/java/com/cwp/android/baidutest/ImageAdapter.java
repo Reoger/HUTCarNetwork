@@ -50,9 +50,8 @@ public class ImageAdapter extends BaseAdapter {
         }else {
             hodler = (ViewHolder) convertView.getTag();
         }
-
 //        hodler.img.setBackgroundResource(R.mipmap.ic_launcher);
-        hodler.img.setImageResource(mId[position%9]);
+        hodler.img.setImageResource(mId[position%8]);
 
         return convertView;
 
