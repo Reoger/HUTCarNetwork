@@ -92,7 +92,7 @@ public class Locate {
             * */
 
             MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL
-                    , true, BitmapDescriptorFactory.fromResource(R.drawable.map_car));
+                    , true, BitmapDescriptorFactory.fromResource(R.drawable.icon_car));
 
             mBaiduMap.setMyLocationConfigeration(configuration);
 

@@ -266,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         t3 = (TextView) mView.findViewById(R.id.textView3);
         t4 = (TextView) mView.findViewById(R.id.textView4);
 
+
         String name = (String) bundle.get("NAME");
         String address = (String) bundle.get("ADDRESS");
         String price = (String) bundle.get("price1");
@@ -278,7 +279,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         btn_ording.setOnClickListener(v -> {
             Intent intent = null;
-
             //判断是否已经登陆了
             if (MyApplication.isLanded()) {
 
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         } else {
             //聚焦
-            LatLng latLng = new LatLng(poiSearch.nodeLocation.latitude, poiSearch.nodeLocation.longitude);
+            LatLng latLng = new LatLng(poiSearch.nodeLocation.latitude + 0.014, poiSearch.nodeLocation.longitude);
             MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
 
             mBaiduMap.animateMapStatus(msu);
