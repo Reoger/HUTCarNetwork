@@ -3,6 +3,7 @@ package com.cwp.android.baidutest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     String editSearchKeyEt, editCityEt;
     //加油站信息布局
     private LinearLayout mView;
+    private LinearLayout mPositionView;
 
     private boolean Search_true_folse;
     private boolean Gas_Show;
@@ -91,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
     private Travel travel;
     private POISearch poiSearch;
     public static ShapeLoadingDialog shapeLoadingDialog;
+
+    EditText editSt;
+    EditText editEn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +129,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         travel = new Travel(mBaiduMap);
     }
+
     public void init() {
 
+        mPositionView = (LinearLayout) findViewById(R.id.map_layout_position);
         mView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.myview, null);
 
         mMapView = (MapView) findViewById(R.id.map);
@@ -139,6 +148,26 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         mBaiduMap.setOnMapClickListener(this);
 
+        // 处理搜索按钮响应
+        editSt = (EditText) findViewById(R.id.start);
+        editEn = (EditText) findViewById(R.id.end);
+        //设置起终点信息，对于tranist search 来说，城市名无意义
+
+        if (editEn != null) {
+            editEn.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    travelByEditText();
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    //隐藏软键盘
+                    imm.hideSoftInputFromWindow(mPositionView.getWindowToken(), 0);
+
+                    return true;
+                }
+                Toast.makeText(MainActivity.this, "false", Toast.LENGTH_SHORT).show();
+                return false;
+            });
+        }
 
         myhandler = new Handler() {
             @Override
@@ -406,17 +435,12 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
-    public void travelTo() {
 
-        //重置浏览节点的路线数据
+    public void travelByEditText() {
+
         mBtnPre.setVisibility(View.INVISIBLE);
         mBtnNext.setVisibility(View.INVISIBLE);
         mBaiduMap.clear();
-
-        // 处理搜索按钮响应
-        EditText editSt = (EditText) findViewById(R.id.start);
-        EditText editEn = (EditText) findViewById(R.id.end);
-        //设置起终点信息，对于tranist search 来说，城市名无意义
 
         PlanNode stNode;
         PlanNode enNode;
@@ -424,12 +448,32 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         stNode = PlanNode.withCityNameAndPlaceName("株洲", editSt.getText().toString());
         enNode = PlanNode.withCityNameAndPlaceName("株洲", editEn.getText().toString());
 
+
         if (!Search_true_folse) {
 
             Search_true_folse = true;
             travel.search(stNode, enNode);
 
-        } else {
+        }
+//        else {
+//            mBaiduMap.clear();
+//            Search_true_folse = false;
+//        }
+
+        mPositionView.setVisibility(View.INVISIBLE);
+    }
+
+    public void travelTo() {
+
+        if (mPositionView.getVisibility() == View.INVISIBLE && !Search_true_folse) {
+
+            mPositionView.setVisibility(View.VISIBLE);
+        } else if (mPositionView.getVisibility() == View.VISIBLE) {
+
+            mPositionView.setVisibility(View.INVISIBLE);
+        }
+
+        if (Search_true_folse) {
             mBaiduMap.clear();
             Search_true_folse = false;
         }
@@ -437,10 +481,11 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
     }
 
-    public void location(){
+    public void location() {
 
         myLocate.centerToMyLocation();
     }
+
     /**
      * 上一个或下一个节点点击事件
      * 节点浏览示例
@@ -598,6 +643,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
          * */
         mBaiduMap.hideInfoWindow();
     }
+
     /**
      * 地图内 Poi 单击事件回调函数
      */

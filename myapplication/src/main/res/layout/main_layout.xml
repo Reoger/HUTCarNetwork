@@ -13,14 +13,15 @@
             android:clickable="true" />
 
         <LinearLayout
+            android:id="@+id/map_layout_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="48dp"
             android:background="@drawable/my_shadow"
-
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
 
             <LinearLayout
@@ -44,25 +45,26 @@
                     android:id="@+id/start"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:cursorVisible="false"
+                    android:layout_weight="5"
                     android:ems="10"
+                    android:maxLength="10"
                     android:singleLine="true"
                     android:text="株洲"
                     android:textSize="15sp">
 
-                    <requestFocus />
+
                 </EditText>
 
-                <Button
-                    android:id="@+id/drive_end"
-                    android:layout_width="0dip"
-                    android:layout_height="30dip"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    android:layout_weight="0.6"
-                    android:background="@drawable/change"
-                   />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp">
 
                 <TextView
                     android:id="@+id/textView2"
@@ -75,16 +77,19 @@
                     android:id="@+id/end"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:cursorVisible="false"
+                    android:layout_weight="5"
                     android:ems="10"
+                    android:maxLength="10"
+                    android:imeOptions="actionGo"
+                    android:singleLine="true"
                     android:text="长沙"
                     android:textSize="15sp">
 
-                    <requestFocus />
+
                 </EditText>
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -127,8 +132,8 @@
         android:id="@+id/listview"
         android:layout_width="80dip"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dip"
         android:layout_marginBottom="40dip"
+        android:layout_marginTop="70dip"
         android:divider="@null">
 
     </ListView>

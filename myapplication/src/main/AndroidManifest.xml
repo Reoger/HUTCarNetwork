@@ -27,7 +27,8 @@
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
 
         <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+
+            android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|keyboardHidden" >
 
             <intent-filter>

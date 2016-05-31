@@ -22,9 +22,9 @@ import utils.MyLog;
  */
 public class Locate {
 
-
     /*
     *   mLatitue经度 ,mLongLatitue纬度
+    *
     * */
     private BaiduMap mBaiduMap;
     private Context context;
@@ -52,7 +52,6 @@ public class Locate {
            * 需要传入一个Context类型的参数，
            * 推荐使用getApplicationContext()来获取全局进程有效的context。
            * */
-
 
     public void initLocation() {
         MyLog.LogE("Locate", "initLocation");
@@ -87,8 +86,10 @@ public class Locate {
                     .longitude(location.getLongitude())
                     .build();
             mBaiduMap.setMyLocationData(data);
+
             /*
-            * 用来显示状态和标志
+            *    用来显示状态和标志
+            *
             * */
 
             MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL
@@ -110,6 +111,7 @@ public class Locate {
 
                 centerToMyLocation();
             }
+
         }
     }
 
@@ -119,10 +121,10 @@ public class Locate {
         //定位功能
         LatLng latLng = new LatLng(mLatitue, mLongLatitue);
         //地图状态将要发生的变化
+
         MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
         //设置地图中心点
         mBaiduMap.animateMapStatus(msu);
-
 
         isFirstIn = false;
         if (myAddress != null) {
