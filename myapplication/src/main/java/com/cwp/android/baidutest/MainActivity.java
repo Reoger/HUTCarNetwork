@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
             LatLng point = new LatLng(myLocate.getmLatitue(), myLocate.getmLongLatitue() + 0.004);
             BitmapDescriptor bitmap = BitmapDescriptorFactory
-                    .fromResource(R.drawable.icon_en);
+                    .fromResource(R.drawable.map_en);
 
             OverlayOptions options = new MarkerOptions()
                     .position(point)  //设置marker的位置
