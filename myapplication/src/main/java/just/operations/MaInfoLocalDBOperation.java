@@ -22,7 +22,11 @@ public class MaInfoLocalDBOperation {
     public static void insert(Context context, MaInfo maInfo, int isSyncToCloud) {
         SQLiteDatabase db= LocalInfoOpenHelper.getInstance(context).getWritableDatabase();
 
-        //因为每时每刻添加的维护信息都不同，所以不需要判断是否已经存在
+        //有时候会从云端同步数据，所以需要判断本地是否已有重复的
+        Cursor cursor = db.query(MaInfoConstants.MA_INFO_TABLE_NAME, new String[]{MaInfoConstants.COLUMN_SCAN_TIME},
+                MaInfoConstants.COLUMN_VIN+" = ? and "+MaInfoConstants.COLUMN_SCAN_TIME+" = ? and "+MaInfoConstants.COLUMN_USERNAME+" = ?",
+                new String[]{maInfo.getVin(),maInfo.getScanTime(),maInfo.getUsername()}, null, null, null);
+        if (cursor.moveToFirst()) return;
 
         ContentValues values= getValuesForInsert(maInfo,isSyncToCloud);
 

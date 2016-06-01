@@ -65,7 +65,7 @@
                 android:id="@+id/id_et_password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:digits="@string/password_requirement"
+                android:digits="@string/input_limit1"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:maxLength="10"
