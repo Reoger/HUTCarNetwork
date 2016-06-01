@@ -75,7 +75,7 @@ public class MyInfoActivity extends AppCompatActivity {
             mLlHint.setVisibility(View.GONE);
 
             mTvPersonalInfo= (TextView) findViewById(R.id.id_tv_personal_info);
-            mTvPersonalInfo.setText("当前账号:"+MyApplication.getUsername()+"\n车主:"+MyApplication.getName());
+            mTvPersonalInfo.setText(MyApplication.getUsername());
 
             mAutoInfo= (LinearLayout) findViewById(R.id.id_ll_auto_info);
             mMaInfo= (LinearLayout) findViewById(R.id.id_ll_ma_info);

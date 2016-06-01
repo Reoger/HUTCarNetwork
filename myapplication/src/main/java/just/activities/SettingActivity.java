@@ -14,8 +14,9 @@ import com.cwp.android.baidutest.R;
 
 import just.utils.MyActivityUtil;
 
-public class SettingActivity extends AppCompatActivity {
+public class  SettingActivity extends AppCompatActivity {
     private LinearLayout mLlAbout;
+    private LinearLayout mLlPersonalData;
     private Button mBtLogoutAccount;
 
     @Override
@@ -32,12 +33,18 @@ public class SettingActivity extends AppCompatActivity {
         actionBar.setTitle("设置");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mLlAbout= (LinearLayout) findViewById(R.id.id_ll_setting_about);
+        mLlAbout= (LinearLayout) findViewById(R.id.id_ll_setting_relevant_statement);
         mLlAbout.setOnClickListener(v -> {
             Intent intent=new Intent(SettingActivity.this,AboutStatementActivity.class);
             startActivity(intent);
-            finish();
         });
+
+        mLlPersonalData= (LinearLayout) findViewById(R.id.id_ll_setting_personal_data);
+        mLlPersonalData.setOnClickListener(v -> {
+            Intent intent=new Intent(SettingActivity.this,PersonalDataActivity.class);
+            startActivity(intent);
+        });
+
         mBtLogoutAccount = (Button) findViewById(R.id.id_bt_setting_logout_account);
         if(!MyApplication.isLanded()) {
             mBtLogoutAccount.setText("登陆");
