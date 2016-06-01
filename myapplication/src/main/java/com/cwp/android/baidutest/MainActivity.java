@@ -158,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     travelByEditText();
 
+                    mBtnPre.setVisibility(View.VISIBLE);
+                    mBtnNext.setVisibility(View.VISIBLE);
+
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     //隐藏软键盘
                     imm.hideSoftInputFromWindow(mPositionView.getWindowToken(), 0);
@@ -394,6 +397,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             POI_true_folse = false;
             mBaiduMap.clear();
 
+            mBtnPre.setVisibility(View.VISIBLE);
+            mBtnNext.setVisibility(View.VISIBLE);
+
+
             LatLng stPosition = new LatLng(myLocate.getmLatitue(), myLocate.getmLongLatitue());
             LatLng enPosition = mMarker.getPosition();
 
@@ -434,7 +441,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
 
     }
-
 
     public void travelByEditText() {
 
@@ -548,7 +554,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
             nodeLocation = ((DrivingRouteLine.DrivingStep) step).getEntrance().getLocation();
             nodeTitle = ((DrivingRouteLine.DrivingStep) step).getInstructions();
-
 
         }
 
