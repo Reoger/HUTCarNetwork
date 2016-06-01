@@ -76,8 +76,6 @@ public class MyInfoActivity extends AppCompatActivity {
 
             mTvPersonalInfo= (TextView) findViewById(R.id.id_tv_personal_info);
             mTvPersonalInfo.setText("当前账号:"+MyApplication.getUsername()+"\n车主:"+MyApplication.getName());
-            Log.d("测试","+++++++++++++++");
-            Log.d("测试","+++++++++++++++");
 
             mAutoInfo= (LinearLayout) findViewById(R.id.id_ll_auto_info);
             mMaInfo= (LinearLayout) findViewById(R.id.id_ll_ma_info);
@@ -93,7 +91,8 @@ public class MyInfoActivity extends AppCompatActivity {
                 turnActivity(SettingActivity.class);
             });
 
-            MyApplication.startSyncToCloudService();
+            MyApplication.startSyncService();
+            MyApplication.startMaInfoMonitoring();
         }
     }
 

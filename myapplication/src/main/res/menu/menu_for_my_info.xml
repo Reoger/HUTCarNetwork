@@ -7,6 +7,5 @@
         android:id="@+id/id_item_menu_setting"
         android:title="设置"
         android:icon="@drawable/ic_setting_for_menu"
-        android:showAsAction="always"
         app:showAsAction="always" />
 </menu>

@@ -31,6 +31,7 @@ import just.beans.MaInfo;
 import just.constants.AutoInfoConstants;
 import just.operations.AutoInfoLocalDBOperation;
 import just.operations.MaInfoLocalDBOperation;
+import just.utils.ToastUtil;
 
 public class MaInfoActivity extends Activity {
     private Spinner mSpinner;
@@ -184,6 +185,7 @@ public class MaInfoActivity extends Activity {
                 String result=data.getExtras().getString("result");
                 if(!result.substring(0,6).equals("维护信息->")) {
                     Log.d("测试","维护信息二维码格式不正确");
+                    ToastUtil.showOrdinaryToast("维护信息二维码不符合要求",this);
                     return;
                 }
                 Log.d("测试->MaInfoActivity",result);

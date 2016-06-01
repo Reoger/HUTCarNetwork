@@ -5,18 +5,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.gsm.SmsMessage;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.VerifySMSCodeListener;
 import just.beans.MyUser;
+import just.utils.ToastUtil;
 
 public class RegisterActivity extends AppCompatActivity {
     private ImageView mIvStep1,mIvStep2,mIvStep3;
@@ -44,17 +46,26 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mEtStep1,mEtStep2,mEtStep3_1,mEtStep3_2,mEtStep3_3;
     private ImageButton mBtStep1,mBtStep2,mBtStep3;
 
+    private Button mBtStepAgain;
+    private boolean canClick=false;
+    private boolean isReset=false;
+    private boolean isContinue=true;
+
     private static final int REQUEST_SEND =1;
     private static final int SUCCEED_SEND=2;
     private static final int FAILED_SEND=3;
 
-    public static final int START_VALIDATE=4;
-    public static final int SUCCEED_VALIDATE=5;
-    public static final int FAILED_VALIDATE=6;
+    private static final int START_VALIDATE=4;
+    private static final int SUCCEED_VALIDATE=5;
+    private static final int FAILED_VALIDATE=6;
 
-    public static final int START_REGISTER =7;
-    public static final int SUCCEED_REGISTER=8;
-    public static final int FAILED_REGISTER=9;
+    private static final int START_REGISTER =7;
+    private static final int SUCCEED_REGISTER=8;
+    private static final int FAILED_REGISTER=9;
+
+    private static final int REFRESH_COUNTDOWN=10;
+    private static final int AGAIN_REQUEST=11;
+    private static final int FINISHED_COUNTDOWN=12;
 
     private VerCodeMessageReceiver messageReceiver;
     private IntentFilter receiveFilter;
@@ -103,6 +114,19 @@ public class RegisterActivity extends AppCompatActivity {
                 case FAILED_REGISTER:
                     dealFailedResult(STEP3);
                     break;
+
+                case REFRESH_COUNTDOWN:
+                    int i= (int) msg.obj;
+                    mBtStepAgain.setText(i+"s");
+                    break;
+                case AGAIN_REQUEST:
+                    showProgressDialog("重新请求验证码","正在重新请求短信验证码...");
+                    break;
+                case FINISHED_COUNTDOWN:
+                    mBtStepAgain.setTextColor(getResources().getColor(R.color.step_again));
+                    mBtStepAgain.setText("重发");
+                    break;
+                default:break;
             }
         }
 
@@ -114,7 +138,37 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         private void setNextStepView(int nextStep) {
+            mBtStep2.setTag("未获取");
+
             if(nextStep==STEP2) {
+                new Thread(()-> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    int i=60;
+                    while (i>=1&&!isReset&&isContinue) {
+                        try {
+                            Thread.sleep(950);
+                            Message message=Message.obtain();
+                            message.what=REFRESH_COUNTDOWN;
+                            message.obj=i;
+                            mHandler.sendMessage(message);
+                            i--;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //倒计时完成
+                    mHandler.sendEmptyMessage(FINISHED_COUNTDOWN);
+                    isReset=false;
+                    isContinue=true;
+                    canClick=true;
+                }).start();
+
+                ToastUtil.showOrdinaryToast("请求验证码成功",RegisterActivity.this);
+
                 mTvStep1.setVisibility(View.VISIBLE);
                 mLlStep1.setVisibility(View.INVISIBLE);
 
@@ -126,7 +180,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                 mTvStep2.setVisibility(View.INVISIBLE);
                 mLlStep2.setVisibility(View.VISIBLE);
+
+                canClick=false;
+                mBtStepAgain.setTextColor(getResources().getColor(R.color.colorWhite));
             } else if(nextStep==STEP3) {
+                mTvStep2.setTag("已获取");
+
+                isContinue=false;
+
                 mTvStep2.setVisibility(View.VISIBLE);
                 mLlStep2.setVisibility(View.INVISIBLE);
 
@@ -139,6 +200,8 @@ public class RegisterActivity extends AppCompatActivity {
                 mTvStep3.setVisibility(View.INVISIBLE);
                 mLlStep3.setVisibility(View.VISIBLE);
             } else if(nextStep==FINISHED) {
+                ToastUtil.showOrdinaryToast("注册成功",RegisterActivity.this);
+
                 mTvStep3.setVisibility(View.VISIBLE);
                 mLlStep3.setVisibility(View.INVISIBLE);
 
@@ -224,11 +287,13 @@ public class RegisterActivity extends AppCompatActivity {
                         public void done(Integer smsId,BmobException ex) {
                             if(ex==null){//验证码发送成功
                                 Log.d("测试->RegisterActivity","请求验证码成功");
+                                ToastUtil.showOrdinaryToast("验证码请求成功",RegisterActivity.this);
                                 mHandler.sendEmptyMessage(SUCCEED_SEND);
                             }
                             else {
                                 Log.d("测试->RegisterActivity","请求验证码失败:code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
-                                mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_SEND));
+                                ToastUtil.showToastForErrorCode(ex.getErrorCode(),RegisterActivity.this);
+                                mHandler.sendEmptyMessage(FAILED_SEND);
                             }
                         }
                     });
@@ -242,6 +307,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             else {
                 Log.d("测试->RegisterActivity","请输入合法的手机号码");
+                ToastUtil.showOrdinaryToast("请输入合法的手机号码",this);
             }
         });
 
@@ -252,19 +318,19 @@ public class RegisterActivity extends AppCompatActivity {
             String code=mEtStep2.getText().toString();
             if(!TextUtils.isEmpty(code)) {
                 if (code.length()==6) {
-                    mTvStep2.setTag("已获取");
                     new Thread(()->{
                         mHandler.sendEmptyMessage(START_VALIDATE);
-
                         BmobSMS.verifySmsCode(RegisterActivity.this,mEtStep1.getText().toString(), code, new VerifySMSCodeListener() {
                             @Override
                             public void done(BmobException ex) {
                                 if(ex==null){//短信验证码已验证成功
                                     Log.i("测试->RegisterActivity", "验证通过");
+                                    ToastUtil.showOrdinaryToast("验证通过",RegisterActivity.this);
                                     mHandler.sendEmptyMessage(SUCCEED_VALIDATE);
                                 }else{
                                     Log.i("测试->RegisterActivity", "验证失败：code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
-                                    mHandler.sendMessage(getMessage(ex.getErrorCode(),FAILED_VALIDATE));
+                                    ToastUtil.showToastForErrorCode(ex.getErrorCode(),RegisterActivity.this);
+                                    mHandler.sendEmptyMessage(FAILED_VALIDATE);
                                 }
                             }
                         });
@@ -278,7 +344,34 @@ public class RegisterActivity extends AppCompatActivity {
                     }).start();
                 }else {
                     Log.i("测试->RegisterActivity", "验证码格式错误");
+                    ToastUtil.showOrdinaryToast("验证码需为6位数",RegisterActivity.this);
                 }
+            }
+        });
+
+        mBtStepAgain= (Button) findViewById(R.id.id_bt_register_step2_again);
+        mBtStepAgain.setOnClickListener(v -> {
+            if (canClick) {
+                new Thread(()-> {
+                    mHandler.sendEmptyMessage(AGAIN_REQUEST);
+
+                    BmobSMS.requestSMSCode(RegisterActivity.this, mEtStep1.getText().toString(), "test",new RequestSMSCodeListener() {
+
+                        @Override
+                        public void done(Integer smsId,BmobException ex) {
+                            if(ex==null){//验证码发送成功
+                                Log.d("测试->RegisterActivity","请求验证码成功");
+                                ToastUtil.showOrdinaryToast("验证码请求成功",RegisterActivity.this);
+                                mHandler.sendEmptyMessage(SUCCEED_SEND);
+                            }
+                            else {
+                                Log.d("测试->RegisterActivity","请求验证码失败:code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
+                                ToastUtil.showToastForErrorCode(ex.getErrorCode(),RegisterActivity.this);
+                                mHandler.sendEmptyMessage(FAILED_SEND);
+                            }
+                        }
+                    });
+                }).start();
             }
         });
 
@@ -291,10 +384,12 @@ public class RegisterActivity extends AppCompatActivity {
             if (!TextUtils.isEmpty(password1)&& !TextUtils.isEmpty(password2)&&!TextUtils.isEmpty(name)) {
                 if(!password1.equals(password2)) {
                     Log.d("测试->RegisterActivity","两次密码不一致");
+                    ToastUtil.showOrdinaryToast("两次密码不一致",RegisterActivity.this);
                     return;
                 }
                 else if(password1.length()<6) {
                     Log.d("测试->RegisterActivity","密码长度不能小于6");
+                    ToastUtil.showOrdinaryToast("密码长度不能小于6",RegisterActivity.this);
                     return;
                 }
                 new Thread(()-> {
@@ -309,6 +404,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             Log.i("测试->RegisterActivity", "注册成功");
+                            ToastUtil.showOrdinaryToast("注册成功",RegisterActivity.this);
 
                             MyApplication.saveLoginInfo(mEtStep1.getText().toString(),name);
 
@@ -318,7 +414,8 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(int i, String s) {
                             Log.i("测试->RegisterActivity", "注册失败:i="+i+",s="+s);
-                            mHandler.sendMessage(getMessage(i,FAILED_REGISTER));
+                            ToastUtil.showToastForErrorCode(i,RegisterActivity.this);
+                            mHandler.sendEmptyMessage(FAILED_REGISTER);
                         }
                     });
 
@@ -332,22 +429,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
             else {
                 Log.d("测试->RegisterActivity","所填信息不能为空");
+                ToastUtil.showOrdinaryToast("所填信息不能为空",this);
             }
         });
-    }
-
-    private Message getMessage(int i,int code) {
-        String s=null;
-        if(i==9016) {
-            s="无网络连接，请检查您的手机网络。";
-        }
-        else if(i==9010) {
-            s="网络超时!";
-        }
-        Message message=Message.obtain();
-        message.what=code;
-        message.obj=s;
-        return message;
     }
 
     @Override
@@ -356,6 +440,9 @@ public class RegisterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.id_item_menu_reset:
+                resetAll();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -366,7 +453,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("测试->RegisterActivity","截获信息");
+            Log.d("测试->RegisterActivity","截获信息，mBtStep2.getTag()="+mBtStep2.getTag());
             if ("未获取".equals(mBtStep2.getTag())) {
                 Bundle bundle = intent.getExtras();
                 Object[] pdus = (Object[]) bundle.get("pdus"); // 提取短信消息
@@ -374,15 +461,14 @@ public class RegisterActivity extends AppCompatActivity {
                 for (int i = 0; i < messages.length; i++) {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 }
-                String address = messages[0].getOriginatingAddress(); // 获取发送方号码
-                if(address.equals("10690563168910245")) {
-                    StringBuilder fullMessage = new StringBuilder();
-                    for (SmsMessage message : messages) {
-                        fullMessage.append(message.getMessageBody()); // 获取短信内容
-                    }
-                    fullMessage.substring(12,18);
-                    Log.d("测试->RegisterActivity","自动获取验证码"+fullMessage.substring(12,18));
-                    mEtStep2.setText(fullMessage);
+                StringBuilder fullMessage = new StringBuilder();
+                for (SmsMessage message : messages) {
+                    fullMessage.append(message.getMessageBody()); // 获取短信内容
+                }
+                if("比目科技".equals(fullMessage.substring(1,5))) {
+                    Log.d("测试->RegisterActivity","自动获取验证码:"+fullMessage.substring(12,18));
+                    mBtStep2.setTag("已获取");
+                    mEtStep2.setText(fullMessage.substring(12,18));
                 }
             }
         }
@@ -404,6 +490,7 @@ public class RegisterActivity extends AppCompatActivity {
         mLlStep1.setVisibility(View.VISIBLE);
 
         mEtStep2.setText("");
+        mEtStep2.setTag("未获取");
         mTvPrompt2.setText("验证手机号码");
         mTvPrompt2.setTextColor(getResources().getColor(R.color.step_unfocus));
         mIvStep2.setImageResource(R.drawable.ic_register_step2_unfocus);
@@ -417,7 +504,15 @@ public class RegisterActivity extends AppCompatActivity {
         mIvStep3.setImageResource(R.drawable.ic_register_step3_unfocus);
         mTvStep3.setVisibility(View.VISIBLE);
         mLlStep3.setVisibility(View.INVISIBLE);
+
+        isReset=true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_register_reset,menu);
+        return true;
+    }
 
 }

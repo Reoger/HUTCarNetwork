@@ -11,6 +11,6 @@
     <string name="csy_close">关闭</string>
     <string name="action_settings">Settings</string>
 
-    <string name="password_requirement">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
-
+    <!--密码，车牌号，车架号输入限制-->
+    <string name="input_limit1">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
 </resources>

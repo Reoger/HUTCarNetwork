@@ -26,6 +26,8 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="15"
                 android:id="@+id/id_et_add_brand"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -45,6 +47,8 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="10"
                 android:id="@+id/id_et_add_model"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -64,6 +68,8 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="6"
                 android:id="@+id/id_et_add_body_level"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -83,6 +89,8 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="8"
                 android:id="@+id/id_et_add_plate_num"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -102,6 +110,9 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:digits="@string/input_limit1"
+                android:maxLines="1"
+                android:maxLength="8"
                 android:id="@+id/id_et_add_engine_num"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -121,6 +132,9 @@
                 android:layout_weight="1" />
 
             <EditText
+                android:digits="@string/input_limit1"
+                android:maxLines="1"
+                android:maxLength="17"
                 android:id="@+id/id_et_add_vin"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -136,7 +150,8 @@
             <Button
                 android:id="@+id/id_bt_add_confirm"
                 android:layout_margin="5dp"
-                android:background="#40ec4e4e"
+                android:background="#20ffffff"
+                android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="确定" />
@@ -144,7 +159,8 @@
             <Button
                 android:id="@+id/id_bt_add_cancel"
                 android:layout_margin="5dp"
-                android:background="#40baf198"
+                android:textStyle="italic"
+                android:background="#20ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="取消" />

@@ -21,4 +21,8 @@
     <color name="step_unfocus">#70ffffff</color>
 
     <color name="not_landing">#4aa7e6</color>
+
+    <color name="step_again">#90ffffff</color>
+    
+    <color name="side_line">#c7c5c5</color>
 </resources>

@@ -15,6 +15,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
+    <uses-permission android:name="android.permission.RECEIVE_MMS" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -46,9 +51,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name="just.activities.MyInfoActivity" />
-        <activity android:name="just.activities.AutoInfoActivity" />
-        <activity android:name="just.activities.MaInfoActivity" />
         <activity
             android:name="com.com.reoger.music.View.MainActivity"
             android:launchMode="singleTask"
@@ -58,26 +60,13 @@
         <service android:name="com.com.reoger.music.service.ServiceForMusic" />
 
         <activity android:name="com.com.reoger.music.View.NextActivity" />
-        <activity
-            android:name="just.activities.ManualAddAutoInfoActivity"/>
-        <activity android:name="just.activities.IllegalActivity" />
 
         <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
 
-        <activity android:name="just.activities.WeizhangResul" />
-        <activity android:name="just.activities.ProvinceList" />
-        <activity android:name="just.activities.CityList" />
 
-        <service android:name="just.services.AutoAndMaInfoSyncService" />
-
-        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
-
-        <activity android:name="just.activities.LoginActivity" />
-        <activity android:name="just.activities.RegisterActivity" />
         <activity android:name=".OrdGasActivity" />
-        <activity android:name="just.activities.OrdGasInfoActivity" />
         <activity android:name=".PayActivity" />
-        <activity android:name="just.activities.DetailedBilingActivity" />
+
         <activity
             android:name="c.b.a.A"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -88,8 +77,29 @@
             android:name="c.b.a.B"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent" />
+
+        <!--Just区域-->
+        <activity android:name="just.activities.LoginActivity" />
+        <activity android:name="just.activities.RegisterActivity" />
+        <activity android:name="just.activities.WeizhangResul" />
+        <activity android:name="just.activities.ProvinceList" />
+        <activity android:name="just.activities.CityList" />
         <activity android:name="just.activities.SettingActivity" />
-        <activity android:name="just.activities.AboutStatementActivity"></activity>
+        <activity android:name="just.activities.AboutStatementActivity"/>
+        <activity android:name="just.activities.ManualAddAutoInfoActivity"/>
+        <activity android:name="just.activities.IllegalActivity" />
+        <activity android:name="just.activities.MyInfoActivity" />
+        <activity android:name="just.activities.AutoInfoActivity" />
+        <activity android:name="just.activities.MaInfoActivity" />
+        <activity android:name="just.activities.DetailedBilingActivity" />
+        <activity android:name="just.activities.OrdGasInfoActivity" />
+
+
+        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
+
+        <service android:name="just.services.InfoSyncToCloudService"/>
+        <service android:name="just.services.MonitoringMaInfoService"/>
+        <service android:name="just.services.InfoSyncToLocalService"/>
     </application>
 
 </manifest>
