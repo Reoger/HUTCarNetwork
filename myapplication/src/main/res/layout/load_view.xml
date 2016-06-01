@@ -18,7 +18,7 @@
             android:layout_height="3dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="82dp"
-            android:src="@drawable/shadow" />
+            android:src="@drawable/my_shadow" />
 
         <TextView
             android:id="@+id/promptTV"
@@ -28,7 +28,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp"
             android:minWidth="44dp"
-            android:textColor="#757575"
+            android:textColor="#ffffff"
             android:textSize="14sp"
             android:visibility="gone" />
 

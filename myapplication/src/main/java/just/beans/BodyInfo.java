@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class BodyInfo implements Serializable {
     private String body;//加油站的主要信息
     private String create_time;//产生时间
-    private String name;//商品名称
+    private String name;//用户名字
     private String pay_type;//支付方式
     private String total_fee;//交易总额
     private String trade_state;//交易状态
@@ -18,7 +18,19 @@ public class BodyInfo implements Serializable {
     private String Car_info;//汽车信息
     private String usename;//用户名
     private boolean mCanUsed;//判断是否可以使用
-    private double liter;
+    private double liter;//汽油的数量
+    private String ObjectId;
+
+
+
+
+    public String getObjectId() {
+        return ObjectId;
+    }
+
+    public void setObjectId(String objectId) {
+        ObjectId = objectId;
+    }
 
     public double getLiter() {
         return liter;

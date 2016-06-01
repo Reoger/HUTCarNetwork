@@ -84,7 +84,7 @@ public class SideBar extends View {
         switch (action) {
             case MotionEvent.ACTION_UP:
                 setBackgroundDrawable(new ColorDrawable(0x00000000));
-                choose = -1;//
+            //    choose = -1;//
                 invalidate();
                 if (mTextDialog != null) {
                     mTextDialog.setVisibility(View.INVISIBLE);
@@ -133,4 +133,8 @@ public class SideBar extends View {
         public void onTouchingLetterChanged(String s);
     }
 
+    public void setChoose(int postion){
+        this.choose = postion;
+        invalidate();
+    }
 }

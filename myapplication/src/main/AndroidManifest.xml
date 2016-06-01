@@ -26,7 +26,11 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|keyboardHidden" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

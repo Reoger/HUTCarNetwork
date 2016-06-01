@@ -216,6 +216,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
                 String orienTime = mDate.get(i).getReservationTime();
                 boolean mCanUsed= mDate.get(i).ismIsUsed();
                 double liter = mDate.get(i).getLiter();
+                String Object = mDate.get(i).getObjectId();
 
                 item.setBody(body);
                 item.setCreate_time(create_time);
@@ -231,6 +232,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
                 item.setOrien_time(orienTime);
                 item.setmCanUsed(mCanUsed);
                 item.setLiter(liter);
+                item.setObjectId(Object);
 
                 mBodyData.add(item);
 
