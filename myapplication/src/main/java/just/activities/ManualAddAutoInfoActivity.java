@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.cwp.android.baidutest.R;
 
+import just.utils.ToastUtil;
+
 public class ManualAddAutoInfoActivity extends Activity {
     private EditText etBrand,etModel,etBodyLevel,etPlateNum,etEngineNum,etVin;
     private Button btConfirm,btCancel;
@@ -55,7 +57,7 @@ public class ManualAddAutoInfoActivity extends Activity {
                 setResult(RESULT_OK, intent);
                 finish();
             } else {
-                Toast.makeText(this,"所填信息不能为空",Toast.LENGTH_SHORT).show();
+                ToastUtil.showOrdinaryToast("还有信息未填写",this);
             }
         });
 

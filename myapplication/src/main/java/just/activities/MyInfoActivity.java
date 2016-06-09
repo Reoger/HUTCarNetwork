@@ -39,12 +39,6 @@ public class MyInfoActivity extends AppCompatActivity {
     //ViewFlipper的定义
     private ViewFlipper mViewFlipper;
 
-    public static final String FILE_NAME="LoginInfo";
-    public static final String USERNAME="username";
-    public static final String NAME="name";
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +75,7 @@ public class MyInfoActivity extends AppCompatActivity {
             mLlHint.setVisibility(View.GONE);
 
             mTvPersonalInfo= (TextView) findViewById(R.id.id_tv_personal_info);
-            mTvPersonalInfo.setText("当前账号:"+MyApplication.getUsername()+"\n车主:"+MyApplication.getName());
-            Log.d("测试","+++++++++++++++");
-            Log.d("测试","+++++++++++++++");
+            mTvPersonalInfo.setText(MyApplication.getUsername());
 
             mAutoInfo= (LinearLayout) findViewById(R.id.id_ll_auto_info);
             mMaInfo= (LinearLayout) findViewById(R.id.id_ll_ma_info);
@@ -99,7 +91,8 @@ public class MyInfoActivity extends AppCompatActivity {
                 turnActivity(SettingActivity.class);
             });
 
-            MyApplication.startSyncToCloudService();
+            MyApplication.startSyncService();
+            MyApplication.startMaInfoMonitoring();
         }
     }
 

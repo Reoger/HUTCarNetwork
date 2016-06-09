@@ -1,1 +1,1 @@
-include ':myapplication', ':libzxing'
+include ':myapplication', ':libzxing', ':simulation_gas'

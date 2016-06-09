@@ -28,6 +28,7 @@ import just.beans.AutoInfo;
 import just.operations.AutoInfoLocalDBOperation;
 import just.swipemenulistview.SwipeMenuItem;
 import just.swipemenulistview.SwipeMenuListView;
+import just.utils.ToastUtil;
 
 public class AutoInfoActivity extends Activity {
     private SwipeMenuListView mLvAutoInfo;
@@ -213,7 +214,8 @@ public class AutoInfoActivity extends Activity {
                     String result=data.getExtras().getString("result");
                     Log.d("测试->AutoInfoActivity",result);
                     if(!result.substring(0,6).equals("汽车信息->")) {
-                        Log.d("测试->AutoInfoActivity","二维码格式不正确!");
+                        Log.d("测试->AutoInfoActivity","汽车信息二维码不符合要求");
+                        ToastUtil.showOrdinaryToast("汽车信息二维码不符合要求",AutoInfoActivity.this);
                         return;
                     }
                     new OperationTask(result,time).start();
@@ -227,8 +229,8 @@ public class AutoInfoActivity extends Activity {
         autoInfo.setBrand(result[2]);
         autoInfo.setModel(result[4]);
         autoInfo.setBodyLevel(result[6]);
-        autoInfo.setEngineNum(result[8]);
-        autoInfo.setLicensePlateNum(result[10]);
+        autoInfo.setLicensePlateNum(result[8]);
+        autoInfo.setEngineNum(result[10]);
         autoInfo.setVin(result[12]);
         autoInfo.setUsername(MyApplication.getUsername());
         autoInfo.setAddTime(date);

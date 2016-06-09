@@ -30,10 +30,11 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import just.beans.MaInfo;
 import just.beans.MyUser;
+import just.utils.ToastUtil;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mEtUsername, mEtPassword;
-    private Button mBtRegister, mBtLogin, mBtForget,mBtUsernameClear,mBtPasswordClear,mBtEyePassword;
+    private Button mBtRegister, mBtLogin,mBtUsernameClear,mBtPasswordClear;
 
     public static final int START_VERIFY=1;
     public static final int SUCCEED_VERIFY=2;
@@ -54,9 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     progressDialog =null;
                     Log.d("测试->LoginActivity","验证成功");
-
-//                    //直接用登陆的时候，应该开启一个从云端同步数据到本地的服务
-//                    MyApplication.startSyncFromCloudService();
+                    ToastUtil.showOrdinaryToast("验证成功",LoginActivity.this);
 
                     Intent intent=null;
                     String tag=getIntent().getStringExtra("TAG");
@@ -143,10 +142,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mBtRegister= (Button) findViewById(R.id.id_bt_register);
         mBtLogin= (Button) findViewById(R.id.id_bt_login);
-//        mBtForget= (Button) findViewById(R.id.id_bt_login_forget);
         mBtUsernameClear= (Button) findViewById(R.id.id_bt_username_clear);
         mBtPasswordClear= (Button) findViewById(R.id.id_bt_password_clear);
-//        mBtEyePassword= (Button) findViewById(R.id.id_bt_pwd_eye);
 
         mBtUsernameClear.setOnClickListener(v -> {
             mEtUsername.setText("");
@@ -156,26 +153,18 @@ public class LoginActivity extends AppCompatActivity {
             mEtPassword.setText("");
         });
 
-//        mBtEyePassword.setOnClickListener(v -> {
-//            if(mEtPassword.getInputType() == (InputType.TYPE_TEXT_VARIATION_PASSWORD)){
-//                mBtEyePassword.setBackgroundResource(R.drawable.ic_login_no_eye);
-//                mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-//            }else if(mEtPassword.getInputType() == (InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)) {
-//                mBtEyePassword.setBackgroundResource(R.drawable.ic_login_eye);
-//                mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//            }
-//            mEtPassword.setSelection(mEtPassword.getText().toString().length());
-//        });
         mBtLogin.setOnClickListener(v -> {
             Log.d("测试->LoginActivity","登陆");
             String username=mEtUsername.getText().toString();
             String password=mEtPassword.getText().toString();
             if (TextUtils.isEmpty(username)||username.length()!=11) {
                 Log.d("测试->LoginActivity","请输入有效长度的用户名!");
+                ToastUtil.showOrdinaryToast("请输入有效长度的用户名!",this);
                 return;
             }
             else if(TextUtils.isEmpty(password)) {
                 Log.d("测试->LoginActivity","密码不能为空!");
+                ToastUtil.showOrdinaryToast("密码不能为空!",this);
                 return;
             }
             mHandler.sendEmptyMessage(START_VERIFY);
@@ -208,15 +197,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int i, String s) {
-                        Message message=Message.obtain();
-                        message.what=FAILED_VERIFY;
-                        if(i==9016) {
-                            message.obj="无网络连接,请检查您的手机网络!";
-                        }
-                        else if(i==101) {
-                            message.obj="用户名或密码不正确,请重新输入!";
-                        }
-                        mHandler.sendMessage(message);
+                        ToastUtil.showToastForErrorCode(i,LoginActivity.this);
+                        mHandler.sendEmptyMessage(FAILED_VERIFY);
                     }
                 });
             }).start();
@@ -226,9 +208,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
             startActivity(intent);
         });
-//        mBtForget.setOnClickListener(v -> {
-//            Log.d("测试->LoginActivity","忘记密码");
-//        });
     }
 
     @Override

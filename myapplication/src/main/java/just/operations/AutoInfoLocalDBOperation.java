@@ -22,17 +22,15 @@ public class AutoInfoLocalDBOperation {
         SQLiteDatabase db= LocalInfoOpenHelper.getInstance(context).getWritableDatabase();
 
         //暂时先用这种方式防止插入重复的数据
-        Cursor cursor = db.query(AutoInfoConstants.AUTO_INFO_TABLE_NAME, new String[]{AutoInfoConstants.COLUMN_VIN},AutoInfoConstants.COLUMN_VIN+" = ?", new String[]{autoInfo.getVin()}, null, null, null);
+        Cursor cursor = db.query(AutoInfoConstants.AUTO_INFO_TABLE_NAME,
+                new String[]{AutoInfoConstants.COLUMN_VIN},AutoInfoConstants.COLUMN_VIN+" = ? and "+AutoInfoConstants.COLUMN_USERNAME+" = ?",
+                new String[]{autoInfo.getVin(),autoInfo.getUsername()}, null, null, null);
         if (cursor.moveToFirst()) return;
 
         ContentValues values= getValuesForInsert(autoInfo,isSyncToCloud);
 
         db.insert(AutoInfoConstants.AUTO_INFO_TABLE_NAME,null,values);
         db.close();
-    }
-
-    public static List<AutoInfo> queryAll(Context context) {
-        return queryBy(context,null,null);
     }
 
     /**
