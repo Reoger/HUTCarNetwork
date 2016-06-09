@@ -92,7 +92,7 @@ public class Locate {
             *
             * */
 
-            MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL
+            MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.COMPASS
                     , true, BitmapDescriptorFactory.fromResource(R.drawable.icon_car));
 
             mBaiduMap.setMyLocationConfigeration(configuration);
@@ -129,7 +129,7 @@ public class Locate {
         isFirstIn = false;
         if (myAddress != null) {
             Toast.makeText(context, myAddress, Toast.LENGTH_SHORT).show();
-//            tts.speak("当前位置" + myAddress, TextToSpeech.QUEUE_FLUSH, null);
+            MainActivity.t.speak("当前位置"+myAddress);
         }
 
     }

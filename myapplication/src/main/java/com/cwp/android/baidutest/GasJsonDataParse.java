@@ -198,7 +198,7 @@ public class GasJsonDataParse {
                 break;
         }
 
-        MainActivity.myhandler.sendMessage(msg);
+        MainActivity.myHandler.sendMessage(msg);
     }
 }
 
