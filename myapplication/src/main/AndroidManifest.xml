@@ -14,10 +14,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
-    <uses-permission android:name="android.permission.RECEIVE_MMS" />
 
     <application
         android:name=".MyApplication"
@@ -26,43 +22,76 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="6hmEisoNHbCxGmI11WHFCwwnFmRWZBy5" />
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="48ae76de3f" />
 
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustPan">
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".BNMainActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:label="@string/sdk_name" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name="com.cwp.android.baidutest.RouteGuideDemo"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:label="@string/title_route_guide_demo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BAIDUNAVISDK_DEMO" />
             </intent-filter>
         </activity>
 
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote">
-            <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2" />
-            </intent-filter>
-        </service>
-
         <activity
-            android:name="com.com.reoger.music.View.MainActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:name="com.cwp.android.baidutest.BNGuideActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:label="@string/title_route_guide_demo" >
+        </activity>
 
-        <service android:name="com.com.reoger.music.service.ServiceForMusic" />
+        
 
+        <activity android:name="just.activities.MyInfoActivity" />
+        <activity android:name="just.activities.AutoInfoActivity" />
+        <activity android:name="just.activities.MaInfoActivity" />
+        <activity android:name="just.activities.SettingActivity" />
+        <activity android:name="just.activities.AboutStatementActivity" />
+
+
+        <activity android:name="just.activities.ManualAddAutoInfoActivity" />
+        <activity android:name="just.activities.IllegalActivity" />
+        <activity android:name="just.activities.WeizhangResul" />
+        <activity android:name="just.activities.ProvinceList" />
+        <activity android:name="just.activities.CityList" />
+
+        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
+
+        <activity android:name="just.activities.LoginActivity" />
+        <activity android:name="just.activities.RegisterActivity" />
+        <activity android:name=".OrdGasActivity" />
+        <activity android:name="just.activities.OrdGasInfoActivity" />
+        <activity android:name=".PayActivity" />
+        <activity android:name="just.activities.DetailedBilingActivity" />
         <activity android:name="com.com.reoger.music.View.NextActivity" />
 
-        <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
-
-        <activity android:name=".OrdGasActivity" />
-        <activity android:name=".PayActivity" />
         <activity
             android:name="c.b.a.A"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -73,30 +102,26 @@
             android:name="c.b.a.B"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.com.reoger.music.View.MainActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
 
-        <!-- Just区域 -->
-        <activity android:name="just.activities.LoginActivity" />
-        <activity android:name="just.activities.RegisterActivity" />
-        <activity android:name="just.activities.WeizhangResul" />
-        <activity android:name="just.activities.ProvinceList" />
-        <activity android:name="just.activities.CityList" />
-        <activity android:name="just.activities.SettingActivity" />
-        <activity android:name="just.activities.AboutStatementActivity" />
-        <activity android:name="just.activities.ManualAddAutoInfoActivity" />
-        <activity android:name="just.activities.IllegalActivity" />
-        <activity android:name="just.activities.MyInfoActivity" />
-        <activity android:name="just.activities.AutoInfoActivity" />
-        <activity android:name="just.activities.MaInfoActivity" />
-        <activity android:name="just.activities.DetailedBilingActivity" />
-        <activity android:name="just.activities.OrdGasInfoActivity" />
 
-        <receiver android:name="just.receivers.AutoAndMaInfoSyncReceiver" />
+        <service android:name="just.services.AutoAndMaInfoSyncService" />
+        <service android:name="com.cheshouye.api.client.WeizhangIntentService" />
+        <service android:name="com.com.reoger.music.service.ServiceForMusic" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="com.baidu.location.service_v2.2" /> -->
+            <!-- </intent-filter> -->
+        </service>
 
-        <service android:name="just.services.InfoSyncToCloudService" />
-        <service android:name="just.services.MonitoringMaInfoService" />
-        <service android:name="just.services.InfoSyncToLocalService" />
 
-        <activity android:name="just.activities.PersonalDataActivity"></activity>
+
     </application>
 
 </manifest>

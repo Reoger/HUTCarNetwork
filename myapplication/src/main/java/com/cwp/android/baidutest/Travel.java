@@ -1,6 +1,8 @@
 package com.cwp.android.baidutest;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
 import com.baidu.mapapi.search.core.RouteLine;
@@ -64,7 +66,8 @@ public class Travel implements  OnGetRoutePlanResultListener {
 
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
 
-//            Toast.makeText(, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            MainActivity.t.speak("规划路线失败！");
+//            Toast.makeText()
         }
 
         if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
@@ -74,11 +77,15 @@ public class Travel implements  OnGetRoutePlanResultListener {
         }
 
         if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-//            nodeIndex = -1;
-//            mBtnPre.setVisibility(View.VISIBLE);
-//            mBtnNext.setVisibility(View.VISIBLE);
+            // nodeIndex = -1;
 
-            //获取第一个路线  ？？？？？
+            MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING
+                    , true, BitmapDescriptorFactory.fromResource(R.drawable.icon_car));
+
+            mBaiduMap.setMyLocationConfigeration(configuration);
+
+            //获取第一个路线
+            MainActivity.t.speak("规划路线成功！");
             route = result.getRouteLines().get(0);
 
             MyLog.LogE("Travel", "***onGetDrivingRouteResult***");
@@ -96,7 +103,6 @@ public class Travel implements  OnGetRoutePlanResultListener {
     public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
 
     }
-
 
 
     //乘车路线覆盖物

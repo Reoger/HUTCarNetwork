@@ -6,9 +6,9 @@
 
     <ImageView
         android:id="@+id/base_item_iamge"
-        android:layout_margin="10dp"
-        android:layout_width="60dip"
-        android:layout_height="wrap_content" />
+        android:layout_margin="4dp"
+        android:layout_width="50dip"
+        android:layout_height="38dip" />
 
 
 </LinearLayout>

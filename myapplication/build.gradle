@@ -27,7 +27,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
     //配置Lambda需要
+    compile 'io.reactivex:rxjava:1.1.0'
     //配置Lambda需要
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/baidumapapi_base_v3_7_3.jar')
@@ -38,16 +42,11 @@ dependencies {
     compile files('libs/baidumapapi_util_v3_7_3.jar')
     compile files('libs/BmobSDK_V3.4.6_0415.jar')
     compile project(':libzxing')
+    compile 'com.android.support:support-v4:23.3.0'
     compile files('libs/weizhang_sdk.jar')
     compile files('libs/BmobPay_v2.7_160427.jar')
     compile files('libs/Bmob_Push_V0.9beta_20160520.jar')
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
-    testCompile 'junit:junit:4.12'
+    compile files('libs/BaiduNaviSDK_3.1.1.jar')
 }
 
-apply plugin: 'me.tatarka.retrolambda'
-//配置Lambda需要
+apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要
