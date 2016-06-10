@@ -21,6 +21,9 @@ import com.cwp.android.baidutest.R;
 
 import just.utils.MyActivityUtil;
 
+/**
+ * 个人信息界面-Just
+ */
 public class MyInfoActivity extends AppCompatActivity {
     private Activity mActivity;
 

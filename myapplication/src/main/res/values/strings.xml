@@ -12,7 +12,7 @@
     <string name="csy_close">关闭</string>
     <string name="action_settings">Settings</string>
 
-    <string name="password_requirement">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
+    <string name="input_limit1">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
     <string-array name="sdkapi_items">
         <item>关键字搜索</item>
         <item>周边搜索</item>
