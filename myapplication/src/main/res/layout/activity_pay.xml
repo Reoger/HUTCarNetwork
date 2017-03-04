@@ -296,12 +296,12 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="输入要加油的时间"/>
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_date"
         android:paddingLeft="20dp"
-        android:hint="2016.5.25"/>
+        android:text="2016.5.25"/>
 </LinearLayout>
     <Button
         android:id="@+id/pay_ok"
@@ -311,14 +311,6 @@
         android:layout_marginRight="20dip"
         android:text="微信支付"/>
 
-    <utils.LoadingView
-        android:id="@+id/loadView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:loadingText="加载中..." />
 
 
 

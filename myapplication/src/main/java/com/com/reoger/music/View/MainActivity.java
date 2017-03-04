@@ -1,13 +1,14 @@
 package com.com.reoger.music.View;
 
 
-
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -26,7 +27,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,6 +47,7 @@ import com.com.reoger.music.constant.Constant;
 import com.com.reoger.music.mode.Music;
 import com.com.reoger.music.mode.Sequence;
 import com.com.reoger.music.service.ServiceForMusic;
+import com.cwp.android.baidutest.MyApplication;
 import com.cwp.android.baidutest.R;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ import java.util.Collections;
 import just.activities.ActivityCollector;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,AbsListView.OnScrollListener{
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private ListView mMusicList;
     private MyAdapter adaper;
     private boolean mIsMusicPlaying = true;
@@ -73,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextView mTimeStare;
     private TextView mTimeTop;
     private boolean processFlag = true;//反之过快点击
-
-    private int postion;
 
     private SideBar sideBar;
     private ClearEditText mClearEditText;
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         mMusicList.setOnItemClickListener(this);
         mMusicList.setOnItemLongClickListener(this);
-        mMusicList.setOnScrollListener(this);
         initButtonReceiver();
 
 
@@ -128,9 +126,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // 根据a-z进行排序源数据
         Collections.sort(mMusicData, pinyinComparator);
         //
-      for (int i=0;i<mMusicData.size();i++){
-          mMusicData.get(i).setCurrentIndex(i);
-      }
+        for (int i=0;i<mMusicData.size();i++){
+            mMusicData.get(i).setCurrentIndex(i);
+        }
         for (int i = 0; i < mMusicData.size(); i++) {
             mMusicData.get(i).setCurrentIndex(i);
         }
@@ -557,11 +555,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             //这里加了广播，所及INTENT的必须用getBroadcast方法
             PendingIntent intent_prev = PendingIntent.getBroadcast(this, 1, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_prev, intent_prev);
-         /** 播放/暂停  按钮 */
+            /** 播放/暂停  按钮 */
             buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_PALY_ID);
             PendingIntent intent_paly = PendingIntent.getBroadcast(this, 2, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_play, intent_paly);
-		    /** 下一首 按钮  */
+            /** 下一首 按钮  */
             buttonIntent.putExtra(Constant.INTENT_BUTTONID_TAG, Constant.BUTTON_NEXT_ID);
             PendingIntent intent_next = PendingIntent.getBroadcast(this, 3, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_next, intent_next);
@@ -707,38 +705,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Toast.makeText(MainActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                 }).show();
         return true;
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch(scrollState){
-            case SCROLL_STATE_FLING:
-
-                dialog.setVisibility(View.VISIBLE);
-                LogUtils.i("Main","用户在手指离开屏幕之前，由于滑了一下，视图仍然依靠惯性继续滑动");
-                break;
-            case SCROLL_STATE_IDLE:
-                dialog.setVisibility(View.INVISIBLE);
-                break;
-            case SCROLL_STATE_TOUCH_SCROLL:
-
-                dialog.setVisibility(View.VISIBLE);
-                LogUtils.i("Main","手指没有离开屏幕，视图正在滑动");
-                break;
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-         postion =mMusicList.getFirstVisiblePosition();
-        String a = ((Music)adaper.getItem(postion)).getmMusicName();
-        LogUtils.i("Main", "测  "+ a);
-        int section = adaper.getSectionForPosition(postion)-'A';
-        LogUtils.d("Main","啊的值是"+section);
-        sideBar.setChoose(section);
-        char w = characterParser.getSelling(a).toUpperCase().charAt(0);
-        dialog.setText(w+"");
-        dialog.setVisibility(View.VISIBLE);
     }
 
     /**

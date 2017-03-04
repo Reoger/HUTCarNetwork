@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -240,6 +242,7 @@ public class OrdGasInfoActivity extends AppCompatActivity implements AdapterView
                 e.printStackTrace();
             }
         }
+        Collections.reverse(mBodyData);//将数据反转排序，即按照最近的时间排序
         Message message = new Message();
         message.what = 10086;
         LogUtils.i("AATT", "json数据解析完毕，sendMessage");

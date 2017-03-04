@@ -1,6 +1,7 @@
 package com.cwp.android.baidutest;
 
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import c.b.BP;
 import c.b.PListener;
@@ -56,8 +60,12 @@ public class PayActivity extends AppCompatActivity {
     Bundle bundle;
 
     private TextView brand, model, licensePlateNum, engineNum, bodyLevel, vin, stationName, stationAddress, price, quantity;
-    private EditText mEditDate;
+    private TextView mEditDate;
     private boolean mFlag=true;//用于判断是否加油成功
+
+    private Calendar calendar;//日历类
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +101,14 @@ public class PayActivity extends AppCompatActivity {
         stationAddress = (TextView) findViewById(R.id.stationAddress);
         price = (TextView) findViewById(R.id.price);
         quantity = (TextView) findViewById(R.id.quantity);
-        mEditDate = (EditText) findViewById(R.id.edit_date);
+        mEditDate = (TextView) findViewById(R.id.edit_date);
 
         radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
         radioButton1 = (RadioButton) findViewById(R.id.RadioButton1);
 
         radioButton2 = (RadioButton) findViewById(R.id.RadioButton2);
+
+        calendar = Calendar.getInstance(); //默认显示当前的时间
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == radioButton1.getId()) {
@@ -115,6 +125,16 @@ public class PayActivity extends AppCompatActivity {
             change(allPrice);
         });
 
+
+        mEditDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    PayActivity.this, DateSet, calendar
+                    .get(Calendar.YEAR), calendar
+                    .get(Calendar.MONTH), calendar
+                    .get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+        }
+        );
 
         btn_pay_ok.setOnClickListener(v -> {//支付接口
             if (mEditDate.getText().toString().equals("")) {
@@ -141,10 +161,12 @@ public class PayActivity extends AppCompatActivity {
                     public void succeed() {
                         Toast.makeText(getApplicationContext(), "成功支付", Toast.LENGTH_SHORT).show();//支付接口
                         updateBoolean(false);
+                        shapeLoadingDialog.dismiss();
                     }
 
                     @Override
                     public void fail(int code, String s) {
+                        shapeLoadingDialog.dismiss();
                         updateBoolean(false);
 
                         if (code == -3) {
@@ -167,7 +189,8 @@ public class PayActivity extends AppCompatActivity {
 
                     @Override
                     public void unknow() {
-                        updateBoolean(false);;
+                        updateBoolean(false);
+                        shapeLoadingDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "未知错误", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -340,4 +363,27 @@ public class PayActivity extends AppCompatActivity {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
     }
+
+    /**
+     * @description 日期设置匿名类
+     */
+    DatePickerDialog.OnDateSetListener DateSet = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // 每次保存设置的日期
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, monthOfYear);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            String str = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+          LogUtils.e("TAG",str+"你好");
+
+            if (!mEditDate.isFocused()) {
+                mEditDate.setText(str);
+            }
+        }
+    };
+
 }
