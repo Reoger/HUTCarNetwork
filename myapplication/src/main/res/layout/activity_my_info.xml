@@ -44,17 +44,22 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/bg_center"
         android:id="@+id/id_ll_auto_info_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         
         <TextView
+            android:textColor="#ffffff"
+            android:text="XXXXXXXX"
+            android:background="#4052b5"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:textSize="20sp"
             android:id="@+id/id_tv_personal_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp" />
 
         <ViewFlipper
             android:id="@+id/mviewFlipper"

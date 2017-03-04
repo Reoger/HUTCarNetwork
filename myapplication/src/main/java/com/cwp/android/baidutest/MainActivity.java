@@ -1,20 +1,18 @@
 package com.cwp.android.baidutest;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,10 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -37,153 +31,183 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.model.LatLngBounds;
-import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
-import com.baidu.mapapi.overlayutil.OverlayManager;
-import com.baidu.mapapi.overlayutil.PoiOverlay;
-import com.baidu.mapapi.overlayutil.TransitRouteOverlay;
-import com.baidu.mapapi.search.core.PoiInfo;
-import com.baidu.mapapi.search.core.RouteLine;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiBoundSearchOption;
-import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
-import com.baidu.mapapi.search.poi.PoiResult;
-import com.baidu.mapapi.search.poi.PoiSearch;
-import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRouteLine;
-import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.search.route.DrivingRouteResult;
-import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
-import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRouteResult;
-import com.baidu.mapapi.search.route.WalkingRouteResult;
-
-import java.util.Locale;
 
 import just.activities.ActivityCollector;
 import just.activities.LoginActivity;
 import just.activities.MyInfoActivity;
+import utils.MyLog;
 import utils.ShapeLoadingDialog;
+import utils.TTS;
 
-
-public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener,
-        OnGetRoutePlanResultListener {
+//实现BaiduMap.OnMapClickListener接口
+//用于实现  onMapClick(LatLng point)  、onMapPoiClick(MapPoi poi) 这两个方法
+public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapClickListener {
 
     // 地图View
-    MapView mMapView;
-    BaiduMap mBaiduMap;
-
-    LocationClient mLocationClient;
-    MyLocationListener mLocationListener;
-
-    PoiSearch mPoiSearch;
-    OnGetPoiSearchResultListener poiListener;
-
-
-    //定位用的按钮
-    Button btn_myPosition;
-    //加油站搜索按钮
-    Button btn_search;
-    //上一个节点
-    Button mBtnPre = null;
-    //下一个节点
-    Button mBtnNext = null;
-
-    //经度
-    private double mLatitue;
-    //纬度
-    private double mLongLatitue;
-
-    private LatLng nodeLocation;
-
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
+    //地图 目的地标注物
     private Marker mMarker;
     //节点索引,供浏览节点时使用
     private int nodeIndex = -1;
-    //路线的父类，包括多种路线，具体用时动态生成
-    private RouteLine route = null;
-    //该类提供一个能够显示和管理多个Overlay的基类
-    OverlayManager routeOverlay = null;
-    //泡泡view
+    //popupView
     private TextView popupText = null;
-    // 搜索模块，也可去掉地图模块独立使用
-    private RoutePlanSearch mSearch = null;
-    //显示popou窗口位置
-
-    public static Handler myhandler;
+    //用于处理异步信息回调
+    public static Handler myHandler;
     //用于更新加油站数据
-    Bundle bundle = null;
-    //语音TTS
-    TextToSpeech tts;
-
-    private String myAddress;
+    private Bundle bundle = null;
+    // editSearchKeyEt : POI关键字  editCityEt： 搜索所在的城市
     String editSearchKeyEt, editCityEt;
+    //上一个节点、下一个节点
+    Button mBtnPre = null;
+    Button mBtnNext = null;
+    EditText mEditSt;
+    EditText mEditEn;
 
-    //加油站信息布局
-    private LinearLayout mView;
+    // isPOIHavingShow： 标注物是否显示 ，isHavingSearch ：是否已经寻路，
+    // isGasHavingShow： 加油站是否显示 ，isSatelliteOpen：卫星菜单是否打开
+    private boolean isPOIHavingShow;
+    private boolean isHavingSearch;
+    private boolean isGasHavingShow;
+    private boolean isSatelliteOpen;
 
-    private LinearLayout layout_server_page;
+    //mGasDetailView ：加油站信息布局
+    //mPositionInputView  ：起始地点输入布局
+    private LinearLayout mGasDetailView;
+    private LinearLayout mPositionInputView;
 
-    //自定义路线
-    private ImageView poi;
-    private ImageView route_to;
-    private ImageView arrow;
+    //记录按下返回键的系统时间
+    private long exitTime;
 
-    //是否第一次进入，是就先定位到当前位置
-    boolean useDefaultIcon = false;
-    boolean isFirstIn = true;
-    private boolean sLayoutServerPageVisiable = false;
-    private boolean POI_true_folse;
-    private boolean Search_true_folse;
-    private boolean Gas_Show;
-
-    private int[] ivIds = {R.id.iv_b, R.id.iv_c, R.id.iv_d, R.id.iv_e, R.id.iv_a};
-    private ImageView[] imageViews = new ImageView[ivIds.length];
-    private boolean isOpen;
-    //卫星菜单的角度
-    private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
-
-    private ShapeLoadingDialog shapeLoadingDialog;
-
-    private long exitTime;//记录按下返回键的系统时间
+    //左边用于显示图标的listView
     private ListView mListView;
 
+    //卫星菜单的角度
+    private double angel[] = {Math.toRadians(270), Math.toRadians(90), Math.toRadians(0)};
+    //卫星菜单的图片id
+    private int[] ivIds = {R.id.iv_b, R.id.iv_c, R.id.iv_d, R.id.iv_e, R.id.iv_a};
+    //用于初始化ImageView
+    private ImageView[] imageViews = new ImageView[ivIds.length];
+    //listView的图标id数组
     private int[] ls = new int[]{
-            R.drawable.map_a, R.drawable.map_b, R.drawable.map_c,
-            R.drawable.map_d, R.drawable.map_e, R.drawable.map_f,
-            R.drawable.map_g, R.drawable.map_h, R.drawable.map_i};
+            R.drawable.map_travel, R.drawable.map_gas, R.drawable.map_localtion,
+            R.drawable.map_rout_to, R.drawable.map_sign, R.drawable.map_music,
+            R.drawable.map_information, R.drawable.map_back, R.drawable.map_com};
+    //用于实现定位的类
+    private Locate myLocate;
+    //TTs的类
+    public static TTS t;
+    //Travel 用于路线规划的类
+    private Travel travel;
+    //POI查询的类
+    private POISearch poiSearch;
+    //加载对话框
+    public static ShapeLoadingDialog shapeLoadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main_layout);
+
         ActivityCollector.addActivity(this);
 
         init();
 
-        initLoadDialong();
 
-        initLocation();
+        myLocate = new Locate(MainActivity.this, mBaiduMap);
 
-        initlistview();
+        myLocate.initLocation();
+
+        poiSearch = new POISearch(mBaiduMap);
+
+
         mListView.setSelection(Integer.MAX_VALUE / 2);
 
         editCityEt = "株洲";
         editSearchKeyEt = "加油站";
 
+        //注意初始化顺序
+        t = new TTS(MainActivity.this);
+
+        travel = new Travel(mBaiduMap);
     }
 
-    public void initLoadDialong(){
+    /**
+     * 下面是一些初始化方法
+     */
+    public void init() {
+
+        mMapView = (MapView) findViewById(R.id.map);
+        mBaiduMap = mMapView.getMap();
+
+        mPositionInputView = (LinearLayout) findViewById(R.id.map_layout_position);
+        mGasDetailView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.myview, null);
+
+        //导航功能初始化
+        mBtnPre = (Button) findViewById(R.id.pre);
+        mBtnNext = (Button) findViewById(R.id.next);
+        // 处理搜索按钮响应
+        mEditSt = (EditText) findViewById(R.id.start);
+        mEditEn = (EditText) findViewById(R.id.end);
+
+
+        mBaiduMap.setOnMapClickListener(this);
+
+        MapZoom();
+
+        nodeButtonInvisiable();
+
+        setOnEditorActionListener(mEditEn);
+
+        initHandle();
+
+        initSateliteMenu();
+
+        initLoadDialong();
+
+        initlistview();
+    }
+
+    //  实例化Handler ,处理网络数据(用于回调加油站详情 数据)。
+    public void initHandle() {
+
+        myHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                switch (msg.what) {
+                    case 0x12:
+                        MyLog.LogE("MainActivity", "handlemessage 0x12");
+                        bundle = msg.getData();
+                        updata(bundle);
+                        shapeLoadingDialog.dismiss();
+                        break;
+                    case 0x13:
+                        MyLog.LogE("MainActivity", "handlemessage 0x13");
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString("NAME", "error");
+                        updata(bundle1);
+                        shapeLoadingDialog.dismiss();
+                    default:
+                        break;
+                }
+            }
+        };
+    }
+
+    //  初始化加载对话框
+    public void initLoadDialong() {
+
         shapeLoadingDialog = new ShapeLoadingDialog(this);
         shapeLoadingDialog.setLoadingText("加载中...");
-
     }
+
+    //  初始化左边的listview
     public void initlistview() {
 
         mListView = (ListView) findViewById(R.id.listview);
@@ -192,106 +216,79 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener((parent, view, position, id) -> {
-            switch (position % 9) {
+            switch (position % 8) {
                 case 0:
-
-                    Log.e("***********", "OnClick a ");
-                    Toast.makeText(MainActivity.this, "Click a ", Toast.LENGTH_SHORT).show();
+                    travelTo();
                     break;
                 case 1:
-
-                    Toast.makeText(MainActivity.this, "Click b ", Toast.LENGTH_SHORT).show();
+                    gas();
                     break;
                 case 2:
-
-                    Toast.makeText(MainActivity.this, "Click c ", Toast.LENGTH_SHORT).show();
+                    location();
                     break;
                 case 3:
-
-                    Toast.makeText(MainActivity.this, "Click d ", Toast.LENGTH_SHORT).show();
+                    route_to();
                     break;
                 case 4:
-
-                    Toast.makeText(MainActivity.this, "Click e ", Toast.LENGTH_SHORT).show();
+                    poi();
                     break;
                 case 5:
+                    music();
 
-                    Toast.makeText(MainActivity.this, "Click f ", Toast.LENGTH_SHORT).show();
                     break;
                 case 6:
 
-                    Toast.makeText(MainActivity.this, "Click g ", Toast.LENGTH_SHORT).show();
+                    myInfo();
                     break;
                 case 7:
-
-                    Toast.makeText(MainActivity.this, "Click h ", Toast.LENGTH_SHORT).show();
+                    changeTravelto();
                     break;
-                case 8:
 
-                    Toast.makeText(MainActivity.this, "Click i ", Toast.LENGTH_SHORT).show();
-                    break;
                 default:
-                    Toast.makeText(MainActivity.this, "Click default ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Click ", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
 
-
-
     }
 
-    private void initLocation() {
-
-        mLocationClient = new LocationClient(this);
-        mLocationListener = new MyLocationListener();
-        mLocationClient.registerLocationListener(mLocationListener);
-
-        LocationClientOption option = new LocationClientOption();
-
-        option.setCoorType("bd09ll");
-        option.setIsNeedAddress(true);
-        option.setOpenGps(true);
-        option.setScanSpan(1000);
-
-        mLocationClient.setLocOption(option);
-
-    }
-
-    void init() {
-
-
-        layout_server_page = (LinearLayout) findViewById(R.id.layout_server_page);
-
-        arrow = (ImageView) findViewById(R.id.arrow);
-        poi = (ImageView) findViewById(R.id.Img_poi);
-        route_to = (ImageView) findViewById(R.id.Img_route_to);
+    //  初始化卫星菜单
+    public void initSateliteMenu() {
 
         for (int i = 0; i < ivIds.length; i++) {
             imageViews[i] = (ImageView) findViewById(ivIds[i]);
         }
-
         imageViews[0].setOnClickListener(v -> {
+
             Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
             startActivity(intent);
         });
 
         imageViews[1].setOnClickListener(v -> {
+
             Intent intent = new Intent(MainActivity.this, MyInfoActivity.class);
             startActivity(intent);
         });
         imageViews[2].setOnClickListener(v -> {
-            if(mListView.getVisibility()==View.GONE){
+
+            if (mListView.getVisibility() == View.GONE) {
                 mListView.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 mListView.setVisibility(View.GONE);
             }
         });
 
         imageViews[4].setOnClickListener(v -> {
+
             switch (v.getId()) {
                 case R.id.iv_a:
-                    executeAnim(isOpen);
-                    isOpen = !isOpen;
+                    if (mListView.getVisibility() == View.GONE) {
+                        mListView.setVisibility(View.VISIBLE);
+                    } else {
+                        mListView.setVisibility(View.GONE);
+                    }
+//                    statelliteMenuExecuteAnim(isSatelliteOpen);
+//                    isSatelliteOpen = !isSatelliteOpen;
                     break;
                 default:
                     Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
@@ -299,418 +296,102 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             }
 
         });
-        //卫星菜单是否打开
-        isOpen = true;
-
-        route_to.setOnClickListener(v -> {
-
-            if (POI_true_folse) {
-
-                POI_true_folse = false;
-                mBaiduMap.clear();
-
-                LatLng stPosition = new LatLng(mLatitue, mLongLatitue);
-                LatLng enPosition = mMarker.getPosition();
-
-                PlanNode stNode = PlanNode.withLocation(stPosition);
-                PlanNode enNode = PlanNode.withLocation(enPosition);
-
-                mSearch.drivingSearch((new DrivingRoutePlanOption())
-                        .from(stNode)
-                        .to(enNode));
-            } else {
-                mBaiduMap.clear();
-                mBtnPre.setVisibility(View.INVISIBLE);
-                mBtnNext.setVisibility(View.INVISIBLE);
-                Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        poi.setOnClickListener(v -> {
-
-            if (!POI_true_folse) {
-
-                POI_true_folse = true;
-
-//                    centerToMyLocation(mLatitue,mLongLatitue);
-
-                LatLng latLng = new LatLng(mLatitue, mLongLatitue);
-                MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
-
-                mBaiduMap.animateMapStatus(msu);
-
-                LatLng point = new LatLng(mLatitue, mLongLatitue + 0.004);
-                BitmapDescriptor bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.icon_en);
-                OverlayOptions options = new MarkerOptions()
-                        .position(point)  //设置marker的位置
-                        .icon(bitmap)  //设置marker图标
-                        .zIndex(9)  //设置marker所在层级
-                        .draggable(true);  //设置手势拖拽
-
-                mMarker = (Marker) (mBaiduMap.addOverlay(options));
-
-            } else {
-                mMarker.remove();
-                POI_true_folse = false;
-            }
-
-        });
-
-        arrow.setOnClickListener(v -> {
-
-            if (sLayoutServerPageVisiable) {
-                ObjectAnimator//
-                        .ofFloat(arrow, "rotationX", 0.0F, 180.0F)//
-                        .setDuration(500)//
-                        .start();
-                layout_server_page.setVisibility(View.GONE);
-                sLayoutServerPageVisiable = false;
-
-            } else {
-                ObjectAnimator//
-                        .ofFloat(arrow, "rotationX", 0.0F, 0.0F)//
-                        .setDuration(500)//
-                        .start();
-                layout_server_page.setVisibility(View.VISIBLE);
-                sLayoutServerPageVisiable = true;
-            }
-
-
-        });
-
-
-        mView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.myview, null);
-
-        mMapView = (MapView) findViewById(R.id.map);
-        mBaiduMap = mMapView.getMap();
-
-        //缩放地图，让地图更加美观
-        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15.0f);
-        mBaiduMap.setMapStatus(msu);
-
-        //***************
-        //导航功能初始化
-        mBtnPre = (Button) findViewById(R.id.pre);
-        mBtnNext = (Button) findViewById(R.id.next);
-        mBtnPre.setVisibility(View.INVISIBLE);
-        mBtnNext.setVisibility(View.INVISIBLE);
-
-        mBaiduMap.setOnMapClickListener(this);
-
-        mSearch = RoutePlanSearch.newInstance();
-
-        mSearch.setOnGetRoutePlanResultListener(this);
-
-
-        myhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-
-                switch (msg.what) {
-                    case 0x12:
-                        bundle = msg.getData();
-                        updata(bundle);
-                        break;
-                    case 0x13:
-                        Bundle bundle1 = new Bundle();
-                        bundle1.putString("NAME", "error");
-                        updata(bundle1);
-                    default:
-                        break;
-                }
-            }
-        };
-
-
-        //初始化检索
-        mPoiSearch = PoiSearch.newInstance();
-
-        btn_myPosition = (Button) findViewById(R.id.button);
-
-        btn_search = (Button) findViewById(R.id.search);
-
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!Gas_Show) {
-//              显示页为第0页的结果
-                    shapeLoadingDialog.show();
-                    boundSearch(0);
-                    Gas_Show = true;
-                } else {
-                    Gas_Show = false;
-                    mBaiduMap.clear();
-                }
-            }
-
-        });
-
-
-        btn_myPosition.setOnClickListener(v -> {
-
-            //定位功能,以自己为中点定位
-            centerToMyLocation(mLatitue, mLongLatitue);
-
-        });
-
-
-        //****************************检索功能***********************
-
-
-        poiListener = new OnGetPoiSearchResultListener() {
-
-            public void onGetPoiResult(PoiResult result) {
-
-                if (result == null
-                        || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                    Toast.makeText(MainActivity.this, "未找到结果",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (result.error == SearchResult.ERRORNO.NO_ERROR) {// 检索结果正常返回
-
-                    mBaiduMap.clear();
-                    MyPoiOverlay poiOverlay = new MyPoiOverlay(mBaiduMap);
-                    poiOverlay.setData(result);// 设置POI数据
-
-                    mBaiduMap.setOnMarkerClickListener(poiOverlay);
-
-                    poiOverlay.addToMap();// 将所有的overlay添加到地图上
-                    poiOverlay.zoomToSpan();
-
-
-                    Toast.makeText(
-                            MainActivity.this,
-                            "已经搜索到附近加油站", Toast.LENGTH_SHORT).show();
-
-                }
-
-                shapeLoadingDialog.dismiss();
-            }
-
-            public void onGetPoiDetailResult(PoiDetailResult result) {
-
-                if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-
-                    Toast.makeText(MainActivity.this, "抱歉，未找到结果",
-                            Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // 正常返回结果的时候，此处可以获得很多相关信息
-
-                    //获取pupouWindow的显示位置
-                    nodeLocation = result.getLocation();
-
-                    new Thread(() -> {
-
-                        GasJsonDataParse.getInstance().getGasDetailsData(nodeLocation.latitude, nodeLocation.longitude);
-
-                    }).start();
-
-                }
-            }
-
-        };
-
-        mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
-
-        //***************语音合成系统************************
-        tts = new TextToSpeech(MainActivity.this, status -> {
-
-            if (status == TextToSpeech.SUCCESS) {
-                int result = tts.setLanguage(Locale.CHINA);
-
-                if (result != TextToSpeech.LANG_MISSING_DATA &&
-                        result != TextToSpeech.LANG_NOT_SUPPORTED) {
-
-                    Toast.makeText(MainActivity.this, "语音系统加载成功！", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        //***************语音合成系统************************
-
-        //在公交线路规划回调方法中添加TransitRouteOverlay用于展示换乘信息
     }
-
 
     /**
-     * 范围检索
+     * 下面是主要的点击事件处理方法（对应于主布局上面的图标）
      */
-    private void boundSearch(int page) {
 
-        PoiBoundSearchOption boundSearchOption = new PoiBoundSearchOption();
+    //音乐
+    public void music() {
 
-        LatLng southwest = new LatLng(mLatitue - 0.01, mLongLatitue - 0.012);// 西南
-        LatLng northeast = new LatLng(mLatitue + 0.01, mLongLatitue + 0.012);// 东北
-
-        LatLngBounds bounds = new LatLngBounds.Builder().include(southwest)
-                .include(northeast).build();// 得到一个地理范围对象
-
-        boundSearchOption.bound(bounds);// 设置poi检索范围
-        boundSearchOption.keyword(editSearchKeyEt);// 检索关键字
-        boundSearchOption.pageNum(page);
-
-        mPoiSearch.searchInBound(boundSearchOption);// 发起poi范围检索请求
+        MyLog.LogE("MainActivity", "music");
+//        Intent intent = new Intent(MainActivity.this, BNMainActivity.class);
+        MyLog.LogE("MainActivity", "music" + "before intent");
+        Intent intent = new Intent(MainActivity.this, com.com.reoger.music.View.MainActivity.class);
+        startActivity(intent);
+        MyLog.LogE("MainActivity", "music" + "after intent");
     }
 
+    //信息
+    public void myInfo() {
+        Intent intent = new Intent(MainActivity.this, MyInfoActivity.class);
+        startActivity(intent);
+    }
 
-    //当后台数据完成后显示加油站的信息
+    //加油站
+    public void gas() {
 
-    public void updata(Bundle bundle) {
+        nodeButtonInvisiable();
+        if (!isGasHavingShow) {
+//              显示页为第0页的结果
+            shapeLoadingDialog.show();
 
-        TextView t1, t2, t3, t4;
+            poiSearch.boundSearch(myLocate);
 
-        /*
-        ** t1是加油站名称  t2是加油站地址  t3是油价 t4也是 价格
-         */
-        Button btn_ording = (Button) mView.findViewById(R.id.ording);
+            isGasHavingShow = true;
+        } else {
+            isGasHavingShow = false;
+            mBaiduMap.clear();
+        }
+    }
 
-        t1 = (TextView) mView.findViewById(R.id.textView1);
-        t2 = (TextView) mView.findViewById(R.id.textView2);
+    //标记
+    public void poi() {
+        if (!isPOIHavingShow) {
 
-        t3 = (TextView) mView.findViewById(R.id.textView3);
-        t4 = (TextView) mView.findViewById(R.id.textView4);
+            isPOIHavingShow = true;
+            //降地图移回地图中心
+            myLocate.centerToMyLocation();
 
-        String name = (String) bundle.get("NAME");
-        String address = (String) bundle.get("ADDRESS");
-        String price = (String) bundle.get("price1");
-        String gasprice = (String) bundle.get("gasprice1");
-//        Toast.makeText(this,gasprice+"ccc",Toast.LENGTH_SHORT).show();
+            LatLng point = new LatLng(myLocate.getmLatitue(), myLocate.getmLongLatitue() + 0.004);
+            BitmapDescriptor bitmap = BitmapDescriptorFactory
+                    .fromResource(R.drawable.map_en);
 
-        t1.setText(name);
-        t2.setText(address);
-        t3.setText(price);
-        t4.setText(gasprice);
+            OverlayOptions options = new MarkerOptions()
+                    .position(point)  //设置marker的位置
+                    .icon(bitmap)  //设置marker图标
+                    .zIndex(9)  //设置marker所在层级
+                    .draggable(true);  //设置手势拖拽
 
-        btn_ording.setOnClickListener(v -> {
-            Intent intent = null;
-
-
-            //判断是否已经登陆了
-            if (MyApplication.isLanded()) {
-
-//                shapeLoadingDialog.show();
-
-                intent = new Intent(MainActivity.this, OrdGasActivity.class);
-                intent.putExtras(bundle);
-            } else {
-                Log.d("测试->MainActivity", "请先登录");
-                intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.putExtras(bundle);
-                intent.putExtra("TAG", "OrdGAs");
-            }
-//            shapeLoadingDialog.dismiss();
-            startActivity(intent);
-        });
-
-        if (bundle.getString("NAME").equals("error")) {
-            Toast.makeText(this, "暂无该加油站具体数据。", Toast.LENGTH_SHORT).show();
+            mMarker = (Marker) (mBaiduMap.addOverlay(options));
 
         } else {
-            //聚焦
-            LatLng latLng = new LatLng(nodeLocation.latitude, nodeLocation.longitude);
-            MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
-
-            mBaiduMap.animateMapStatus(msu);
-
-            mBaiduMap.showInfoWindow(new InfoWindow(mView, nodeLocation, 0));
+            mMarker.remove();
+            isPOIHavingShow = false;
         }
-        shapeLoadingDialog.dismiss();
-
-//        if (mDialog.isShowing()) {
-//            mDialog.dismiss();
-//        }
-    }
-
-    class MyPoiOverlay extends PoiOverlay {
-        public MyPoiOverlay(BaiduMap arg0) {
-            super(arg0);
-        }
-
-        //加油站的点击事件
-        @Override
-        public boolean onPoiClick(int arg0) {
-            super.onPoiClick(arg0);
-            PoiInfo poiInfo = getPoiResult().getAllPoi().get(arg0);
-            // 检索poi详细信息
-            mPoiSearch.searchPoiDetail(new PoiDetailSearchOption()
-                    .poiUid(poiInfo.uid));
-            return true;
-        }
-    }
-
-
-//****************************检索功能***********************
-
-    private class MyLocationListener implements BDLocationListener {
-
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-
-            MyLocationData data = new MyLocationData.Builder()
-                    .accuracy(location.getRadius())//
-                    .latitude(location.getLatitude())
-                    .longitude(location.getLongitude())
-                    .build();
-            mBaiduMap.setMyLocationData(data);
-
-            myAddress = (String) location.getAddrStr();
-            Log.v("mLatitue", mLatitue + "location.getAddress();");
-//           时时获取经纬度
-            mLatitue = location.getLatitude();
-            mLongLatitue = location.getLongitude();
-
-            Log.v("mLatitue", mLatitue + "");
-            Log.v("mLongLatitue", mLongLatitue + "");
-
-
-            if (isFirstIn) {
-
-                centerToMyLocation(location.getLatitude(), location.getLongitude());
-
-            }
-        }
-    }
-
-
-    private void centerToMyLocation(double mLatitue, double mLongLatitue) {
-
-        //定位功能
-        LatLng latLng = new LatLng(mLatitue, mLongLatitue);
-        MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
-
-        mBaiduMap.animateMapStatus(msu);
-        isFirstIn = false;
-
-        if (myAddress != null) {
-            Toast.makeText(this, myAddress, Toast.LENGTH_LONG).show();
-            tts.speak("当前位置" + myAddress, TextToSpeech.QUEUE_FLUSH, null);
-        }
-
 
     }
 
+    //从这里出发
+    public void route_to() {
+        if (isPOIHavingShow) {
 
-    //******************以下为导航信息*********************
-    //路线规划相关类及方法
+            isPOIHavingShow = false;
+            mBaiduMap.clear();
 
-    /**
-     * 驾车搜索，公交搜索，步行搜索按钮点击事件
-     * <p>
-     * 发起路线规划搜索示例
-     *
-     * @param v 视图
-     */
-    public void ChangeSearchButtonProcess(View v) {
+            nodeButtonVisiable();
+
+            LatLng stPosition = new LatLng(myLocate.getmLatitue(), myLocate.getmLongLatitue());
+            LatLng enPosition = mMarker.getPosition();
+
+            PlanNode stNode = PlanNode.withLocation(stPosition);
+            PlanNode enNode = PlanNode.withLocation(enPosition);
+
+//            new BNMainActivity().routeplanToNavi(BNRoutePlanNode.CoordinateType.BD09_MC,stPosition,enPosition);
+            travel.search(stNode, enNode);
+        } else {
+            mBaiduMap.clear();
+            nodeButtonInvisiable();
+            Toast.makeText(MainActivity.this, "请先在地图上选址！", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //起始点交换
+    public void changeTravelto() {
 
         //重置浏览节点的路线数据
-        route = null;
-        mBtnPre.setVisibility(View.INVISIBLE);
-        mBtnNext.setVisibility(View.INVISIBLE);
+        nodeButtonInvisiable();
         mBaiduMap.clear();
 
         // 处理搜索按钮响应
@@ -721,114 +402,178 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         PlanNode enNode = PlanNode.withCityNameAndPlaceName("株洲", editSt.getText().toString());
 
 
-        {
-//            if (!Search_true_folse) {
+        //起始地点交换
+        String temp = editEn.getText().toString().trim();
+        editEn.setText(editSt.getText().toString().trim());
+        editSt.setText(temp);
 
-            mBaiduMap.clear();
+        travel.search(stNode, enNode);
 
-            String temp = (String) editEn.getText().toString().trim();
-            editEn.setText(editSt.getText().toString().trim());
-            editSt.setText(temp);
-
-//                Search_true_folse = true;
-            mSearch.drivingSearch((new DrivingRoutePlanOption())
-                    .from(stNode)
-                    .to(enNode));
-
-//            } else {
-
-//                Search_true_folse = false;
-//            }
-
-        }
+        nodeButtonVisiable();
     }
 
-    public void SearchButtonProcess(View v) {
+    //通过输入起始点出发 （地图上没有对应的图标，在travel()方法中调用）
+    public void travelByEditText() {
 
-        //重置浏览节点的路线数据
-        route = null;
-        mBtnPre.setVisibility(View.INVISIBLE);
-        mBtnNext.setVisibility(View.INVISIBLE);
+        nodeButtonInvisiable();
         mBaiduMap.clear();
 
-        // 处理搜索按钮响应
-        EditText editSt = (EditText) findViewById(R.id.start);
-        EditText editEn = (EditText) findViewById(R.id.end);
-
-        //设置起终点信息，对于tranist search 来说，城市名无意义
-
-        /**
-         * PlanNode:
-         * 路径规划中的出行节点信息,出行节点包括：起点，终点，途经点
-         * 出行节点信息可以通过两种方式确定：
-         *
-         * 1： 给定出行节点经纬度坐标
-         * 2： 给定出行节点地名和城市名
-         *
-         * public static PlanNode withCityNameAndPlaceName(java.lang.String city,
-         * java.lang.String placeName)
-         * 通过地名和城市名确定出行节点信息
-         * @param placeName - 地点名; city - 城市名
-         * @return 出行节点对象
-         * */
         PlanNode stNode;
         PlanNode enNode;
 
-        stNode = PlanNode.withCityNameAndPlaceName("株洲", editSt.getText().toString());
-        enNode = PlanNode.withCityNameAndPlaceName("株洲", editEn.getText().toString());
+        stNode = PlanNode.withCityNameAndPlaceName("株洲", mEditSt.getText().toString());
+        enNode = PlanNode.withCityNameAndPlaceName("株洲", mEditEn.getText().toString());
 
+        if (!isHavingSearch) {
 
-        /**
-         * public boolean drivingSearch(DrivingRoutePlanOption option)
-         * 发起驾车路线规划
-         * @param option - 请求参数
-         * @return 成功发起检索返回true , 失败返回false
-         *
-         * DrivingRoutePlanOption:驾车路线规划参数
-         * public DrivingRoutePlanOption from(PlanNode from)
-         * 设置起点
-         * @param from - 起点
-         * @return 该 DrivingRoutePlanOption 选项对象
-         *
-         * public DrivingRoutePlanOption to(PlanNode to)
-         * 设置终点
-         * @param to - 终点
-         * @return 该 DrivingRoutePlanOption 选项对象
-         * */
-        {
-            if (!Search_true_folse) {
+            isHavingSearch = true;
+            travel.search(stNode, enNode);
 
-                Search_true_folse = true;
-                mSearch.drivingSearch((new DrivingRoutePlanOption())
-                        .from(stNode)
-                        .to(enNode));
+        }
 
-            } else {
-                mBaiduMap.clear();
-                Search_true_folse = false;
-            }
+        mPositionInputView.setVisibility(View.INVISIBLE);
+    }
+
+    //起始点出发  显示出起始地址对话框
+    public void travelTo() {
+
+        mBaiduMap.clear();
+
+        nodeButtonInvisiable();
+
+        if (mPositionInputView.getVisibility() == View.INVISIBLE && !isHavingSearch) {
+
+            mPositionInputView.setVisibility(View.VISIBLE);
+        } else if (mPositionInputView.getVisibility() == View.VISIBLE) {
+
+            nodeButtonInvisiable();
+
+            mPositionInputView.setVisibility(View.INVISIBLE);
+        }
+
+        if (isHavingSearch) {
+            mBaiduMap.clear();
+            isHavingSearch = false;
+
+            nodeButtonInvisiable();
 
         }
     }
 
+    //定位
+    public void location() {
+
+        myLocate.centerToMyLocation();
+    }
+
+/**
+ * 下面是一些辅助方法 ，地图点击事件，路线按钮可见性，卫星菜单执行动画等方法
+ */
 
     /**
-     * 上一个或下一个节点点击事件
-     * <p>
-     * 节点浏览示例
-     *
-     * @param v
+     * 当后台数据完成后显示加油站的信息
+     * t1是加油站名称  t2是加油站地址  t3是油价 t4也是 价格
      */
+    public void updata(Bundle bundle) {
 
+        TextView t1, t2, t3, t4;
+
+        Button btn_ording = (Button) mGasDetailView.findViewById(R.id.ording);
+
+        t1 = (TextView) mGasDetailView.findViewById(R.id.textView1);
+        t2 = (TextView) mGasDetailView.findViewById(R.id.textView2);
+        t3 = (TextView) mGasDetailView.findViewById(R.id.textView3);
+        t4 = (TextView) mGasDetailView.findViewById(R.id.textView4);
+
+
+        String name = (String) bundle.get("NAME");
+        String address = (String) bundle.get("ADDRESS");
+        String price = (String) bundle.get("price1");
+        String gasprice = (String) bundle.get("gasprice1");
+
+        t1.setText(name);
+        t2.setText(address);
+        t3.setText(price);
+        t4.setText(gasprice);
+
+        btn_ording.setOnClickListener(v -> {
+            Intent intent = null;
+            //判断是否已经登陆了
+            if (MyApplication.isLanded()) {
+
+                intent = new Intent(MainActivity.this, OrdGasActivity.class);
+                intent.putExtras(bundle);
+            } else {
+
+                Log.d("测试->MainActivity", "请先登录");
+                intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.putExtras(bundle);
+                intent.putExtra("TAG", "OrdGAs");
+            }
+            startActivity(intent);
+        });
+
+        if ((bundle.getString("NAME")).equals("error")) {
+            Toast.makeText(this, "暂无该加油站具体数据。", Toast.LENGTH_SHORT).show();
+
+        } else {
+            //聚焦
+            LatLng latLng = new LatLng(poiSearch.nodeLocation.latitude + 0.014, poiSearch.nodeLocation.longitude);
+            MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+
+            mBaiduMap.animateMapStatus(msu);
+            mBaiduMap.showInfoWindow(new InfoWindow(mGasDetailView, poiSearch.nodeLocation, 0));
+
+        }
+
+    }
+
+    /**
+     * 设置起始地址输入框，输入完成后就开始 规划路线
+     */
+    public void setOnEditorActionListener(EditText editEn) {
+
+        if (editEn != null) {
+            editEn.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+
+                    //点击出发按钮后，执行下面代码
+                    //根据起始地址 规划路线
+                    travelByEditText();
+                    //详细路线按钮显示
+                    nodeButtonVisiable();
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    //隐藏软键盘
+                    imm.hideSoftInputFromWindow(mPositionInputView.getWindowToken(), 0);
+
+                    return true;
+                }
+                Toast.makeText(MainActivity.this, "false", Toast.LENGTH_SHORT).show();
+                return false;
+            });
+        }
+    }
+
+    /**
+     * 缩放地图，让地图更加美观
+     */
+     public void MapZoom() {
+
+        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15.0f);
+        mBaiduMap.setMapStatus(msu);
+
+    }
+
+    /**
+     * public java.util.List<T> getAllStep()
+     * 获取路线中的所有路段
+     * 返回:路线中的所有路段
+     */
     public void nodeClick(View v) {
 
-        /**
-         * public java.util.List<T> getAllStep()
-         * 获取路线中的所有路段
-         * 返回:路线中的所有路段
-         * */
 
-        if (route == null || route.getAllStep() == null) {
+        if (travel.route == null || travel.route.getAllStep() == null) {
             return;
         }
 
@@ -838,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
 
         //设置节点索引
         if (v.getId() == R.id.next) {
-            if (nodeIndex < route.getAllStep().size() - 1) {
+            if (nodeIndex < travel.route.getAllStep().size() - 1) {
                 nodeIndex++;
             } else {
                 return;
@@ -855,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         //获取节结果信息
         LatLng nodeLocation = null;
         String nodeTitle = null;
-        Object step = route.getAllStep().get(nodeIndex);
+        Object step = travel.route.getAllStep().get(nodeIndex);
 
         /**
          * public static class DrivingRouteLine.DrivingStep extends RouteStep
@@ -879,11 +624,6 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
             nodeLocation = ((DrivingRouteLine.DrivingStep) step).getEntrance().getLocation();
             nodeTitle = ((DrivingRouteLine.DrivingStep) step).getInstructions();
 
-            /**
-             * public static class WalkingRouteLine.WalkingStep extends RouteStep
-             * 描述一个步行路段
-             * */
-
         }
 
         if (nodeLocation == null || nodeTitle == null) {
@@ -899,7 +639,10 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         popupText.setTextColor(0xFF000000);
         popupText.setText(nodeTitle);
 
-        tts.speak(nodeTitle, TextToSpeech.QUEUE_ADD, null);
+//        Toast.makeText(MainActivity.this, "语音播报", Toast.LENGTH_SHORT).show();
+
+        t.speak(nodeTitle);
+
         /**
          * public void showInfoWindow(InfoWindow infoWindow)
          * 显示 InfoWindow
@@ -917,188 +660,124 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
          * yOffset - InfoWindow Y 轴偏移量
          * listener - InfoWindow 点击监听者
          * */
-
         mBaiduMap.showInfoWindow(new InfoWindow(popupText, nodeLocation, 0));
 
     }
 
+    /**
+     * 显示 路线详细步骤的控制 Button
+     */
+    public void nodeButtonVisiable() {
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-
-    @Override
-    public void onGetWalkingRouteResult(WalkingRouteResult result) {
-
+        mBtnPre.setVisibility(View.VISIBLE);
+        mBtnNext.setVisibility(View.VISIBLE);
 
     }
-
-    @Override
-    public void onGetTransitRouteResult(TransitRouteResult result) {
-
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(MainActivity.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
-        }
-        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
-            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
-            //result.getSuggestAddrInfo()
-            return;
-        }
-        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-            nodeIndex = -1;
-            mBtnPre.setVisibility(View.VISIBLE);
-            mBtnNext.setVisibility(View.VISIBLE);
-
-            route = result.getRouteLines().get(0);
-            TransitRouteOverlay overlay = new MyTransitRouteOverlay(mBaiduMap);
-            mBaiduMap.setOnMarkerClickListener(overlay);
-
-            routeOverlay = overlay;
-            overlay.setData(result.getRouteLines().get(0));
-            overlay.addToMap();
-            overlay.zoomToSpan();
-        }
-    }
-
-
-    @Override
-    public void onGetDrivingRouteResult(DrivingRouteResult result) {
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(MainActivity.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
-        }
-        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
-            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
-            //result.getSuggestAddrInfo()
-            return;
-        }
-        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-            nodeIndex = -1;
-            mBtnPre.setVisibility(View.VISIBLE);
-            mBtnNext.setVisibility(View.VISIBLE);
-
-            route = result.getRouteLines().get(0);
-            DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
-
-            routeOverlay = overlay;
-            mBaiduMap.setOnMarkerClickListener(overlay);
-            overlay.setData(result.getRouteLines().get(0));
-            overlay.addToMap();
-            overlay.zoomToSpan();
-        }
-    }
-
-    @Override
-    public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
-
-        //自行车，暂时未实现
-    }
-
-    //乘车路线覆盖物
-    private class MyDrivingRouteOverlay extends DrivingRouteOverlay {
-
-        public MyDrivingRouteOverlay(BaiduMap baiduMap) {
-            super(baiduMap);
-        }
-
-        @Override
-        public BitmapDescriptor getStartMarker() {
-            if (useDefaultIcon) {
-                return BitmapDescriptorFactory.fromResource(R.drawable.icon_st);
-            }
-            return null;
-        }
-
-        @Override
-        public BitmapDescriptor getTerminalMarker() {
-            if (useDefaultIcon) {
-                return BitmapDescriptorFactory.fromResource(R.drawable.icon_en);
-            }
-            return null;
-        }
-    }
-
 
     /**
-     * TransitRouteOverlay已经实现了BaiduMap.OnMarkerClickListener接口
+     * 隐藏 路线详细步骤的 控制 Button
      */
-    private class MyTransitRouteOverlay extends TransitRouteOverlay {
+    public void nodeButtonInvisiable() {
 
-        public MyTransitRouteOverlay(BaiduMap baiduMap) {
-            super(baiduMap);
-        }
-
-        @Override
-        public BitmapDescriptor getStartMarker() {
-            if (useDefaultIcon) {
-                return BitmapDescriptorFactory.fromResource(R.drawable.icon_st);
-            }
-            return null;
-        }
-
-        @Override
-        public BitmapDescriptor getTerminalMarker() {
-            if (useDefaultIcon) {
-                return BitmapDescriptorFactory.fromResource(R.drawable.icon_en);
-            }
-            return null;
-        }
-    }
-
-    public void changeStAndEnd() {
-
+        mBtnPre.setVisibility(View.INVISIBLE);
+        mBtnNext.setVisibility(View.INVISIBLE);
 
     }
 
+    /**
+     * 卫星菜单的动画效果
+     */
+    private void statelliteMenuExecuteAnim(boolean isOpen) {
+
+//        float X = imageViews[3].getX();
+//        float Y = imageViews[3].getY();
+//
+//        if (isOpen) {
+//            for (int i = 0; i <= 2; i++) {
+//                DisplayMetrics metric = new DisplayMetrics();
+//                getWindowManager().getDefaultDisplay().getMetrics(metric);
+//                int width = metric.widthPixels; // 屏幕宽度（像素）
+//
+//                float x = (float) Math.sin(angel[i]) * (width / 6);
+//                float y = -(float) Math.cos(angel[i]) * (width / 6);
+//
+//                //Log.i("坐标", angle + " " + x + " " + y);
+//
+//                ObjectAnimator animator1 = ObjectAnimator.ofFloat(imageViews[i], "X", X, x + X);
+//                ObjectAnimator animator2 = ObjectAnimator.ofFloat(imageViews[i], "Y", Y, y + Y);
+//                ObjectAnimator animator3 = ObjectAnimator.ofFloat(imageViews[i], "alpha", 0.0f, 1.0f);
+//
+//                AnimatorSet set = new AnimatorSet();
+//
+//                set.playTogether(animator1, animator2, animator3);
+//                set.setDuration(500);
+//                set.start();
+//            }
+//        } else {
+//            for (int i = 0; i <= 2; i++) {
+//                PropertyValuesHolder p1 = PropertyValuesHolder.ofFloat("X", imageViews[i].getX(),
+//                        X);
+//                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("Y", imageViews[i].getY(),
+//                        Y);
+//                PropertyValuesHolder p3 = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0.0f);
+//                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2, p3)
+//                        .setDuration(300 * i).start();
+//            }
+//        }
+    }
+
+    /**
+     * 地图的单击 事件
+     * 隐藏当前 InfoWindow
+     */
     @Override
     public void onMapClick(LatLng point) {
-        /**
-         * 隐藏当前 InfoWindow
-         * */
+
         mBaiduMap.hideInfoWindow();
     }
 
     /**
-     * 地图内 Poi 单击事件回调函数
+     * 地图内 Poi 单击事件回调方法
      */
     @Override
     public boolean onMapPoiClick(MapPoi poi) {
+
         return false;
     }
 
-    //******************************
-    //以下为生命周期及菜单选项
+    /**
+     * 以下为生命周期及菜单选项
+     */
 
+    /**
+     * 菜单创建方法
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        Log.v("MenuCreate", "$$$$$$$$$$$$$$$$$$$");
         return true;
     }
 
+    /**
+     * 菜单选择项 点击事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-
             case R.id.map_common:
 
                 mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
                 break;
-
             case R.id.map_site:
 
                 mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
                 break;
-
             case R.id.map_mylocation:
 
-                centerToMyLocation(mLatitue, mLongLatitue);
+                myLocate.centerToMyLocation();
                 break;
-
-
             case R.id.map_traffic:
                 if (mBaiduMap.isTrafficEnabled()) {
 
@@ -1119,37 +798,56 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         return true;
     }
 
+    /**
+     * 地图 和 Activity 销毁时 的 处理方法
+     * 在activity执行onDestroy时执行mMapView.onDestroy()，
+     * 实现地图生命周期管理
+     */
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
-        mPoiSearch.destroy();
-        mSearch.destroy();
+        poiSearch.mPoiSearch.destroy();
+
         ActivityCollector.removeActivity(this);
     }
 
+    /**
+     * 在activity执行onResume时执行mMapView. onResume ()，
+     * 实现地图生命周期管理
+     */
     @Override
     protected void onResume() {
+
         super.onResume();
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+
         mMapView.onResume();
     }
 
+    /**
+     * 在activity执行onPause时执行mMapView. onPause ()，
+     * 实现地图生命周期管理
+     */
     @Override
     protected void onPause() {
+
         super.onPause();
-        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
 
+    /**
+     * 生命周期的管理
+     */
     @Override
     protected void onStart() {
+
         super.onStart();
         //开启定位
         mBaiduMap.setMyLocationEnabled(true);
-        if (!mLocationClient.isStarted()) {
-            mLocationClient.start();
+
+        if (!myLocate.mLocationClient.isStarted()) {
+            myLocate.mLocationClient.start();
         }
     }
 
@@ -1158,58 +856,19 @@ public class MainActivity extends AppCompatActivity implements BaiduMap.OnMapCli
         super.onStop();
         //关闭定位
         mBaiduMap.setMyLocationEnabled(false);
-        mLocationClient.stop();
+        myLocate.mLocationClient.stop();
 
     }
 
-
-
-    private void executeAnim(boolean isOpen) {
-
-        float X = imageViews[3].getX();
-        float Y = imageViews[3].getY();
-
-        if (isOpen) {
-            for (int i = 0; i <= 2; i++) {
-                DisplayMetrics metric = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metric);
-                int width = metric.widthPixels; // 屏幕宽度（像素）
-
-                float x = (float) Math.sin(angel[i]) * (width / 6);
-                float y = -(float) Math.cos(angel[i]) * (width / 6);
-
-                //Log.i("坐标", angle + " " + x + " " + y);
-
-
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(imageViews[i], "X", X, x + X);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(imageViews[i], "Y", Y, y + Y);
-                ObjectAnimator animator3 = ObjectAnimator.ofFloat(imageViews[i], "alpha", 0.0f, 1.0f);
-
-                AnimatorSet set = new AnimatorSet();
-
-                set.playTogether(animator1, animator2, animator3);
-
-                set.setDuration(500);
-                set.start();
-            }
-        } else {
-            for (int i = 0; i <= 2; i++) {
-                PropertyValuesHolder p1 = PropertyValuesHolder.ofFloat("X", imageViews[i].getX(),
-                        X);
-                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("Y", imageViews[i].getY(),
-                        Y);
-                PropertyValuesHolder p3 = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0.0f);
-                ObjectAnimator.ofPropertyValuesHolder(imageViews[i], p1, p2, p3)
-                        .setDuration(300 * i).start();
-            }
-        }
-    }
-
+    /**
+     * 按两次back 退出程序两次间隔时间节点
+     * 设置为2000 ms
+     */
     @Override
     public void onBackPressed() {
 
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            // ToastUtil.makeToastInBottom("再按一次退出应用", MainMyselfActivity);
+
             Toast.makeText(MainActivity.this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
             return;

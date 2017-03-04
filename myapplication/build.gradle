@@ -46,6 +46,7 @@ dependencies {
     compile files('libs/weizhang_sdk.jar')
     compile files('libs/BmobPay_v2.7_160427.jar')
     compile files('libs/Bmob_Push_V0.9beta_20160520.jar')
+    compile files('libs/BaiduNaviSDK_3.1.1.jar')
 }
 
 apply plugin: 'me.tatarka.retrolambda'//配置Lambda需要

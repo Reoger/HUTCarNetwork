@@ -24,6 +24,7 @@ import just.constants.MaInfoConstants;
 import just.operations.AutoInfoLocalDBOperation;
 import just.operations.MaInfoLocalDBOperation;
 import just.receivers.AutoAndMaInfoSyncReceiver;
+import just.receivers.InfoSyncToLocalReceiver;
 import just.utils.NetworkUtil;
 
 /**
@@ -31,9 +32,6 @@ import just.utils.NetworkUtil;
  */
 public class InfoSyncToCloudService extends IntentService {
     private boolean isContinueSync=true;//用于判断某些情况下是否继续同步数据
-    private Context mContext;
-
-    private Semaphore mIsNextSemaphore;//信号量的使用是为了使每块逻辑中的回调方法执行完毕之后再执行下一块的逻辑
 
     public InfoSyncToCloudService() {
             super("InfoSyncToCloudService");
@@ -41,18 +39,61 @@ public class InfoSyncToCloudService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mContext=getApplicationContext();
-        mIsNextSemaphore=new Semaphore(1);
+        isContinueSync=true;//用于判断某些情况下是否继续同步数据
+        Context mContext=getApplicationContext();
 
-        try {
-            MyApplication.mSyncSemaphore.acquire();
-        } catch (InterruptedException e) {
-        }
         Log.d("测试->A&M-InfoSyncService","已成功开启服务");
 
         if(NetworkUtil.isNetworkAvailable(mContext)) {
+            //////////////////////////////////////
+            Log.d("测试->MyApplication","startSyncFromCloudService->开始同步云端的数据");
             try {
-                mIsNextSemaphore.acquire();
+                MyApplication.mSyncSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BmobQuery<AutoInfo> query1=new BmobQuery<>();
+            query1.addWhereEqualTo("username",MyApplication.getUsername());
+            query1.setLimit(50);
+            query1.findObjects(mContext, new FindListener<AutoInfo>() {
+                @Override
+                public void onSuccess(List<AutoInfo> list) {
+                    for (AutoInfo autoInfo:list)
+                        AutoInfoLocalDBOperation.insert(mContext,autoInfo,1);
+                    MyApplication.mSyncSemaphore.release();
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    MyApplication.mSyncSemaphore.release();
+                }
+            });
+
+            try {
+                MyApplication.mSyncSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BmobQuery<MaInfo> query2=new BmobQuery<>();
+            query2.addWhereEqualTo("username",MyApplication.getUsername());
+            query2.setLimit(1000);
+            query2.findObjects(mContext, new FindListener<MaInfo>() {
+                @Override
+                public void onSuccess(List<MaInfo> list) {
+                    for (MaInfo maInfo:list)
+                        MaInfoLocalDBOperation.insert(mContext,maInfo,1);
+                    MyApplication.mSyncSemaphore.release();
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    MyApplication.mSyncSemaphore.release();
+                }
+            });
+            /////////////////////////////////////
+
+            try {
+                MyApplication.mSyncSemaphore.acquire();
             } catch (InterruptedException e) {
             }
             List<AutoInfo> list1 = AutoInfoLocalDBOperation.queryBy(mContext,
@@ -70,7 +111,7 @@ public class InfoSyncToCloudService extends IntentService {
                             AutoInfoLocalDBOperation.updateForIsSyncToCloud(mContext, autoInfo.getVin(), 1);
                             Log.d("测试->A&M-InfoSyncService", "成功同步至云端");
                             if(finalI == finalTotal1 -1) {
-                                mIsNextSemaphore.release();
+                                MyApplication.mSyncSemaphore.release();
                             }
                         }
 
@@ -79,7 +120,7 @@ public class InfoSyncToCloudService extends IntentService {
                             Log.d("测试->A&M-InfoSyncService", "同步云端失败:错误编号-"+i+"，错误原因-"+s);
                             if(i==9016) {
                                 isContinueSync=false;
-                                mIsNextSemaphore.release();
+                                MyApplication.mSyncSemaphore.release();
                             }
                         }
                     });
@@ -90,13 +131,13 @@ public class InfoSyncToCloudService extends IntentService {
                  }
             }
             else {
-                mIsNextSemaphore.release();
+                MyApplication.mSyncSemaphore.release();
             }
 
             isContinueSync=true;
 
             try {
-                mIsNextSemaphore.acquire();
+                MyApplication.mSyncSemaphore.acquire();
             } catch (InterruptedException e) {
             }
             //实现删除云端本该删除的数据
@@ -126,8 +167,7 @@ public class InfoSyncToCloudService extends IntentService {
                                         Log.d("测试->A&M-InfoSyncService", "vin=" + vin + ",本地与云端删除成功!");
                                     }
                                     if(finalI == finalTotal -1) {
-                                        mIsNextSemaphore.release();
-
+                                        MyApplication.mSyncSemaphore.release();
                                     }
                                 }
 
@@ -136,7 +176,7 @@ public class InfoSyncToCloudService extends IntentService {
                                     AutoInfoLocalDBOperation.updateForIsDelWithCloud(mContext, vin, 1);
                                     Log.d("测试->A&M-InfoSyncService", "删除失败！ i=" + i + ",s=" + s);
                                     if(finalI == finalTotal -1) {
-                                        mIsNextSemaphore.release();
+                                        MyApplication.mSyncSemaphore.release();
                                     }
                                 }
                             });
@@ -148,7 +188,7 @@ public class InfoSyncToCloudService extends IntentService {
                             if(i==9016) {
                                 isContinueSync=false;
                                 if(finalI ==finalTotal-1) {
-                                    mIsNextSemaphore.release();
+                                    MyApplication.mSyncSemaphore.release();
                                 }
                             }
                         }
@@ -161,12 +201,12 @@ public class InfoSyncToCloudService extends IntentService {
                 }
             }
             else {
-                mIsNextSemaphore.release();
+                MyApplication.mSyncSemaphore.release();
             }
 
             isContinueSync=true;
             try {
-                mIsNextSemaphore.acquire();
+                MyApplication.mSyncSemaphore.acquire();
             } catch (InterruptedException e) {
             }
 
@@ -185,7 +225,7 @@ public class InfoSyncToCloudService extends IntentService {
                             MaInfoLocalDBOperation.updateForIsSyncToCloud(mContext, maInfo.getScanTime(),maInfo.getVin(), 1);
                             Log.d("测试->A&M-InfoSyncService", "成功同步至云端");
                             if (finalI == finalTotal2 -1) {
-                                mIsNextSemaphore.release();
+                                MyApplication.mSyncSemaphore.release();
                             }
                         }
 
@@ -194,7 +234,7 @@ public class InfoSyncToCloudService extends IntentService {
                             Log.d("测试->A&M-InfoSyncService", "同步云端失败:错误编号-"+i+"，错误原因-"+s);
                             if(i==9016) {
                                 isContinueSync=false;
-                                mIsNextSemaphore.release();
+                                MyApplication.mSyncSemaphore.release();
                             }
                         }
                     });
@@ -205,12 +245,12 @@ public class InfoSyncToCloudService extends IntentService {
                 }
             }
             else {
-                mIsNextSemaphore.release();
+                MyApplication.mSyncSemaphore.release();
             }
 
             isContinueSync=true;
             try {
-                mIsNextSemaphore.acquire();
+                MyApplication.mSyncSemaphore.acquire();
             } catch (InterruptedException e) {
             }
 
@@ -241,7 +281,7 @@ public class InfoSyncToCloudService extends IntentService {
                                             MaInfoConstants.COLUMN_VIN + " = ? and "+MaInfoConstants.COLUMN_SCAN_TIME+" = ?", new String[]{vin,scanTime})) {
                                     }
                                     if (finalI == finalTotal3 -1) {
-                                        mIsNextSemaphore.release();
+                                        MyApplication.mSyncSemaphore.release();
                                     }
                                 }
 
@@ -249,7 +289,7 @@ public class InfoSyncToCloudService extends IntentService {
                                 public void onFailure(int i, String s) {
                                     MaInfoLocalDBOperation.updateForIsDelWithCloud(mContext, scanTime,vin, 1);
                                     if (finalI == finalTotal3 -1) {
-                                        mIsNextSemaphore.release();
+                                        MyApplication.mSyncSemaphore.release();
                                     }
                                 }
                             });
@@ -260,7 +300,7 @@ public class InfoSyncToCloudService extends IntentService {
                         public void onError(int i, String s) {
                             if(i==9016) {
                                 isContinueSync=false;
-                                mIsNextSemaphore.release();
+                                MyApplication.mSyncSemaphore.release();
                             }
                         }
                     });
@@ -272,16 +312,14 @@ public class InfoSyncToCloudService extends IntentService {
                 }
             }
             else {
-                mIsNextSemaphore.release();
+                MyApplication.mSyncSemaphore.release();
             }
         }
 
         try {
-            mIsNextSemaphore.acquire();
+            MyApplication.mSyncSemaphore.acquire();
         } catch (InterruptedException e) {
         }
-
-        MyApplication.mSyncSemaphore.release();
 
         //设置定时，一段时间再开启同步服务
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -290,12 +328,12 @@ public class InfoSyncToCloudService extends IntentService {
         Intent i = new Intent(this, AutoAndMaInfoSyncReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-        mIsNextSemaphore.release();
+        MyApplication.mSyncSemaphore.release();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("测试->A&M-InfoSyncService","onDestroy以执行");
+        Log.d("测试->A&M-InfoSyncService","onDestroy已执行");
     }
 }

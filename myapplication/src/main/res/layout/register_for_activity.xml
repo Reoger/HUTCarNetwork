@@ -75,6 +75,7 @@
             android:layout_weight="2">
 
             <TextView
+                android:visibility="visible"
                 android:text="2"
                 android:textStyle="italic|bold"
                 android:background="#25000000"
@@ -114,12 +115,20 @@
 
                 <ImageButton
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/id_bt_register_step2"
                     android:background="@drawable/ic_register_confirm_ver_code"
                     android:layout_height="30dp"
                     android:layout_width="30dp" />
+                <Button
+                    android:textColor="@color/step_again"
+                    android:background="@drawable/bg_again"
+                    android:id="@+id/id_bt_register_step2_again"
+                    android:text="重发"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="55dp"
+                    android:layout_height="32dp" />
             </LinearLayout>
         </FrameLayout>
 
@@ -166,7 +175,7 @@
                             android:layout_marginLeft="5dp"
                             android:id="@+id/id_et_register_step3_1"
                             android:textSize="18sp"
-                            android:digits="@string/password_requirement"
+                            android:digits="@string/input_limit1"
                             android:hint="请设置密码"
                             android:background="#30ffffff"
                             android:maxLength="10"
@@ -196,7 +205,7 @@
                             android:layout_marginLeft="9dp"
                             android:id="@+id/id_et_register_step3_2"
                             android:textSize="18sp"
-                            android:digits="@string/password_requirement"
+                            android:digits="@string/input_limit1"
                             android:hint="请重复上述密码"
                             android:background="#30ffffff"
                             android:maxLength="10"
