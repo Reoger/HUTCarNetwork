@@ -3,10 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HUTCarNetwork.iml" filepath="$PROJECT_DIR$/HUTCarNetwork.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bmobandroiddemorealtimedatamaster/bmobandroiddemorealtimedatamaster.iml" filepath="$PROJECT_DIR$/bmobandroiddemorealtimedatamaster/bmobandroiddemorealtimedatamaster.iml" />
       <module fileurl="file://$PROJECT_DIR$/libzxing/libzxing.iml" filepath="$PROJECT_DIR$/libzxing/libzxing.iml" />
       <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simulation_gas/simulation_gas.iml" filepath="$PROJECT_DIR$/simulation_gas/simulation_gas.iml" />
     </modules>
   </component>
 </project>
