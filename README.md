@@ -31,10 +31,10 @@
 7.	查询交通违章信息
 
 部分截图如下：
-![第一部分.PNG](http://upload-images.jianshu.io/upload_images/2178834-be2899a1a1569e2e.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![幻灯片1.PNG](http://upload-images.jianshu.io/upload_images/2178834-be2899a1a1569e2e.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![第二部分.PNG](http://upload-images.jianshu.io/upload_images/2178834-37b58de31f72d1d1.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![幻灯片2.PNG](http://upload-images.jianshu.io/upload_images/2178834-37b58de31f72d1d1.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![第三部分.PNG](http://upload-images.jianshu.io/upload_images/2178834-d018abb193dafe05.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![幻灯片3.PNG](http://upload-images.jianshu.io/upload_images/2178834-d018abb193dafe05.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![第四部分.PNG](http://upload-images.jianshu.io/upload_images/2178834-bb0bd2005371547b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
